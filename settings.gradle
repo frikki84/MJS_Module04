@@ -1,2 +1,8 @@
 rootProject.name = 'Module03_14.02'
+include('entity', 'repository', 'service', 'controller')
+include 'reporitory'
+include 'entity'
+include 'service'
+include 'controller'
+include 'repository'
 

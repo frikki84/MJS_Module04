@@ -1,0 +1,12 @@
+plugins {
+    id 'java'
+}
+
+dependencies {
+    implementation project(':entity')
+    implementation project(':service')
+}
+
+bootJar{
+    archiveFileName = 'webBootJar.jar'
+}
