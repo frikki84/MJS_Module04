@@ -1,1 +1,2 @@
-Module 03 MJC
+Module 03
+Minsk Java Community
