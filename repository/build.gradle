@@ -1,7 +1,6 @@
-plugins {
-    id 'java'
+bootJar{
+    enabled = false
 }
-
-dependencies {
-    implementation project(':entity')
+jar{
+    enabled = true
 }

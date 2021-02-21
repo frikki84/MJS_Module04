@@ -1,6 +1,5 @@
-package com.epam.esm;
+package com.epam.esm.entity;
 
-import jdk.jfr.DataAmount;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,9 +30,9 @@ public class GiftCertificate {
     private LocalDateTime createDate;
     @Column(name = "last_update_date", insertable = false, updatable = false)
     private LocalDateTime lastUpdateDate;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(
-            name = "gift_certificate_has_tag",
+    @JoinTable(name = "gift_certificate_has_tag",
             joinColumns = {@JoinColumn(name = "gift_certicicate_id_gift_certicicate")},
             inverseJoinColumns = {@JoinColumn(name = "tag_id_tag")}
     )
