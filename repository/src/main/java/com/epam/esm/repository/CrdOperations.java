@@ -12,8 +12,8 @@ import java.util.List;
 public interface CrdOperations <T, I>{
     public List<T> findAll();
     public T findById(I id);
-    public Integer create(T entity);
-    public Integer delete(I id);
+    public T create(T entity);
+    public Long delete(I id);
 
 
 }

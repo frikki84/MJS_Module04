@@ -4,9 +4,7 @@ package com.epam.esm.controller.controllers;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.repository.GiftCertificateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,17 +18,20 @@ public class GiftCertificateController {
         this.giftCertificateRepository = giftCertificateRepository;
     }
 
-
     @GetMapping
-    public Iterable<GiftCertificate> findAll(){
-        System.out.println("I'm in controller");
-        List<GiftCertificate> list = (List<GiftCertificate>) giftCertificateRepository.findAll();
-        System.out.println(list);
-        return list;
+    public List<GiftCertificate> findAll (){
+        return giftCertificateRepository.findAll();
+
     }
 
-    @GetMapping("/hello")
-    public String returnString() {
-        return "My world";
+    @GetMapping("/{id}")
+    public GiftCertificate findById(@PathVariable Long id) {
+        return giftCertificateRepository.findById(id);
+
+    }
+
+    @PostMapping
+    public GiftCertificate create(@RequestBody GiftCertificate giftCertificate) {
+        return giftCertificateRepository.create(giftCertificate);
     }
 }
