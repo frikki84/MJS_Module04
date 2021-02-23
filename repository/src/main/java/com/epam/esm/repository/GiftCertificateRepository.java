@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GiftCertificateRepository extends CrdOperations<GiftCertificate, Long> {
-    public GiftCertificate update(GiftCertificate giftCertificate, Long id);
+    public GiftCertificate update(GiftCertificate giftCertificate);
 
 
 

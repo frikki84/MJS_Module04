@@ -34,4 +34,9 @@ public class GiftCertificateController {
     public GiftCertificate create(@RequestBody GiftCertificate giftCertificate) {
         return giftCertificateRepository.create(giftCertificate);
     }
+
+    @DeleteMapping("/{id}")
+    public Long delete(@PathVariable Long id) {
+        return giftCertificateRepository.delete(id);
+    }
 }
