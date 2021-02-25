@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface TagDtoMapper {
     public Tag changeTagDtoToTag(TagDto tagDto);
+    public TagDto changeTagToTagDto(Tag tag);
     public List<Tag> changeCertificateDtoToTagList(GiftCertificateDto dto);
 
 

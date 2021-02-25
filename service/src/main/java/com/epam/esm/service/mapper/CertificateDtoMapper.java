@@ -10,7 +10,7 @@ import java.util.List;
 public interface CertificateDtoMapper {
     public GiftCertificate changeDtoToCertificate(GiftCertificateDto dto);
 
-    public GiftCertificateDto changeCertificateToDto(GiftCertificate certificate, List<Tag> tagList);
+    public GiftCertificateDto changeCertificateToDto(GiftCertificate certificate);
 
 
 

@@ -20,17 +20,20 @@ public class TagController {
     }
 
     @GetMapping
-    public List<Tag> findAll (){
-        return tagService.findAll();
+    public List<TagDto> findAll(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+
+        return tagService.findAll(page, size);
     }
 
     @GetMapping("/{id}")
-    public Tag findById(@PathVariable Long id) {
+    public TagDto findById(@PathVariable Long id) {
         return tagService.findById(id);
     }
 
     @PostMapping
-    public Tag create(@RequestBody TagDto dto) {
+    public TagDto create(@RequestBody TagDto dto) {
         return tagService.create(dto);
     }
 

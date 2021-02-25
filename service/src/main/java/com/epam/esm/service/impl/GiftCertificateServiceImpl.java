@@ -9,8 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.naming.ldap.PagedResultsControl;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Comparator.comparing;
 
 @Service
 @Transactional
@@ -26,24 +30,25 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificate> findAll() {
-        return giftCertificateRepository.findAll();
+    public List<GiftCertificateDto> findAll(int offset, int limit) {
+        return giftCertificateRepository.findAll(offset, limit).stream()
+                .map(giftCertificate -> mapper.changeCertificateToDto(giftCertificate))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public GiftCertificateDto findById(Long id) {
+        return mapper.changeCertificateToDto(giftCertificateRepository.findById(id));
     }
 
     @Override
-    public GiftCertificate findById(Long id) {
-        return giftCertificateRepository.findById(id);
-    }
-
-    @Override
-    public GiftCertificate create(GiftCertificateDto entity) {
-        System.out.println("service create dto" + entity);
+    public GiftCertificateDto create(GiftCertificateDto entity) {
         GiftCertificate certificate = mapper.changeDtoToCertificate(entity);
-        System.out.println("service create" + certificate);
         LocalDateTime currentDate = LocalDateTime.now();
         certificate.setCreateDate(currentDate);
         certificate.setLastUpdateDate(currentDate);
-        return giftCertificateRepository.create(certificate);
+        return mapper.changeCertificateToDto(giftCertificateRepository.create(certificate));
     }
 
     @Override
@@ -52,7 +57,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public GiftCertificate update(GiftCertificateDto giftCertificate, Long id) {
+    public GiftCertificateDto update(GiftCertificateDto giftCertificate, Long id) {
         GiftCertificate certificate = mapper.changeDtoToCertificate(giftCertificate);
         GiftCertificate certificateFromDb = giftCertificateRepository.findById(id);
         if (certificate.getName() != null) {
@@ -78,6 +83,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         LocalDateTime currentDate = LocalDateTime.now();
         certificateFromDb.setLastUpdateDate(currentDate);
 
-        return giftCertificateRepository.update(certificateFromDb);
+        return mapper.changeCertificateToDto(giftCertificateRepository.update(certificateFromDb));
     }
 }

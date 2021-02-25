@@ -19,19 +19,24 @@ public class CertificateDtoMapperImpl implements CertificateDtoMapper {
         certificate.setDescription(dto.getDescription());
         certificate.setPrice(dto.getPrice());
         certificate.setDuration(dto.getDuration());
+        certificate.setCreateDate(dto.getCreateDate());
+        certificate.setLastUpdateDate(dto.getLastUpdateDate());
         certificate.setTags(dto.getTagList());
         return certificate;
     }
 
     @Override
-    public GiftCertificateDto changeCertificateToDto(GiftCertificate certificate, List<Tag> tagList) {
+    public GiftCertificateDto changeCertificateToDto(GiftCertificate certificate) {
         GiftCertificateDto dto = new GiftCertificateDto();
         dto.setId(certificate.getId());
         dto.setName(certificate.getName());
         dto.setDescription(certificate.getDescription());
         dto.setPrice(certificate.getPrice());
         dto.setDuration(certificate.getDuration());
-        dto.setTagList(tagList);
+        dto.setCreateDate(certificate.getCreateDate());
+        dto.setLastUpdateDate(certificate.getLastUpdateDate());
+        dto.setTagList(certificate.getTags());
+
         return dto;
     }
 

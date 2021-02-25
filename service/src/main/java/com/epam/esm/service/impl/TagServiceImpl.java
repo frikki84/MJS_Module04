@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -26,19 +27,19 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> findAll() {
-        return tagRepository.findAll();
+    public List<TagDto> findAll(int offset, int limit) {
+        return tagRepository.findAll(offset, limit).stream().map(tag -> mapper.changeTagToTagDto(tag)).collect(Collectors.toList());
     }
 
     @Override
-    public Tag findById(Long id) {
-        return tagRepository.findById(id);
+    public TagDto findById(Long id) {
+        return mapper.changeTagToTagDto(tagRepository.findById(id));
     }
 
     @Override
-    public Tag create(TagDto entity) {
+    public TagDto create(TagDto entity) {
         Tag tag = mapper.changeTagDtoToTag(entity);
-        return tagRepository.create(tag);
+        return mapper.changeTagToTagDto(tagRepository.create(tag));
     }
 
     @Override

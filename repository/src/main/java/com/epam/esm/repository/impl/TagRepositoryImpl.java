@@ -1,5 +1,6 @@
 package com.epam.esm.repository.impl;
 
+import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.repository.TagRepository;
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
@@ -17,8 +21,17 @@ public class TagRepositoryImpl implements TagRepository {
     EntityManager entityManager;
 
     @Override
-    public List<Tag> findAll() {
-        return null;
+    public List<Tag> findAll(int offset, int limit) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> tagCriteriaQuery = criteriaBuilder.createQuery(Tag.class);
+        Root<Tag> root = tagCriteriaQuery.from(Tag.class);
+        tagCriteriaQuery.select(root);
+        return entityManager.createQuery(tagCriteriaQuery)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+
     }
 
     @Override

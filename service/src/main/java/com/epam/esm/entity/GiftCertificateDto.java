@@ -1,11 +1,12 @@
 package com.epam.esm.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.DecimalMin;
+import javax.persistence.Column;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -37,6 +38,12 @@ public class GiftCertificateDto {
 
     @Min(value = 1, message = ERROR_MESSAGE_DURATION)
     private Integer duration;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    private LocalDateTime createDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    private LocalDateTime lastUpdateDate;
 
     //@NotEmpty(message = ERROR_MESSAGE_TAGS)
     List<Tag> tagList;

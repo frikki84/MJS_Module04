@@ -19,6 +19,14 @@ public class TagDtoMapperImpl implements TagDtoMapper {
         return tag;
     }
 
+    @Override
+    public TagDto changeTagToTagDto(Tag tag) {
+        TagDto dto = new TagDto();
+        dto.setId(tag.getId());
+        dto.setNameTag(tag.getNameTag());
+        return dto;
+    }
+
 
     @Override
     public List<Tag> changeCertificateDtoToTagList(GiftCertificateDto dto) {
