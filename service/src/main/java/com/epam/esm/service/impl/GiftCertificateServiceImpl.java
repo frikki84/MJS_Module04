@@ -2,19 +2,20 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.GiftCertificateDto;
+import com.epam.esm.entity.SearchGiftSertificateParametr;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.mapper.CertificateDtoMapper;
+import com.epam.esm.service.validation.GiftCertificateDtoValidation;
+import com.epam.esm.service.validation.PageInfoValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.naming.ldap.PagedResultsControl;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.util.Comparator.comparing;
 
 @Service
 @Transactional
@@ -23,19 +24,34 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateRepository giftCertificateRepository;
     @Autowired
     private final CertificateDtoMapper mapper;
+    @Autowired
+    private final PageInfoValidation pageValidation;
 
-    public GiftCertificateServiceImpl(GiftCertificateRepository giftCertificateRepository, CertificateDtoMapper mapper) {
+
+    public GiftCertificateServiceImpl(GiftCertificateRepository giftCertificateRepository, CertificateDtoMapper mapper, PageInfoValidation validation, PageInfoValidation pageValidation) {
         this.giftCertificateRepository = giftCertificateRepository;
         this.mapper = mapper;
+        this.pageValidation = pageValidation;
     }
 
     @Override
     public List<GiftCertificateDto> findAll(int offset, int limit) {
+        pageValidation.checkPageInfo(offset, limit);
         return giftCertificateRepository.findAll(offset, limit).stream()
                 .map(giftCertificate -> mapper.changeCertificateToDto(giftCertificate))
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<GiftCertificateDto> findAll(SearchGiftSertificateParametr parametr, int offset, int limit) {
+        pageValidation.checkPageInfo(offset, limit);
+        if (parametr == null || parametr.isEmpty()) {
+            return findAll(offset, limit);
+        }
+        return giftCertificateRepository.findAll(parametr, offset, limit).stream()
+                .map(giftCertificate -> mapper.changeCertificateToDto(giftCertificate))
+                .collect(Collectors.toList());
+    }
 
     @Override
     public GiftCertificateDto findById(Long id) {
@@ -44,6 +60,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public GiftCertificateDto create(GiftCertificateDto entity) {
+        GiftCertificateDtoValidation.chechCertificateDtoFormat(entity);
         GiftCertificate certificate = mapper.changeDtoToCertificate(entity);
         LocalDateTime currentDate = LocalDateTime.now();
         certificate.setCreateDate(currentDate);
@@ -76,7 +93,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             certificateFromDb.setCreateDate(certificate.getCreateDate());
         }
 
-        if ( certificate.getTags()!= null || certificate.getTags().isEmpty())  {
+        if (certificate.getTags() != null || certificate.getTags().isEmpty()) {
             certificateFromDb.setTags(certificate.getTags());
         }
 
@@ -85,4 +102,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
         return mapper.changeCertificateToDto(giftCertificateRepository.update(certificateFromDb));
     }
+
+
 }

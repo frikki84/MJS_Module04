@@ -1,10 +1,11 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.SearchGiftSertificateParametr;
 import com.epam.esm.repository.GiftCertificateRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import com.epam.esm.utils.GiftCertificateCriteriaBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -12,17 +13,24 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.awt.*;
 import java.util.List;
 
 
 @Repository
 @Transactional
 public class GiftCertificateRepositoryImpl implements GiftCertificateRepository {
-    public static int OFFSET_DEFAULT_VALUE =1;
+    public static int OFFSET_DEFAULT_VALUE = 1;
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    private final GiftCertificateCriteriaBuilder criteriaBuilder;
+
+    public GiftCertificateRepositoryImpl(GiftCertificateCriteriaBuilder criteriaBuilder) {
+        this.criteriaBuilder = criteriaBuilder;
+    }
+
 
     @Override
     public List<GiftCertificate> findAll(int offset, int limit) {
@@ -32,6 +40,17 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
         giftCertificateCriteriaQuery.select(root);
         int itemsOffset = (offset - OFFSET_DEFAULT_VALUE) * limit;
         return entityManager.createQuery(giftCertificateCriteriaQuery)
+                .setFirstResult(itemsOffset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+
+    @Override
+    public List<GiftCertificate> findAll(SearchGiftSertificateParametr parametr, int offset, int limit) {
+        CriteriaQuery<GiftCertificate> criteriaQuery = criteriaBuilder.buildQuery(parametr);
+        int itemsOffset = (offset - OFFSET_DEFAULT_VALUE) * limit;
+        return entityManager.createQuery(criteriaQuery)
                 .setFirstResult(itemsOffset)
                 .setMaxResults(limit)
                 .getResultList();
@@ -54,8 +73,18 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
         return id;
     }
 
+
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
         return entityManager.merge(giftCertificate);
     }
+
+    @Override
+    public long findNumberOfEntities() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+        query.select(builder.count(query.from(GiftCertificate.class)));
+        return entityManager.createQuery(query).getSingleResult();
+    }
 }
+
