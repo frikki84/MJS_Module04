@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -56,42 +57,49 @@ public class GiftCertificateCriteriaBuilder {
         }
 
         List<String> tagNames = parameter.getTagNames();
-        if (tagNames != null || !tagNames.isEmpty()) {
+
+        if (Objects.nonNull(tagNames)) {
             List<String> distinctTagList = tagNames.stream().distinct().collect(Collectors.toList());
             List<Tag> tags = entityManager.createQuery(QUERY_SELECT_BY_TAG_NAME, Tag.class).setParameter(PARAMETER_TAG_NAMES, distinctTagList).getResultList();
             if (tags.size() != distinctTagList.size()) {
                 return giftCertificateCriteriaQuery;
             }
-
-            giftCertificateCriteriaQuery.select(root).where(predicateList.toArray(new Predicate[0]));
-
-            SortParameter sortParameter = parameter.getSortBy();
-
-            String sortValue = null;
-
-            if (sortParameter != null) {
-                switch (sortParameter) {
-                    case NAME:
-                        sortValue = PARAMETER_SORTBY_NAME;
-                        break;
-                    case CREATE_DATE:
-                        sortValue = PARAMETER_SORTBY_CREATE_DATE;
-                        break;
-                }
-            }
-
-            OrderType orderType = parameter.getOrder();
-            Order order = null;
-            if (orderType != null) {
-                switch (orderType) {
-                    case ASC:order = criteriaBuilder.asc(root.get(sortValue)); break;
-                    case DESC:order = criteriaBuilder.desc(root.get(sortValue)); break;
-                }
-
-                giftCertificateCriteriaQuery.orderBy(order);
-            }
+            tags.forEach(tag -> predicateList.add(criteriaBuilder.isMember(tag, root.get("tags"))));
 
         }
+        giftCertificateCriteriaQuery.select(root).where(predicateList.toArray(new Predicate[0]));
+
+        SortParameter sortParameter = parameter.getSortBy();
+
+        String sortValue = null;
+
+        if (sortParameter != null) {
+            switch (sortParameter) {
+                case NAME:
+                    sortValue = PARAMETER_SORTBY_NAME;
+                    break;
+                case CREATE_DATE:
+                    sortValue = PARAMETER_SORTBY_CREATE_DATE;
+                    break;
+            }
+        }
+
+        OrderType orderType = parameter.getOrder();
+        Order order = null;
+        if (orderType != null) {
+            switch (orderType) {
+                case ASC:
+                    order = criteriaBuilder.asc(root.get(sortValue));
+                    break;
+                case DESC:
+                    order = criteriaBuilder.desc(root.get(sortValue));
+                    break;
+            }
+
+            giftCertificateCriteriaQuery.orderBy(order);
+        }
+
+
         return giftCertificateCriteriaQuery;
 
     }

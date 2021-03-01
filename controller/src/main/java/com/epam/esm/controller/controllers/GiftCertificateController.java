@@ -1,7 +1,7 @@
 package com.epam.esm.controller.controllers;
 
 
-import com.epam.esm.entity.GiftCertificate;
+
 import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.SearchGiftSertificateParametr;
 import com.epam.esm.service.GiftCertificateService;
