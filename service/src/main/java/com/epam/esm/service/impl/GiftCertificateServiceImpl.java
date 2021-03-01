@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -45,12 +46,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public List<GiftCertificateDto> findAll(SearchGiftSertificateParametr parametr, int offset, int limit) {
         pageValidation.checkPageInfo(offset, limit);
-        if (parametr == null || parametr.isEmpty()) {
+        if (Objects.isNull(parametr) || parametr.isEmpty()) {
             return findAll(offset, limit);
         }
         return giftCertificateRepository.findAll(parametr, offset, limit).stream()
                 .map(giftCertificate -> mapper.changeCertificateToDto(giftCertificate))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public long findNumberOfEntities() {
+        return giftCertificateRepository.findNumberOfEntities();
     }
 
     @Override

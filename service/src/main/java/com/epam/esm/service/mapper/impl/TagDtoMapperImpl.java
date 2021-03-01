@@ -7,6 +7,7 @@ import com.epam.esm.entity.TagDto;
 import com.epam.esm.service.mapper.TagDtoMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -30,6 +31,8 @@ public class TagDtoMapperImpl implements TagDtoMapper {
 
     @Override
     public List<Tag> changeCertificateDtoToTagList(GiftCertificateDto dto) {
-        return dto.getTagList();
+        List<Tag> tagList = new ArrayList<>();
+        dto.getTagList().forEach(tagDto -> tagList.add(changeTagDtoToTag(tagDto)));
+        return tagList;
     }
 }

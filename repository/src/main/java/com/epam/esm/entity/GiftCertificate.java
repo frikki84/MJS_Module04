@@ -27,10 +27,10 @@ public class GiftCertificate {
     private BigDecimal price;
     @Column
     private Integer duration;
-    @Column(name = "create_date", insertable = false, updatable = false)
+    @Column(name = "create_date", updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime createDate;
-    @Column(name = "last_update_date", insertable = false, updatable = false)
+    @Column(name = "last_update_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime lastUpdateDate;
 

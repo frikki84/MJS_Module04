@@ -3,13 +3,24 @@ package com.epam.esm.service.mapper.impl;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.TagDto;
 import com.epam.esm.service.mapper.CertificateDtoMapper;
+import com.epam.esm.service.mapper.TagDtoMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class CertificateDtoMapperImpl implements CertificateDtoMapper {
+    @Autowired
+    private final TagDtoMapper tagDtoMapper;
+
+    public CertificateDtoMapperImpl(TagDtoMapper tagDtoMapper) {
+        this.tagDtoMapper = tagDtoMapper;
+    }
+
 
     @Override
     public GiftCertificate changeDtoToCertificate(GiftCertificateDto dto) {
@@ -21,7 +32,9 @@ public class CertificateDtoMapperImpl implements CertificateDtoMapper {
         certificate.setDuration(dto.getDuration());
         certificate.setCreateDate(dto.getCreateDate());
         certificate.setLastUpdateDate(dto.getLastUpdateDate());
-        certificate.setTags(dto.getTagList());
+        List<Tag> tagList = new ArrayList<>();
+        dto.getTagList().forEach(tagDto -> tagList.add(tagDtoMapper.changeTagDtoToTag(tagDto)));
+        certificate.setTags(tagList);
         return certificate;
     }
 
@@ -35,8 +48,9 @@ public class CertificateDtoMapperImpl implements CertificateDtoMapper {
         dto.setDuration(certificate.getDuration());
         dto.setCreateDate(certificate.getCreateDate());
         dto.setLastUpdateDate(certificate.getLastUpdateDate());
-        dto.setTagList(certificate.getTags());
-
+        List<TagDto> dtoList = new ArrayList<>();
+        certificate.getTags().forEach(tag -> dtoList.add(tagDtoMapper.changeTagToTagDto(tag)));
+        dto.setTagList(dtoList);
         return dto;
     }
 

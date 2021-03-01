@@ -27,7 +27,8 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     @Autowired
     private final GiftCertificateCriteriaBuilder criteriaBuilder;
 
-    public GiftCertificateRepositoryImpl(GiftCertificateCriteriaBuilder criteriaBuilder) {
+    public GiftCertificateRepositoryImpl(EntityManager entityManager, GiftCertificateCriteriaBuilder criteriaBuilder) {
+        this.entityManager = entityManager;
         this.criteriaBuilder = criteriaBuilder;
     }
 

@@ -1,6 +1,9 @@
 package com.epam.esm.entity;
 
 import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import javax.validation.constraints.NotBlank;
 
 
@@ -8,10 +11,11 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TagDto {
-    public static final String ERROR_MESSAGE_NAME = "Name's size mustn't be empty or consist of spaces";
+@EqualsAndHashCode()
+@Relation(itemRelation = "tag", collectionRelation = "tags")
+public class TagDto extends RepresentationModel<TagDto> {
     private long id;
 
-    @NotBlank(message = ERROR_MESSAGE_NAME)
+    @NotBlank
     private String nameTag;
 }

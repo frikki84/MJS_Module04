@@ -2,10 +2,12 @@ package com.epam.esm.controller.controllers;
 
 
 
+import com.epam.esm.controller.util.HateoasBuilder;
 import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.SearchGiftSertificateParametr;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,38 +17,44 @@ import java.util.List;
 public class GiftCertificateController {
     @Autowired
     private final GiftCertificateService giftCertificateService;
+    @Autowired
+    private final HateoasBuilder<GiftCertificateDto> hateoas;
 
-    public GiftCertificateController(GiftCertificateService giftCertificateService) {
+    public GiftCertificateController(GiftCertificateService giftCertificateService, HateoasBuilder<GiftCertificateDto> hateoas) {
         this.giftCertificateService = giftCertificateService;
+        this.hateoas = hateoas;
     }
 
     @GetMapping
-    public List<GiftCertificateDto> findAll(
+    public PagedModel<GiftCertificateDto> findAll(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
-
-        return giftCertificateService.findAll(page, size);
+        List<GiftCertificateDto> list = giftCertificateService.findAll(page, size);
+        hateoas.addLinksToGiftCertificateList(list);
+        return hateoas.addPagination(list, page, size, giftCertificateService.findNumberOfEntities());
     }
 
     @GetMapping("/find")
-    public List<GiftCertificateDto> findAllByParameter(
+    public PagedModel<GiftCertificateDto> findAllByParameter(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             @RequestBody SearchGiftSertificateParametr parametr) {
-
-        return giftCertificateService.findAll(parametr, page, size);
+        List<GiftCertificateDto> list = giftCertificateService.findAll(parametr, page, size);
+        hateoas.addLinksToGiftCertificateList(list);
+        return hateoas.addPagination(list, page, size, giftCertificateService.findNumberOfEntities());
     }
 
 
+
     @GetMapping("/{id}")
-    public GiftCertificateDto findById(@PathVariable Long id) {
-        return giftCertificateService.findById(id);
+    public GiftCertificateDto findById(@PathVariable final Long id) {
+        return hateoas.addLinksToGiftCertificate(giftCertificateService.findById(id));
 
     }
 
     @PostMapping
     public GiftCertificateDto create(@RequestBody GiftCertificateDto dto) {
-        return giftCertificateService.create(dto);
+        return hateoas.addLinksToGiftCertificate(giftCertificateService.create(dto));
     }
 
     @DeleteMapping("/{id}")
@@ -56,6 +64,6 @@ public class GiftCertificateController {
 
     @PatchMapping
     public GiftCertificateDto update(@RequestBody GiftCertificateDto dto, Long id) {
-        return giftCertificateService.update(dto, id);
+        return hateoas.addLinksToGiftCertificate(giftCertificateService.update(dto, id));
     }
 }

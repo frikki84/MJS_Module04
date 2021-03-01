@@ -37,5 +37,10 @@ public class TagController {
         return tagService.create(dto);
     }
 
+    @DeleteMapping
+    public Long delete(Long id) {
+        return tagService.delete(id);
+    }
+
 
 }
