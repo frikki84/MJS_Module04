@@ -12,6 +12,7 @@ import com.epam.esm.service.validation.PageInfoValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigDecimal;
@@ -52,6 +53,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderDto create(OrderCreationParameter parameter) {
         User user = userRepository.findById(parameter.getUserId());
         if (Objects.isNull(user)) {

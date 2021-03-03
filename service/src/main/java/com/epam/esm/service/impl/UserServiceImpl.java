@@ -45,10 +45,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.delete(id);
     }
 
-    @Override
-    public UserDto findUserWithTheHighestCostOfAllOrder() {
-        return mapper.chandeUserToDto(userRepository.findUserWithTheHighestCostOfAllOrder());
-    }
 
     @Override
     public long findNumberOfEntities() {

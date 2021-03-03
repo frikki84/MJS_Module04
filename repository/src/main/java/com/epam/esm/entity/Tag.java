@@ -8,8 +8,6 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Table(name = "tag")
 public class Tag {
     @Id

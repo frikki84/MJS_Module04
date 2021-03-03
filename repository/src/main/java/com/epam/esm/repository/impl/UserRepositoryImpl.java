@@ -18,8 +18,8 @@ import java.util.List;
 @Transactional
 public class UserRepositoryImpl implements UserRepository {
    public static final int OFFSET_DEFAULT_VALUE = 1;
-   public static final String QUERY_FIND_USER_WITH_HIGHIEST_COST_OF_ORDERS = "select users_order.user_id from users_order group by users_order.user_id order by sum(users_order.price) desc;";
-
+   public static final String QUERY_FIND_USER_WITH_HIGHIEST_COST_OF_ORDERS = "select o.id from Order o group by o.id order by sum(o.price) desc";
+   private static final int POSITION_WITH_MAX_VALUE = 1;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -63,9 +63,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findUserWithTheHighestCostOfAllOrder() {
-        return (User) entityManager.createQuery(QUERY_FIND_USER_WITH_HIGHIEST_COST_OF_ORDERS)
-                .setMaxResults(1).getSingleResult();
+    public Long findUserWithTheHighestCostOfAllOrder() {
+        return entityManager.createQuery(QUERY_FIND_USER_WITH_HIGHIEST_COST_OF_ORDERS, Long.class)
+                .setMaxResults(POSITION_WITH_MAX_VALUE).getSingleResult();
     }
 
 

@@ -48,5 +48,10 @@ public class TagController {
         return tagService.delete(id);
     }
 
+    @GetMapping("/most_used_tag")
+    public TagDto findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder(){
+        return tagService.findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder();
+    }
+
 
 }

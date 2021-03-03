@@ -11,6 +11,5 @@ public interface UserService {
     public UserDto findById(long id);
     public UserDto create(UserDto entity);
     public long delete(long id);
-    public UserDto findUserWithTheHighestCostOfAllOrder();
     public long findNumberOfEntities();
 }

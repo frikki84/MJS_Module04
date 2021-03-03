@@ -2,7 +2,9 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.TagDto;
+import com.epam.esm.entity.User;
 import com.epam.esm.repository.TagRepository;
+import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.mapper.TagDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,13 @@ public class TagServiceImpl implements TagService {
 
     @Autowired
     private final TagRepository tagRepository;
-    @Autowired
     private final TagDtoMapper mapper;
+    private final UserRepository userRepository;
 
-    public TagServiceImpl(TagRepository tagRepository, TagDtoMapper mapper) {
+    public TagServiceImpl(TagRepository tagRepository, TagDtoMapper mapper, UserRepository userRepository) {
         this.tagRepository = tagRepository;
         this.mapper = mapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -53,4 +56,10 @@ public class TagServiceImpl implements TagService {
     }
 
 
+    @Override
+    public TagDto findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder() {
+        Long userId = userRepository.findUserWithTheHighestCostOfAllOrder();
+        Tag tag = tagRepository.getMostWidelyUsedUsersTag(userId);
+        return mapper.changeTagToTagDto(tag);
+    }
 }
