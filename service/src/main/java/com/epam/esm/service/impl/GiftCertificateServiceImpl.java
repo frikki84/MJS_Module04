@@ -23,9 +23,7 @@ import java.util.stream.Collectors;
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Autowired
     private final GiftCertificateRepository giftCertificateRepository;
-    @Autowired
     private final CertificateDtoMapper mapper;
-    @Autowired
     private final PageInfoValidation pageValidation;
 
 

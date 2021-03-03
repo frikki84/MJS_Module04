@@ -1,4 +1,4 @@
-package com.epam.esm.controller.exception;
+package com.epam.esm.service.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 

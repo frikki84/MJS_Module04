@@ -1,9 +1,8 @@
 package com.epam.esm.controller.exception;
 
 
-import com.epam.esm.service.exception.GiftCertificateDtoValidationException;
-import com.epam.esm.service.exception.PageException;
-import com.epam.esm.service.validation.GiftCertificateDtoValidation;
+import com.epam.esm.service.exception.*;
+import com.epam.esm.service.exception.notused.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

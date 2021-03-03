@@ -1,6 +1,7 @@
-package com.epam.esm.controller.exception;
+package com.epam.esm.service.exception.notused;
 
 
+import com.epam.esm.service.exception.CustomErrorCode;
 
 public class TagAlreadyExistsException extends RuntimeException {
     private String code;

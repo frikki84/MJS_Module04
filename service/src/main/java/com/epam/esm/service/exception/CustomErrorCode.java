@@ -1,9 +1,11 @@
-package com.epam.esm.controller.exception;
+package com.epam.esm.service.exception;
 
 public enum CustomErrorCode {
 
     CERTIFICATE("01", "Certificate"),
-    TAG("02", "Tag");
+    TAG("02", "Tag"),
+    USER("03", "User"),
+    ORDER("04", "Order");
 
 
     private String code;

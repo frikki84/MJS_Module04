@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Relation(itemRelation = "order", collectionRelation = "orders")
 public class OrderDto extends RepresentationModel<OrderDto> {
-    private int id;
+    private long id;
     private BigDecimal price;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")

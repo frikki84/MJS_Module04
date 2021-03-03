@@ -58,7 +58,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public GiftCertificate findById(Long id) {
+    public GiftCertificate findById(long id) {
         return entityManager.find(GiftCertificate.class, id);
     }
 
@@ -69,7 +69,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public Long delete(Long id) {
+    public long delete(long id) {
         entityManager.remove(findById(id));
         return id;
     }

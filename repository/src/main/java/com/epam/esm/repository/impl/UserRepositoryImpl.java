@@ -55,7 +55,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public long findNumberOfEntities() {
+    public Long findNumberOfEntities() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = builder.createQuery(Long.class);
         query.select(builder.count(query.from(User.class)));

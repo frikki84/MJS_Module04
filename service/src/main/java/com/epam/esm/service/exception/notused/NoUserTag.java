@@ -1,5 +1,7 @@
-package com.epam.esm.controller.exception;
+package com.epam.esm.service.exception.notused;
 
+
+import com.epam.esm.service.exception.CustomErrorCode;
 
 public class NoUserTag  extends RuntimeException {
     private String code;

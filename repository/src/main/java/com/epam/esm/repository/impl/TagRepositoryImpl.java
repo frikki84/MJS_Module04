@@ -35,7 +35,7 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public Tag findById(Long id) {
+    public Tag findById(long id) {
         return entityManager.find(Tag.class, id);
     }
 
@@ -46,7 +46,7 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public Long delete(Long id) {
+    public long delete(long id) {
         entityManager.remove(findById(id));
         return id;
     }
