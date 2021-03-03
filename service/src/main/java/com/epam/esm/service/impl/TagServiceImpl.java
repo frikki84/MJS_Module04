@@ -32,7 +32,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDto findById(Long id) {
+    public TagDto findById(long id) {
         return mapper.changeTagToTagDto(tagRepository.findById(id));
     }
 
@@ -43,7 +43,14 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Long delete(Long id) {
+    public long delete(long id) {
         return tagRepository.delete(id);
     }
+
+    @Override
+    public long findNumberOfEntities() {
+        return tagRepository.findNumberOfEntities();
+    }
+
+
 }

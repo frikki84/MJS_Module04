@@ -60,7 +60,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public GiftCertificateDto findById(Long id) {
+    public GiftCertificateDto findById(long id) {
         return mapper.changeCertificateToDto(giftCertificateRepository.findById(id));
     }
 
@@ -75,7 +75,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public Long delete(Long id) {
+    public long delete(long id) {
         return giftCertificateRepository.delete(id);
     }
 

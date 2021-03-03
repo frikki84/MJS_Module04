@@ -81,7 +81,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     }
 
     @Override
-    public long findNumberOfEntities() {
+    public Long findNumberOfEntities() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = builder.createQuery(Long.class);
         query.select(builder.count(query.from(GiftCertificate.class)));

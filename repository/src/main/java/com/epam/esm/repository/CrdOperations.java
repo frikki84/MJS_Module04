@@ -14,6 +14,7 @@ public interface CrdOperations <T, I>{
     public T findById(I id);
     public T create(T entity);
     public Long delete(I id);
+    public Long findNumberOfEntities();
 
 
 }

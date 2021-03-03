@@ -50,4 +50,12 @@ public class TagRepositoryImpl implements TagRepository {
         entityManager.remove(findById(id));
         return id;
     }
+
+    @Override
+    public Long findNumberOfEntities() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+        query.select(builder.count(query.from(Tag.class)));
+        return entityManager.createQuery(query).getSingleResult();
+    }
 }
