@@ -1,7 +1,7 @@
 package com.epam.esm.utils;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.SearchGiftSertificateParametr;
+import com.epam.esm.entity.SearchGiftCertificateParameter;
 import com.epam.esm.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,7 +34,7 @@ public class GiftCertificateCriteriaBuilder {
         this.entityManager = entityManager;
     }
 
-    public CriteriaQuery<GiftCertificate> buildQuery(SearchGiftSertificateParametr parameter) {
+    public CriteriaQuery<GiftCertificate> buildQuery(SearchGiftCertificateParameter parameter) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<GiftCertificate> giftCertificateCriteriaQuery = criteriaBuilder.createQuery(GiftCertificate.class);
         Root<GiftCertificate> root = giftCertificateCriteriaQuery.from(GiftCertificate.class);

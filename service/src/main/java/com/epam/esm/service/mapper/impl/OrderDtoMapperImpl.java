@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Component
@@ -39,7 +40,9 @@ public class OrderDtoMapperImpl implements OrderDtoMapper {
         order.setUser(userDtoMapper.chandeDtoToUser(dto.getUser()));
         order.setDate(dto.getDate());
         List<GiftCertificate> dtoList = new ArrayList<>();
-        dto.getGiftCertificateList().forEach(certificateDto -> dtoList.add(mapper.changeDtoToCertificate(certificateDto)));
+        if (Objects.nonNull(dto.getGiftCertificateList())) {
+            dto.getGiftCertificateList().forEach(certificateDto -> dtoList.add(mapper.changeDtoToCertificate(certificateDto)));
+        }
         order.setGiftCertificateList(dtoList);
         return order;
     }

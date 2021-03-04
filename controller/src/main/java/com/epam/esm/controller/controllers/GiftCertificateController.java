@@ -5,7 +5,7 @@ package com.epam.esm.controller.controllers;
 import com.epam.esm.controller.util.HateoasBuilder;
 import com.epam.esm.controller.util.PaginationBuilder;
 import com.epam.esm.entity.GiftCertificateDto;
-import com.epam.esm.entity.SearchGiftSertificateParametr;
+import com.epam.esm.entity.SearchGiftCertificateParameterDto;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
@@ -44,14 +44,11 @@ public class GiftCertificateController {
     public PagedModel<GiftCertificateDto> findAllByParameter(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
-            @RequestBody SearchGiftSertificateParametr parameter) {
+            @RequestBody SearchGiftCertificateParameterDto parameter) {
         List<GiftCertificateDto> list = giftCertificateService.findAll(parameter, page, size);
         hateoas.addLinksToGiftCertificateList(list);
         return pagination.addPagination(list, page, size, giftCertificateService.findNumberOfEntities());
     }
-
-
-
 
     @PostMapping
     public GiftCertificateDto create(@RequestBody GiftCertificateDto dto) {
@@ -63,8 +60,8 @@ public class GiftCertificateController {
         return giftCertificateService.delete(id);
     }
 
-    @PatchMapping
-    public GiftCertificateDto update(@RequestBody GiftCertificateDto dto, Long id) {
+    @PatchMapping("/{id}")
+    public GiftCertificateDto update(@RequestBody GiftCertificateDto dto, @PathVariable Long id) {
         return hateoas.addLinksToGiftCertificate(giftCertificateService.update(dto, id));
     }
 }

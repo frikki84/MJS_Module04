@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class SearchGiftSertificateParametr {
+public class SearchGiftCertificateParameterDto {
 
     private String name;
     private String description;
@@ -25,3 +25,4 @@ public class SearchGiftSertificateParametr {
         return (name == null || name.isEmpty()) && (description == null || description.isEmpty()) && (tagNames == null || tagNames.isEmpty()) && sortBy == null && order == null;
     }
 }
+

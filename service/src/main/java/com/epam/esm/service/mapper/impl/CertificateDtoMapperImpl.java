@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class CertificateDtoMapperImpl implements CertificateDtoMapper {
@@ -33,7 +34,9 @@ public class CertificateDtoMapperImpl implements CertificateDtoMapper {
         certificate.setCreateDate(dto.getCreateDate());
         certificate.setLastUpdateDate(dto.getLastUpdateDate());
         List<Tag> tagList = new ArrayList<>();
-        dto.getTagList().forEach(tagDto -> tagList.add(tagDtoMapper.changeTagDtoToTag(tagDto)));
+        if (Objects.nonNull(dto.getTagList())) {
+            dto.getTagList().forEach(tagDto -> tagList.add(tagDtoMapper.changeTagDtoToTag(tagDto)));
+        }
         certificate.setTags(tagList);
         return certificate;
     }

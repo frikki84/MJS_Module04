@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 @Transactional
@@ -21,7 +22,9 @@ public class TagRepositoryImpl implements TagRepository {
     private static final String CERTIFICATE_LIST_ATTRIBUTE = "giftCertificateList";
     private static final String TAG_ATTRIBUTE = "tags";
     private static final String COLUMN_ID = "id";
+    private static final String COLUMN_NAME = "nameTag";
     private static final int POSITION_WITH_MAX_VALUE = 1;
+    private static final String SQL_FIND_TAG_BY_NAME = "select t.id, t.nameTag from Tag t where t.name = ?";
 
     @PersistenceContext
     EntityManager entityManager;
@@ -43,6 +46,17 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public Tag findById(long id) {
         return entityManager.find(Tag.class, id);
+    }
+
+    @Override
+    public List<Tag> findByName(String tagName) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> giftCertificateCriteriaQuery = criteriaBuilder.createQuery(Tag.class);
+        Root<Tag> root = giftCertificateCriteriaQuery.from(Tag.class);
+        Predicate predicate = criteriaBuilder.like(root.get(COLUMN_NAME), tagName);
+        giftCertificateCriteriaQuery.select(root).where(predicate);
+        return entityManager.createQuery(giftCertificateCriteriaQuery)
+                .getResultList();
     }
 
     @Override

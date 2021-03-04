@@ -1,7 +1,7 @@
 package com.epam.esm.repository.impl;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.SearchGiftSertificateParametr;
+import com.epam.esm.entity.SearchGiftCertificateParameter;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.utils.GiftCertificateCriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +46,8 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
                 .getResultList();
     }
 
-
     @Override
-    public List<GiftCertificate> findAll(SearchGiftSertificateParametr parametr, int offset, int limit) {
+    public List<GiftCertificate> findAll(SearchGiftCertificateParameter parametr, int offset, int limit) {
         CriteriaQuery<GiftCertificate> criteriaQuery = criteriaBuilder.buildQuery(parametr);
         int itemsOffset = (offset - OFFSET_DEFAULT_VALUE) * limit;
         return entityManager.createQuery(criteriaQuery)
@@ -64,6 +63,8 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public GiftCertificate create(GiftCertificate entity) {
+        //addNeccesaryTagsToDb(entity);
+        //entity.setTags(new ArrayList<>());
         entityManager.persist(entity);
         return entity;
     }
@@ -87,5 +88,15 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
         query.select(builder.count(query.from(GiftCertificate.class)));
         return entityManager.createQuery(query).getSingleResult();
     }
+
+//    private  void addNeccesaryTagsToDb(GiftCertificate certificate) {
+//        List<Tag> tagList = certificate.getTags();
+//        List<Tag> tagListForAdding = tagList.stream()
+//                .map(tag -> entityManager.merge(tag))
+//                .collect(Collectors.toList());
+//        certificate.setTags(tagListForAdding);
+//    }
+
+
 }
 

@@ -41,15 +41,6 @@ public class ApplicationExceptionHandler {
         return new ResponseEntity<>(data, status);
     }
 
-    @ExceptionHandler({TagAlreadyExistsException.class})
-    public ResponseEntity<ExceptionDetails> handleTagAlreadyExistsException(TagAlreadyExistsException exception) {
-        HttpStatus status = HttpStatus.CONFLICT;
-        String message = getErrorResponse(TAG_EXISTS_MESSAGE);
-        String errorCode = status.value() + exception.getCode();
-        ExceptionDetails data = new ExceptionDetails(LocalDateTime.now(), status.value(), message, errorCode);
-        return new ResponseEntity<>(data, status);
-    }
-
     @ExceptionHandler({NoUserTag.class})
     public ResponseEntity<ExceptionDetails> handlerGeneralException(NoUserTag exception) {
         HttpStatus status = HttpStatus.NOT_FOUND;

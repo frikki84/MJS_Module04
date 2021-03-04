@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,7 +43,14 @@ public class TagServiceImpl implements TagService {
     @Override
     public TagDto create(TagDto entity) {
         Tag tag = mapper.changeTagDtoToTag(entity);
-        return mapper.changeTagToTagDto(tagRepository.create(tag));
+        List<Tag> checkingTagList = tagRepository.findByName(entity.getNameTag());
+        Tag resultTag = null;
+        if (Objects.isNull(checkingTagList) || checkingTagList.isEmpty()) {
+            resultTag = tagRepository.create(tag);
+        } else {
+            resultTag = checkingTagList.get(0);
+        }
+        return mapper.changeTagToTagDto(resultTag);
     }
 
     @Override
