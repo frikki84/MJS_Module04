@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v2/certificates")
-//@CompileStatic
+
 public class GiftCertificateController {
     @Autowired
     private final GiftCertificateService giftCertificateService;

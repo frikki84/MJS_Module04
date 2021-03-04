@@ -63,14 +63,13 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public GiftCertificate create(GiftCertificate entity) {
-        //проверить разницу
-        entityManager.merge(entity);
+        entityManager.persist(entity);
         return entity;
     }
 
     @Override
     public long delete(long id) {
-        entityManager.remove(findById(id));
+        entityManager.refresh(findById(id));
         return id;
     }
 

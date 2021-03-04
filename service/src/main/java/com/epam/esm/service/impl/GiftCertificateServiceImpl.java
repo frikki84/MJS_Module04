@@ -4,6 +4,7 @@ import com.epam.esm.entity.*;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.TagService;
 import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.CertificateDtoMapper;
@@ -30,13 +31,15 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final PageInfoValidation pageValidation;
     private final TagRepository tagRepository;
     private final SearchParamterDtoMapper paramterDtoMapper;
+    private final TagDtoMapper tagDtoMapper;
 
-    public GiftCertificateServiceImpl(GiftCertificateRepository giftCertificateRepository, CertificateDtoMapper mapper, PageInfoValidation validation, PageInfoValidation pageValidation, TagDtoMapper tagDtoMapper, TagRepository tagRepository, SearchParamterDtoMapper paramterDtoMapper) {
+    public GiftCertificateServiceImpl(GiftCertificateRepository giftCertificateRepository, CertificateDtoMapper mapper, PageInfoValidation validation, PageInfoValidation pageValidation, TagDtoMapper tagDtoMapper, TagRepository tagRepository, SearchParamterDtoMapper paramterDtoMapper, TagService tagService, TagDtoMapper tagDtoMapper1) {
         this.giftCertificateRepository = giftCertificateRepository;
         this.mapper = mapper;
         this.pageValidation = pageValidation;
         this.tagRepository = tagRepository;
         this.paramterDtoMapper = paramterDtoMapper;
+        this.tagDtoMapper = tagDtoMapper1;
     }
 
     @Override
@@ -80,8 +83,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         LocalDateTime currentDate = LocalDateTime.now();
         certificate.setCreateDate(currentDate);
         certificate.setLastUpdateDate(currentDate);
-        createNeccesaryTags(certificate);
-        return mapper.changeCertificateToDto(giftCertificateRepository.create(certificate));
+        List<Tag> tags = correctTagList(entity.getTagList());
+        certificate.setTags(tags);
+        GiftCertificate createdCertificate = giftCertificateRepository.create(certificate);
+        return mapper.changeCertificateToDto(createdCertificate);
+
     }
 
     @Override
@@ -128,16 +134,19 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         return mapper.changeCertificateToDto(giftCertificateRepository.update(certificateFromDb));
     }
 
-    private void createNeccesaryTags(GiftCertificate giftCertificate) {
-        List<Tag> tags = giftCertificate.getTags();
-        if (Objects.nonNull(tags)) {
-            tags.forEach(tag -> {
-                if (tagRepository.findById(tag.getId()) == null) {
-                    tagRepository.create(tag);
-                }
-            });
+
+    private List<Tag> correctTagList(List<TagDto> tagDtoList) {
+        return tagDtoList.stream()
+                .map(dto -> checkTagOperation(tagDtoMapper.changeTagDtoToTag(dto)))
+                .collect(Collectors.toList());
+    }
+
+    private Tag checkTagOperation(Tag tag) {
+        try {
+            return tagRepository.findByName(tag.getNameTag()).get(0);
+        } catch (RuntimeException e) {
+            return tagRepository.create(tag);
         }
-        ;
     }
 
 

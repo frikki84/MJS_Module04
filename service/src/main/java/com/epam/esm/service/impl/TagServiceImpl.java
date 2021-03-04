@@ -57,7 +57,7 @@ public class TagServiceImpl implements TagService {
         } else {
             resultTag = checkingTagList.get(0);
         }
-        return mapper.changeTagToTagDto(resultTag);
+        return mapper.changeTagToTagDto(tagRepository.create(resultTag));
     }
 
     @Override
