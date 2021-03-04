@@ -9,6 +9,7 @@ import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.OrderDtoMapper;
 import com.epam.esm.service.validation.PageInfoValidation;
+import org.graalvm.compiler.core.common.type.ArithmeticOpTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto findById(long id) {
-        return orderMapper.chandeOrderToDto(orderRepository.findById(id));
+        Order order = orderRepository.findById(id);
+        if (Objects.isNull(order)) {
+            throw new NoSuchResourceException(CustomErrorCode.ORDER);
+        }
+        return orderMapper.chandeOrderToDto(order);
     }
 
     @Override
@@ -79,7 +84,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public long delete(long id) {
-        return orderRepository.delete(id);
+        Long findId = null;
+        try {
+            findId=orderRepository.delete(id);
+        } catch (RuntimeException e) {
+            throw new NoSuchResourceException(CustomErrorCode.ORDER);
+        }
+        return findId;
     }
 
     @Override

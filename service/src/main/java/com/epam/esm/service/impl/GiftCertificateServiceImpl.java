@@ -68,7 +68,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificateDto findById(long id) {
         GiftCertificate certificate = giftCertificateRepository.findById(id);
         if (Objects.isNull(certificate)) {
-            throw  new NoSuchResourceException(CustomErrorCode.CERTIFICATE);
+            throw new NoSuchResourceException(CustomErrorCode.CERTIFICATE);
         }
         return mapper.changeCertificateToDto(certificate);
     }
@@ -86,11 +86,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public long delete(long id) {
-        Long givenId = giftCertificateRepository.delete(id);
-        if (Objects.isNull(givenId)) {
+        Long findId = null;
+        try {
+            findId = giftCertificateRepository.delete(id);
+        } catch (RuntimeException e) {
             throw new NoSuchResourceException(CustomErrorCode.CERTIFICATE);
         }
-        return givenId;
+        return findId;
     }
 
     @Override
@@ -129,12 +131,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private void createNeccesaryTags(GiftCertificate giftCertificate) {
         List<Tag> tags = giftCertificate.getTags();
         if (Objects.nonNull(tags)) {
-            tags.forEach(tag ->  {
+            tags.forEach(tag -> {
                 if (tagRepository.findById(tag.getId()) == null) {
                     tagRepository.create(tag);
                 }
             });
-        };
+        }
+        ;
     }
 
 

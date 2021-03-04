@@ -6,6 +6,7 @@ import com.epam.esm.entity.TagDto;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,12 +40,13 @@ public class TagController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public TagDto create(@RequestBody TagDto dto) {
         return hateoas.addLinksToTag(tagService.create(dto));
     }
 
-    @DeleteMapping
-    public long delete(long id) {
+    @DeleteMapping("/{id}")
+    public long delete(@PathVariable long id) {
         return tagService.delete(id);
     }
 

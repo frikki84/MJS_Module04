@@ -63,9 +63,8 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public GiftCertificate create(GiftCertificate entity) {
-        //addNeccesaryTagsToDb(entity);
-        //entity.setTags(new ArrayList<>());
-        entityManager.persist(entity);
+        //проверить разницу
+        entityManager.merge(entity);
         return entity;
     }
 
@@ -89,13 +88,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
         return entityManager.createQuery(query).getSingleResult();
     }
 
-//    private  void addNeccesaryTagsToDb(GiftCertificate certificate) {
-//        List<Tag> tagList = certificate.getTags();
-//        List<Tag> tagListForAdding = tagList.stream()
-//                .map(tag -> entityManager.merge(tag))
-//                .collect(Collectors.toList());
-//        certificate.setTags(tagListForAdding);
-//    }
+
 
 
 }

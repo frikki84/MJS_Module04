@@ -15,6 +15,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -44,4 +45,4 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
     @NotEmpty
     List<TagDto> tagList;
 
-}
+    }

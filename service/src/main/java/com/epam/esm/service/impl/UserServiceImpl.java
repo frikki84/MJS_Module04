@@ -1,13 +1,18 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.entity.Order;
+import com.epam.esm.entity.User;
 import com.epam.esm.entity.UserDto;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.UserService;
+import com.epam.esm.service.exception.CustomErrorCode;
+import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.UserDtoMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +37,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto findById(long id) {
-        return mapper.chandeUserToDto(userRepository.findById(id));
+        User user = userRepository.findById(id);
+        if (Objects.isNull(user)) {
+            throw new NoSuchResourceException(CustomErrorCode.USER);
+        }
+        return mapper.chandeUserToDto(user);
     }
 
     @Override
@@ -42,9 +51,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public long delete(long id) {
-        return userRepository.delete(id);
+        Long findId = null;
+        try {
+            findId = userRepository.delete(id);
+        } catch (RuntimeException e) {
+            throw new NoSuchResourceException(CustomErrorCode.USER);
+        }
+        return findId;
     }
-
 
     @Override
     public long findNumberOfEntities() {

@@ -6,6 +6,8 @@ import com.epam.esm.entity.User;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.TagService;
+import com.epam.esm.service.exception.CustomErrorCode;
+import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.TagDtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +39,11 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDto findById(long id) {
-        return mapper.changeTagToTagDto(tagRepository.findById(id));
+        Tag tag = tagRepository.findById(id);
+        if (Objects.isNull(tag)) {
+            throw new NoSuchResourceException(CustomErrorCode.TAG);
+        }
+        return mapper.changeTagToTagDto(tag);
     }
 
     @Override
@@ -46,6 +52,7 @@ public class TagServiceImpl implements TagService {
         List<Tag> checkingTagList = tagRepository.findByName(entity.getNameTag());
         Tag resultTag = null;
         if (Objects.isNull(checkingTagList) || checkingTagList.isEmpty()) {
+            //nullable - варинаты проверки на null
             resultTag = tagRepository.create(tag);
         } else {
             resultTag = checkingTagList.get(0);
@@ -55,7 +62,13 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public long delete(long id) {
-        return tagRepository.delete(id);
+        Long tagId = null;
+        try {
+            tagId = tagRepository.delete(id);
+        } catch (RuntimeException e) {
+            throw new NoSuchResourceException(CustomErrorCode.TAG);
+        }
+        return tagId;
     }
 
     @Override

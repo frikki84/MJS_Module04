@@ -7,6 +7,7 @@ import com.epam.esm.entity.OrderDto;
 import com.epam.esm.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,12 +43,13 @@ public class OrderController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public OrderDto create(@RequestBody OrderCreationParameter parameter) {
         return hateoas.addLinksToOrder(orderService.create(parameter));
     }
 
-    @DeleteMapping
-    public long delete(long id) {
+    @DeleteMapping("/{id}")
+    public long delete(@PathVariable long id) {
         return orderService.delete(id);
     }
 

@@ -9,12 +9,14 @@ import com.epam.esm.entity.SearchGiftCertificateParameterDto;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/v2/certificates")
+//@CompileStatic
 public class GiftCertificateController {
     @Autowired
     private final GiftCertificateService giftCertificateService;
@@ -51,6 +53,7 @@ public class GiftCertificateController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public GiftCertificateDto create(@RequestBody GiftCertificateDto dto) {
         return hateoas.addLinksToGiftCertificate(giftCertificateService.create(dto));
     }

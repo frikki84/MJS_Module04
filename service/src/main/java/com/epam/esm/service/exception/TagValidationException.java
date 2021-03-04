@@ -1,4 +1,4 @@
-package com.epam.esm.service.exception.notused;
+package com.epam.esm.service.exception;
 
 
 import com.epam.esm.service.exception.CustomErrorCode;
