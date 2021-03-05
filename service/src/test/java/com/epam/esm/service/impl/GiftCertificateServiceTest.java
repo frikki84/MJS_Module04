@@ -5,15 +5,10 @@ import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.TagDto;
 import com.epam.esm.repository.GiftCertificateRepository;
-import com.epam.esm.repository.TagRepository;
-import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.exception.GiftCertificateDtoValidationException;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.CertificateDtoMapper;
-import com.epam.esm.service.mapper.SearchParamterDtoMapper;
-import com.epam.esm.service.mapper.TagDtoMapper;
 import com.epam.esm.service.validation.PageInfoValidation;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,7 +36,7 @@ class GiftCertificateServiceImplTest {
     private  PageInfoValidation pageValidation;
 
     @InjectMocks
-    private GiftCertificateServiceImpl giftCertificateService;
+    private GiftCertificateService giftCertificateService;
 
     public static final int OFFSET = 10;
     public static final int LIMIT = 10;
@@ -65,9 +60,6 @@ class GiftCertificateServiceImplTest {
         assertEquals(expected, giftCertificateService.findAll(OFFSET, LIMIT));
     }
 
-    @Test
-    void testFindAll() {
-    }
 
     @Test
     void findNumberOfEntities() {

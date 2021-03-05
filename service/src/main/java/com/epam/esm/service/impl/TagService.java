@@ -5,10 +5,11 @@ import com.epam.esm.entity.TagDto;
 import com.epam.esm.entity.User;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.repository.UserRepository;
-import com.epam.esm.service.TagService;
+import com.epam.esm.service.CrdService;
 import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.TagDtoMapper;
+import com.epam.esm.service.validation.TagValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,14 +20,14 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class TagServiceImpl implements TagService {
+public class TagService implements CrdService<TagDto> {
 
     @Autowired
     private final TagRepository tagRepository;
     private final TagDtoMapper mapper;
     private final UserRepository userRepository;
 
-    public TagServiceImpl(TagRepository tagRepository, TagDtoMapper mapper, UserRepository userRepository) {
+    public TagService(TagRepository tagRepository, TagDtoMapper mapper, UserRepository userRepository) {
         this.tagRepository = tagRepository;
         this.mapper = mapper;
         this.userRepository = userRepository;
@@ -48,16 +49,16 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDto create(TagDto entity) {
+        TagValidation.chechTagDtoFormat(entity);
         Tag tag = mapper.changeTagDtoToTag(entity);
         List<Tag> checkingTagList = tagRepository.findByName(entity.getNameTag());
-        Tag resultTag = null;
-        if (Objects.isNull(checkingTagList) || checkingTagList.isEmpty()) {
-            //nullable - варинаты проверки на null
+        Tag resultTag;
+        if (checkingTagList.isEmpty()) {
             resultTag = tagRepository.create(tag);
         } else {
             resultTag = checkingTagList.get(0);
         }
-        return mapper.changeTagToTagDto(tagRepository.create(resultTag));
+        return mapper.changeTagToTagDto(resultTag);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class TagServiceImpl implements TagService {
     }
 
 
-    @Override
+
     public TagDto findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder() {
         Long userId = userRepository.findUserWithTheHighestCostOfAllOrder();
         Tag tag = tagRepository.getMostWidelyUsedUsersTag(userId);

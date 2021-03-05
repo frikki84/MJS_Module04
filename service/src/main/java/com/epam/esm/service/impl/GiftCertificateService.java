@@ -3,6 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.entity.*;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.TagRepository;
+import com.epam.esm.service.CrdService;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.exception.CustomErrorCode;
@@ -24,7 +25,8 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class GiftCertificateServiceImpl implements GiftCertificateService {
+
+public class GiftCertificateServiceImpl implements CrdService<GiftCertificateDto> {
     @Autowired
     private final GiftCertificateRepository giftCertificateRepository;
     private final CertificateDtoMapper mapper;
@@ -50,7 +52,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 .collect(Collectors.toList());
     }
 
-    @Override
+
     public List<GiftCertificateDto> findAll(SearchGiftCertificateParameterDto parametrDto, int offset, int limit) {
         pageValidation.checkPageInfo(offset, limit);
         if (Objects.isNull(parametrDto) || parametrDto.isEmpty()) {
@@ -101,7 +103,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         return findId;
     }
 
-    @Override
+
     public GiftCertificateDto update(GiftCertificateDto giftCertificate, Long id) {
         GiftCertificate certificateFromDb = giftCertificateRepository.findById(id);
         if (Objects.isNull(certificateFromDb)) {

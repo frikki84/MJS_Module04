@@ -100,7 +100,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> readOrdersByUser(long userId) {
-        return orderRepository.readOrdersByUser(userId).stream().map(order -> orderMapper.chandeOrderToDto(order))
+        List<Order>orderList = orderRepository.readOrdersByUser(userId);
+        if (orderList.isEmpty() || Objects.isNull(orderList) ) {
+            throw new NoSuchResourceException(CustomErrorCode.USER);
+        }
+        return orderList.stream().map(order -> orderMapper.chandeOrderToDto(order))
                 .collect(Collectors.toList());
     }
 }
