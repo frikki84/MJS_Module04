@@ -2,7 +2,6 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.TagDto;
-import com.epam.esm.entity.User;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.CrdService;
@@ -26,11 +25,13 @@ public class TagService implements CrdService<TagDto> {
     private final TagRepository tagRepository;
     private final TagDtoMapper mapper;
     private final UserRepository userRepository;
+    private final TagValidation tagValidation;
 
-    public TagService(TagRepository tagRepository, TagDtoMapper mapper, UserRepository userRepository) {
+    public TagService(TagRepository tagRepository, TagDtoMapper mapper, UserRepository userRepository, TagValidation tagValidation) {
         this.tagRepository = tagRepository;
         this.mapper = mapper;
         this.userRepository = userRepository;
+        this.tagValidation = tagValidation;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class TagService implements CrdService<TagDto> {
 
     @Override
     public TagDto create(TagDto entity) {
-        TagValidation.chechTagDtoFormat(entity);
+        tagValidation.chechTagDtoFormat(entity);
         Tag tag = mapper.changeTagDtoToTag(entity);
         List<Tag> checkingTagList = tagRepository.findByName(entity.getNameTag());
         Tag resultTag;
@@ -63,7 +64,7 @@ public class TagService implements CrdService<TagDto> {
 
     @Override
     public long delete(long id) {
-        Long tagId = null;
+        Long tagId;
         try {
             tagId = tagRepository.delete(id);
         } catch (RuntimeException e) {

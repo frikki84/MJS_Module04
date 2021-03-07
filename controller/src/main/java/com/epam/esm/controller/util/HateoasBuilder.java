@@ -35,6 +35,7 @@ public class HateoasBuilder {
         dto.add(linkTo(methodOn(GiftCertificateController.class).create(dto))
                 .withRel(CERTIFICATE_CREATE)
                 .withType(HttpMethod.POST.name()));
+        System.out.println("hateoas dto " + dto);
 //        dto.add(linkTo(methodOn(GiftCertificateController.class).delete(dto.getId()))
 //                .withRel(CERTIFICATE_DELETE)
 //                .withType(HttpMethod.DELETE.name()));

@@ -11,10 +11,12 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
+
 @Relation(itemRelation = "tag", collectionRelation = "tags")
 public class TagDto extends RepresentationModel<TagDto> {
     private long id;
 
     @NotBlank
     private String nameTag;
+
 }

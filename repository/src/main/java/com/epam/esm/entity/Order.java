@@ -1,5 +1,6 @@
 package com.epam.esm.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
@@ -16,6 +17,7 @@ import java.util.List;
 @Table(name = "users_order")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 
 public class Order {
 

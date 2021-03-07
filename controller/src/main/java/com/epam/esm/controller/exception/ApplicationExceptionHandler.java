@@ -20,7 +20,6 @@ import java.util.Objects;
 @ControllerAdvice
 public class ApplicationExceptionHandler {
     public static final String NO_SUCH_RESOURCE_MESSAGE = "no_resource";
-    public static final String TAG_EXISTS_MESSAGE = "tag_exist";
     public static final String NO_CERTIFICATE = "no_certificate";
     public static final String WRONG_TAG_NAME = "wrong_tag_name";
     public static final String NO_TAG_IN_DB = "no_tag_in_db";
@@ -75,8 +74,9 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(TagValidationException.class)
     public ResponseEntity<ExceptionDetails> handleTagValidationException(TagValidationException exception) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        String message = getErrorResponse(WRONG_TAG_NAME);
-        String errorCode = status.value()+ exception.getCode();
+        String message = getErrorResponse(exception.getMessage());
+        String exceptionCode = CustomErrorCode.TAG.getCode();
+        String errorCode = status.value()+ exceptionCode;
         ExceptionDetails data = new ExceptionDetails(LocalDateTime.now()
                 , status.value(), message, errorCode);
         return new ResponseEntity<>(data, status);

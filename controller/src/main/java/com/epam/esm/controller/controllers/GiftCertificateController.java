@@ -6,7 +6,7 @@ import com.epam.esm.controller.util.HateoasBuilder;
 import com.epam.esm.controller.util.PaginationBuilder;
 import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.SearchGiftCertificateParameterDto;
-import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.service.impl.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
@@ -38,8 +38,10 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/{id}")
-    public GiftCertificateDto findById(@PathVariable Long id) {
-        return hateoas.addLinksToGiftCertificate(giftCertificateService.findById(id));
+    public GiftCertificateDto findById(@PathVariable Long id)
+    {
+        GiftCertificateDto dto = giftCertificateService.findById(id);
+        return hateoas.addLinksToGiftCertificate(dto);
     }
 
     @GetMapping("/find")

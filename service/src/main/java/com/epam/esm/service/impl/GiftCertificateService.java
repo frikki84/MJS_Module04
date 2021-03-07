@@ -4,8 +4,6 @@ import com.epam.esm.entity.*;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.CrdService;
-import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.service.TagService;
 import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.CertificateDtoMapper;
@@ -26,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 
-public class GiftCertificateServiceImpl implements CrdService<GiftCertificateDto> {
+public class GiftCertificateService implements CrdService<GiftCertificateDto> {
     @Autowired
     private final GiftCertificateRepository giftCertificateRepository;
     private final CertificateDtoMapper mapper;
@@ -35,7 +33,7 @@ public class GiftCertificateServiceImpl implements CrdService<GiftCertificateDto
     private final SearchParamterDtoMapper paramterDtoMapper;
     private final TagDtoMapper tagDtoMapper;
 
-    public GiftCertificateServiceImpl(GiftCertificateRepository giftCertificateRepository, CertificateDtoMapper mapper, PageInfoValidation validation, PageInfoValidation pageValidation, TagDtoMapper tagDtoMapper, TagRepository tagRepository, SearchParamterDtoMapper paramterDtoMapper, TagService tagService, TagDtoMapper tagDtoMapper1) {
+    public GiftCertificateService(GiftCertificateRepository giftCertificateRepository, CertificateDtoMapper mapper, PageInfoValidation validation, PageInfoValidation pageValidation, TagDtoMapper tagDtoMapper, TagRepository tagRepository, SearchParamterDtoMapper paramterDtoMapper, TagService tagService, TagDtoMapper tagDtoMapper1) {
         this.giftCertificateRepository = giftCertificateRepository;
         this.mapper = mapper;
         this.pageValidation = pageValidation;

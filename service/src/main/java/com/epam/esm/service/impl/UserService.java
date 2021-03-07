@@ -4,7 +4,7 @@ import com.epam.esm.entity.Order;
 import com.epam.esm.entity.User;
 import com.epam.esm.entity.UserDto;
 import com.epam.esm.repository.UserRepository;
-import com.epam.esm.service.UserService;
+import com.epam.esm.service.CrdService;
 import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.UserDtoMapper;
@@ -17,12 +17,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserService implements CrdService<UserDto> {
+
 
     private final UserRepository userRepository;
     private final UserDtoMapper mapper;
 
-    public UserServiceImpl(UserRepository userRepository, UserDtoMapper mapper) {
+    public UserService(UserRepository userRepository, UserDtoMapper mapper) {
         this.userRepository = userRepository;
         this.mapper = mapper;
     }

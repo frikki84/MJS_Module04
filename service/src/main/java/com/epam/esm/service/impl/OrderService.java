@@ -4,7 +4,6 @@ import com.epam.esm.entity.*;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.OrderRepository;
 import com.epam.esm.repository.UserRepository;
-import com.epam.esm.service.OrderService;
 import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.OrderDtoMapper;
@@ -24,7 +23,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-public class OrderServiceImpl implements OrderService {
+public class OrderService {
     @Autowired
     private final OrderRepository orderRepository;
     private final OrderDtoMapper orderMapper;
@@ -32,7 +31,7 @@ public class OrderServiceImpl implements OrderService {
     private final GiftCertificateRepository certificateRepository;
     private final PageInfoValidation pageInfoValidation;
 
-    public OrderServiceImpl(OrderRepository orderRepository, OrderDtoMapper orderMapper, UserRepository userRepository, GiftCertificateRepository certificateRepository, PageInfoValidation pageInfoValidation) {
+    public OrderService(OrderRepository orderRepository, OrderDtoMapper orderMapper, UserRepository userRepository, GiftCertificateRepository certificateRepository, PageInfoValidation pageInfoValidation) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.userRepository = userRepository;
@@ -40,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
         this.pageInfoValidation = pageInfoValidation;
     }
 
-    @Override
+
     public List<OrderDto> findAll(int offset, int limit) {
         pageInfoValidation.checkPageInfo(offset, limit);
         return orderRepository.findAll(offset, limit).stream()
@@ -48,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toList());
     }
 
-    @Override
+
     public OrderDto findById(long id) {
         Order order = orderRepository.findById(id);
         if (Objects.isNull(order)) {
@@ -57,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.chandeOrderToDto(order);
     }
 
-    @Override
+
     @Transactional
     public OrderDto create(OrderCreationParameter parameter) {
         User user = userRepository.findById(parameter.getUserId());
@@ -82,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.chandeOrderToDto(orderRepository.create(order));
     }
 
-    @Override
+
     public long delete(long id) {
         Long findId = null;
         try {
@@ -93,12 +92,12 @@ public class OrderServiceImpl implements OrderService {
         return findId;
     }
 
-    @Override
+
     public long findNumberOfEntities() {
         return orderRepository.findNumberOfEntities();
     }
 
-    @Override
+
     public List<OrderDto> readOrdersByUser(long userId) {
         List<Order>orderList = orderRepository.readOrdersByUser(userId);
         if (orderList.isEmpty() || Objects.isNull(orderList) ) {

@@ -4,7 +4,7 @@ import com.epam.esm.controller.util.HateoasBuilder;
 import com.epam.esm.controller.util.PaginationBuilder;
 import com.epam.esm.entity.OrderCreationParameter;
 import com.epam.esm.entity.OrderDto;
-import com.epam.esm.service.OrderService;
+import com.epam.esm.service.impl.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
