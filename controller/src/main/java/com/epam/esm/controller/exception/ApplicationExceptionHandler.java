@@ -2,7 +2,6 @@ package com.epam.esm.controller.exception;
 
 
 import com.epam.esm.service.exception.*;
-import com.epam.esm.service.exception.notused.*;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +19,6 @@ import java.util.Objects;
 @ControllerAdvice
 public class ApplicationExceptionHandler {
     public static final String NO_SUCH_RESOURCE_MESSAGE = "no_resource";
-    public static final String NO_CERTIFICATE = "no_certificate";
-    public static final String WRONG_TAG_NAME = "wrong_tag_name";
-    public static final String NO_TAG_IN_DB = "no_tag_in_db";
-
-
 
     private final ReloadableResourceBundleMessageSource resourceBundle;
 
@@ -32,38 +26,10 @@ public class ApplicationExceptionHandler {
         this.resourceBundle = resourceBundle;
     }
 
-    @ExceptionHandler({InvalidDataException.class})
-    public ResponseEntity<ExceptionDetails> handleInvalidDataException(InvalidDataException exception) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        String errorCode = status.value() + exception.getCode();
-        ExceptionDetails data = new ExceptionDetails(LocalDateTime.now(), status.value(), exception.getMessage(), errorCode);
-        return new ResponseEntity<>(data, status);
-    }
-
-    @ExceptionHandler({NoUserTag.class})
-    public ResponseEntity<ExceptionDetails> handlerGeneralException(NoUserTag exception) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        String message = getErrorResponse(NO_TAG_IN_DB);
-        String errorCode = status.value() + exception.getCode();
-        ExceptionDetails data = new ExceptionDetails(LocalDateTime.now(), status.value(), message, errorCode);
-        return new ResponseEntity<>(data, status);
-    }
-
     @ExceptionHandler(NoSuchResourceException.class)
     public ResponseEntity<ExceptionDetails> handleNoSuchResourceException(NoSuchResourceException exception) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         String message = getErrorResponse(NO_SUCH_RESOURCE_MESSAGE);
-        String errorCode = status.value()+ exception.getCode();
-        ExceptionDetails data = new ExceptionDetails(LocalDateTime.now()
-                , status.value(), message, errorCode);
-
-        return new ResponseEntity<>(data, status);
-    }
-
-    @ExceptionHandler(NoCertificatesWithName.class)
-    public ResponseEntity<ExceptionDetails> handleNoCertificatesWithName(NoCertificatesWithName exception) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        String message = getErrorResponse(NO_CERTIFICATE);
         String errorCode = status.value()+ exception.getCode();
         ExceptionDetails data = new ExceptionDetails(LocalDateTime.now()
                 , status.value(), message, errorCode);
@@ -111,7 +77,6 @@ public class ApplicationExceptionHandler {
                 .requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         Locale locale = request.getLocale();
         String bundleMessage = resourceBundle.getMessage(key, new Object[]{}, locale);
-
         return bundleMessage;
     }
 
