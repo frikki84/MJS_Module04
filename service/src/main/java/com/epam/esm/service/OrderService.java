@@ -1,4 +1,4 @@
-package com.epam.esm.service.impl;
+package com.epam.esm.service;
 
 import com.epam.esm.entity.*;
 import com.epam.esm.repository.GiftCertificateRepository;
@@ -8,7 +8,6 @@ import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.OrderDtoMapper;
 import com.epam.esm.service.validation.PageInfoValidation;
-import org.graalvm.compiler.core.common.type.ArithmeticOpTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -83,7 +82,7 @@ public class OrderService {
 
 
     public long delete(long id) {
-        Long findId = null;
+        Long findId;
         try {
             findId=orderRepository.delete(id);
         } catch (RuntimeException e) {

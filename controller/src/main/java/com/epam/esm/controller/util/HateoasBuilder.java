@@ -5,8 +5,6 @@ import com.epam.esm.controller.controllers.GiftCertificateController;
 import com.epam.esm.controller.controllers.TagController;
 import com.epam.esm.controller.controllers.UserController;
 import com.epam.esm.entity.*;
-import org.springframework.context.annotation.Bean;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +17,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class HateoasBuilder {
     public static final String CERTIFICATE_UPDATE = "update certificate";
-    public static final String CERTIFICATE_DELETE = "delete certificate";
     public static final String CERTIFICATE_CREATE = "create certificate";
-    public static final String TAG_DELETE = "delete tag";
     public static final String TAG_CREATE = "create tag";
-    public static final String USER_DELETE = "delete user";
     public static final String USER_CREATE = "create user";
     public static final String ORDER_LINK_TO_USER = "user";
     public static final String ORDER_USER_ORDERS = "user orders";
@@ -35,10 +30,6 @@ public class HateoasBuilder {
         dto.add(linkTo(methodOn(GiftCertificateController.class).create(dto))
                 .withRel(CERTIFICATE_CREATE)
                 .withType(HttpMethod.POST.name()));
-        System.out.println("hateoas dto " + dto);
-//        dto.add(linkTo(methodOn(GiftCertificateController.class).delete(dto.getId()))
-//                .withRel(CERTIFICATE_DELETE)
-//                .withType(HttpMethod.DELETE.name()));
         addLinksToListTag(dto.getTagList());
         return dto;
     }
@@ -56,9 +47,7 @@ public class HateoasBuilder {
         tagDto.add(linkTo(methodOn(TagController.class).create(tagDto))
                 .withRel(TAG_CREATE)
                 .withType(HttpMethod.POST.name()));
-//        tagDto.add(linkTo(methodOn(TagController.class).delete(tagDto.getId()))
-//                .withRel(TAG_DELETE)
-//                .withType(HttpMethod.DELETE.name()));
+
         return tagDto;
     }
 
@@ -72,9 +61,7 @@ public class HateoasBuilder {
         userDto.add(linkTo(methodOn(UserController.class).create(userDto))
                 .withRel(USER_CREATE)
                 .withType(HttpMethod.POST.name()));
-//        userDto.add(linkTo(methodOn(UserController.class).delete(userDto.getId()))
-//                .withRel(USER_DELETE)
-//                .withType(HttpMethod.DELETE.name()));
+
         return userDto;
     }
 

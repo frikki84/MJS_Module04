@@ -1,4 +1,4 @@
-package com.epam.esm.service.impl;
+package com.epam.esm.service;
 
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.User;
@@ -52,7 +52,7 @@ public class UserService implements CrdService<UserDto> {
 
     @Override
     public long delete(long id) {
-        Long findId = null;
+        Long findId;
         try {
             findId = userRepository.delete(id);
         } catch (RuntimeException e) {

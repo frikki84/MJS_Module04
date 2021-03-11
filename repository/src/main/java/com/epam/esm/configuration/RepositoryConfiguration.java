@@ -1,5 +1,7 @@
 package com.epam.esm.configuration;
 
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 @Configuration
 @ComponentScan("com.epam.esm")
@@ -22,9 +25,7 @@ public class RepositoryConfiguration {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             DataSource dataSource, JpaVendorAdapter jpaVendorAdapter) {
-
         LocalContainerEntityManagerFactoryBean lef = new LocalContainerEntityManagerFactoryBean();
-
         lef.setDataSource(dataSource);
         lef.setPackagesToScan("com.epam.esm");
         lef.setJpaVendorAdapter(jpaVendorAdapter);
@@ -36,32 +37,27 @@ public class RepositoryConfiguration {
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-
         hibernateJpaVendorAdapter.setShowSql(false);
         hibernateJpaVendorAdapter.setGenerateDdl(true);
         hibernateJpaVendorAdapter.setDatabase(Database.MYSQL);
-
         return hibernateJpaVendorAdapter;
     }
 
     @Bean
     public PlatformTransactionManager hibernateTransactionManager(
             LocalContainerEntityManagerFactoryBean entityManagerFactory) {
-
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory.getObject());
-
         return transactionManager;
     }
 
     @Bean
-    public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
     private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
-
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         hibernateProperties.setProperty("hibernate.show_sql", "true");
@@ -69,6 +65,7 @@ public class RepositoryConfiguration {
 
         return hibernateProperties;
     }
+
 
 
 }

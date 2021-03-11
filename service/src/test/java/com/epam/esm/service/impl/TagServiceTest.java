@@ -1,11 +1,10 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.TagDto;
 import com.epam.esm.repository.TagRepository;
 import com.epam.esm.repository.UserRepository;
+import com.epam.esm.service.TagService;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.exception.TagValidationException;
 import com.epam.esm.service.mapper.TagDtoMapper;
@@ -20,8 +19,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 

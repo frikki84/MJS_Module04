@@ -3,7 +3,7 @@ package com.epam.esm.controller.controllers;
 import com.epam.esm.controller.util.HateoasBuilder;
 import com.epam.esm.controller.util.PaginationBuilder;
 import com.epam.esm.entity.TagDto;
-import com.epam.esm.service.impl.TagService;
+import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;

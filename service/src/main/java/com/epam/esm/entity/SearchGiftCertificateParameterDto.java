@@ -17,12 +17,12 @@ public class SearchGiftCertificateParameterDto {
 
     private String name;
     private String description;
-    private List<String> tagNames;
+    private List<String> tags;
     private SortParameter sortBy;
     private OrderType order;
 
     public boolean isEmpty() {
-        return (name == null || name.isEmpty()) && (description == null || description.isEmpty()) && (tagNames == null || tagNames.isEmpty()) && sortBy == null && order == null;
+        return (name == null || name.isEmpty()) && (description == null || description.isEmpty()) && (tags == null || tags.isEmpty()) && sortBy == null && order == null;
     }
 }
 

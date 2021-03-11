@@ -1,12 +1,11 @@
 package com.epam.esm.controller.controllers;
 
 
-
 import com.epam.esm.controller.util.HateoasBuilder;
 import com.epam.esm.controller.util.PaginationBuilder;
 import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.SearchGiftCertificateParameterDto;
-import com.epam.esm.service.impl.GiftCertificateService;
+import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
@@ -28,6 +27,7 @@ public class GiftCertificateController {
         this.hateoas = hateoas;
         this.pagination = pagination;
     }
+
     @GetMapping
     public PagedModel<GiftCertificateDto> findAll(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
@@ -38,15 +38,14 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/{id}")
-    public GiftCertificateDto findById(@PathVariable Long id)
-    {
+    public GiftCertificateDto findById(@PathVariable Long id) {
         GiftCertificateDto dto = giftCertificateService.findById(id);
         return hateoas.addLinksToGiftCertificate(dto);
     }
 
     @GetMapping("/find")
     public PagedModel<GiftCertificateDto> findAllByParameter(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "page", required = false, defaultValue = "10") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             @RequestBody SearchGiftCertificateParameterDto parameter) {
         List<GiftCertificateDto> list = giftCertificateService.findAll(parameter, page, size);

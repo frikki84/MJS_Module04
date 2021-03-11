@@ -1,11 +1,9 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.User;
 import com.epam.esm.entity.UserDto;
 import com.epam.esm.repository.UserRepository;
-import com.epam.esm.service.exception.GiftCertificateDtoValidationException;
+import com.epam.esm.service.UserService;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.UserDtoMapper;
 import org.junit.jupiter.api.BeforeEach;

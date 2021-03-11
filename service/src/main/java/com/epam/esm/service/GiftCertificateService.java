@@ -1,9 +1,8 @@
-package com.epam.esm.service.impl;
+package com.epam.esm.service;
 
 import com.epam.esm.entity.*;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.TagRepository;
-import com.epam.esm.service.CrdService;
 import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.CertificateDtoMapper;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-
 public class GiftCertificateService implements CrdService<GiftCertificateDto> {
     @Autowired
     private final GiftCertificateRepository giftCertificateRepository;
@@ -52,9 +50,10 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
 
 
     public List<GiftCertificateDto> findAll(SearchGiftCertificateParameterDto parametrDto, int offset, int limit) {
+
         pageValidation.checkPageInfo(offset, limit);
         if (Objects.isNull(parametrDto) || parametrDto.isEmpty()) {
-            return findAll(offset, limit);
+                      return findAll(offset, limit);
         }
         SearchGiftCertificateParameter parametr = paramterDtoMapper.changeDtoToSearchGiftSertificateParametr(parametrDto);
         return giftCertificateRepository.findAll(parametr, offset, limit).stream()
@@ -92,7 +91,7 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
 
     @Override
     public long delete(long id) {
-        Long findId = null;
+        Long findId;
         try {
             findId = giftCertificateRepository.delete(id);
         } catch (RuntimeException e) {

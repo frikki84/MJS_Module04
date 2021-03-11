@@ -22,7 +22,6 @@ public class PageInfoValidation {
         this.repository = repository;
     }
 
-
     public boolean checkPageInfo(int offset, int limit) {
         boolean result = true;
 
@@ -32,11 +31,9 @@ public class PageInfoValidation {
         if (limit < MIN_PAGE_SIZE) {
             throw new PageException(NONEXISTENT_PAGE_SIZE);
         }
-
         if ((offset - VALUE_TO_CHANGE_FIRST_INDEX_FROM_ONE_TO_ZERO) * limit > repository.findNumberOfEntities()) {
             throw new PageException(NONEXISTENT_PAGE_NUMBER);
         }
-
 
         return result;
     }

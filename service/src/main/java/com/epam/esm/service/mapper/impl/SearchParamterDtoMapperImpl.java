@@ -12,7 +12,7 @@ public class SearchParamterDtoMapperImpl implements SearchParamterDtoMapper {
         SearchGiftCertificateParameter parametr =new SearchGiftCertificateParameter();
         parametr.setName(dto.getName());
         parametr.setDescription(dto.getDescription());
-        parametr.setTagNames(dto.getTagNames());
+        parametr.setTags(dto.getTags());
         parametr.setOrder(dto.getOrder());
         parametr.setSortBy(dto.getSortBy());
         return parametr;

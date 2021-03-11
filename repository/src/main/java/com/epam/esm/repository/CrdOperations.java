@@ -9,6 +9,12 @@ import java.util.List;
  */
 
 public interface CrdOperations <T>{
+    /**
+     *
+     * @param offset - number of search results per page
+     * @param limit - number of pages
+     * @return
+     */
     public List<T> findAll(int offset, int limit);
     public T findById(long id);
     public T create(T entity);
