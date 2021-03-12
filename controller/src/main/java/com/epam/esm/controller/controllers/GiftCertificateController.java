@@ -45,7 +45,7 @@ public class GiftCertificateController {
 
     @GetMapping("/find")
     public PagedModel<GiftCertificateDto> findAllByParameter(
-            @RequestParam(value = "page", required = false, defaultValue = "10") int page,
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "10") int size,
             @RequestBody SearchGiftCertificateParameterDto parameter) {
         List<GiftCertificateDto> list = giftCertificateService.findAll(parameter, page, size);

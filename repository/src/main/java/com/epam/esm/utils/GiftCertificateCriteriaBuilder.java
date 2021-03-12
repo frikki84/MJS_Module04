@@ -23,7 +23,7 @@ public class GiftCertificateCriteriaBuilder {
     public static final String PARAMETER_SORTBY_NAME = "name";
     public static final String PARAMETER_SORTBY_CREATE_DATE = "createDate";
     public static final String TAG_LIST_IN_GIFTCERTIFICATE = "tags";
-    public static final String QUERY_SELECT_BY_TAG_NAME = "from Tag tag where tag.nameTag in (:" + PARAMETER_TAG_NAMES + ")";
+    public static final String QUERY_SELECT_BY_TAG_NAME = "select tag from Tag tag where tag.nameTag in (:" + PARAMETER_TAG_NAMES + ")";
 
 
     @Autowired
