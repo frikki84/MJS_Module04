@@ -1,24 +1,24 @@
 package com.epam.esm.entity;
 
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.springframework.hateoas.RepresentationModel;
-import org.springframework.hateoas.server.core.Relation;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper=false)
 @Relation(itemRelation = "order", collectionRelation = "orders")
 public class OrderDto extends RepresentationModel<OrderDto> {
+
     private long id;
     private BigDecimal price;
     @JsonInclude(JsonInclude.Include.NON_NULL)

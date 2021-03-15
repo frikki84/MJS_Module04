@@ -1,19 +1,21 @@
 package com.epam.esm.repository.impl;
 
-import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.SearchGiftCertificateParameter;
-import com.epam.esm.repository.GiftCertificateRepository;
-import com.epam.esm.utils.GiftCertificateCriteriaBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.SearchGiftCertificateParameter;
+import com.epam.esm.repository.GiftCertificateRepository;
+import com.epam.esm.utils.GiftCertificateCriteriaBuilder;
 
 
 @Repository
@@ -32,11 +34,11 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
         this.criteriaBuilder = criteriaBuilder;
     }
 
-
     @Override
     public List<GiftCertificate> findAll(int offset, int limit) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<GiftCertificate> giftCertificateCriteriaQuery = criteriaBuilder.createQuery(GiftCertificate.class);
+        CriteriaQuery<GiftCertificate> giftCertificateCriteriaQuery = criteriaBuilder.createQuery(
+                GiftCertificate.class);
         Root<GiftCertificate> root = giftCertificateCriteriaQuery.from(GiftCertificate.class);
         giftCertificateCriteriaQuery.select(root);
         int itemsOffset = (offset - OFFSET_DEFAULT_VALUE) * limit;
@@ -86,8 +88,6 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
         query.select(builder.count(query.from(GiftCertificate.class)));
         return entityManager.createQuery(query).getSingleResult();
     }
-
-
 
 
 }

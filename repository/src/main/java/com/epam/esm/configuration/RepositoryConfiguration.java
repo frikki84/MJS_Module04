@@ -1,7 +1,9 @@
 package com.epam.esm.configuration;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.ApplicationContext;
+import java.util.Properties;
+
+import javax.sql.DataSource;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,17 +16,14 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.sql.DataSource;
-import java.util.Properties;
-import java.util.stream.Stream;
-
 @Configuration
 @ComponentScan("com.epam.esm")
 @EnableTransactionManagement
 public class RepositoryConfiguration {
+
     @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            DataSource dataSource, JpaVendorAdapter jpaVendorAdapter) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource,
+            JpaVendorAdapter jpaVendorAdapter) {
         LocalContainerEntityManagerFactoryBean lef = new LocalContainerEntityManagerFactoryBean();
         lef.setDataSource(dataSource);
         lef.setPackagesToScan("com.epam.esm");
@@ -65,7 +64,5 @@ public class RepositoryConfiguration {
 
         return hibernateProperties;
     }
-
-
 
 }

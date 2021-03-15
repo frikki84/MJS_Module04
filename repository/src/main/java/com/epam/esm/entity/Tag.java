@@ -1,8 +1,15 @@
 package com.epam.esm.entity;
 
-import lombok.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
@@ -10,11 +17,11 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "tag")
 public class Tag {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "nameTag")
     private String nameTag;
-
 
 }

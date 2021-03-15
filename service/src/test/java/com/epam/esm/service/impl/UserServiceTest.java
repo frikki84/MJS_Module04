@@ -1,11 +1,11 @@
 package com.epam.esm.service.impl;
 
-import com.epam.esm.entity.User;
-import com.epam.esm.entity.UserDto;
-import com.epam.esm.repository.UserRepository;
-import com.epam.esm.service.UserService;
-import com.epam.esm.service.exception.NoSuchResourceException;
-import com.epam.esm.service.mapper.UserDtoMapper;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,14 +14,16 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-import static org.junit.jupiter.api.Assertions.*;
+import com.epam.esm.entity.User;
+import com.epam.esm.entity.UserDto;
+import com.epam.esm.repository.UserRepository;
+import com.epam.esm.service.UserService;
+import com.epam.esm.service.exception.NoSuchResourceException;
+import com.epam.esm.service.mapper.UserDtoMapper;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
+
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -43,6 +45,7 @@ class UserServiceTest {
         users.add(user);
         dtos.add(dto);
     }
+
     @Test
     void findAll() {
         Mockito.when(userRepository.findAll(OFFSET, LIMIT)).thenReturn(users);
@@ -81,7 +84,6 @@ class UserServiceTest {
         Mockito.when(userRepository.delete(ID)).thenThrow(RuntimeException.class);
         assertThrows(NoSuchResourceException.class, () -> userService.delete(ID));
     }
-
 
     @Test
     void findNumberOfEntities() {

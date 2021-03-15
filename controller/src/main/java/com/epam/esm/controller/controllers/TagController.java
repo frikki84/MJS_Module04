@@ -4,6 +4,7 @@ import com.epam.esm.controller.util.HateoasBuilder;
 import com.epam.esm.controller.util.PaginationBuilder;
 import com.epam.esm.entity.TagDto;
 import com.epam.esm.service.TagService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v2/tags")
 public class TagController {
+
     public static final String DEFAULTE_PAGE_VALUE = "1";
     public static final String DEFAULTE_SIZE_VALUE = "10";
 
@@ -34,7 +36,7 @@ public class TagController {
             @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size) {
         List<TagDto> list = tagService.findAll(page, size);
         hateoas.addLinksToListTag(list);
-        return pagination.addPagination(list,page, size, tagService.findNumberOfEntities());
+        return pagination.addPagination(list, page, size, tagService.findNumberOfEntities());
     }
 
     @GetMapping("/{id}")
@@ -54,9 +56,8 @@ public class TagController {
     }
 
     @GetMapping("/most_used_tag")
-    public TagDto findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder(){
+    public TagDto findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder() {
         return tagService.findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder();
     }
-
 
 }

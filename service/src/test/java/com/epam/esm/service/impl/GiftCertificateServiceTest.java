@@ -1,5 +1,22 @@
 package com.epam.esm.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.Tag;
@@ -10,31 +27,16 @@ import com.epam.esm.service.exception.GiftCertificateDtoValidationException;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.CertificateDtoMapper;
 import com.epam.esm.service.validation.PageInfoValidation;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class GiftCertificateServiceTest {
 
     @Mock
-    private  GiftCertificateRepository giftCertificateRepository;
+    private GiftCertificateRepository giftCertificateRepository;
     @Mock
-    private  CertificateDtoMapper mapper;
+    private CertificateDtoMapper mapper;
     @Mock
-    private  PageInfoValidation pageValidation;
+    private PageInfoValidation pageValidation;
 
     @InjectMocks
     private GiftCertificateService giftCertificateService;
@@ -43,12 +45,9 @@ class GiftCertificateServiceTest {
     public static final int LIMIT = 10;
     public static final long NON_EXISTING_ID = 10000;
     private GiftCertificate certificate = new GiftCertificate(1L, "Spa", "Spa for company", new BigDecimal(150), 180,
-            LocalDateTime.now(), LocalDateTime.now(), Arrays.asList(new Tag(1, "spa"), new Tag(2, "relax"))
-            );
+            LocalDateTime.now(), LocalDateTime.now(), Arrays.asList(new Tag(1, "spa"), new Tag(2, "relax")));
     private GiftCertificateDto dto = new GiftCertificateDto(1L, "Spa", "Spa for company", new BigDecimal(150), 180,
-            LocalDateTime.now(), LocalDateTime.now(), Arrays.asList(new TagDto(1, "spa"), new TagDto(2, "relax"))
-    );
-
+            LocalDateTime.now(), LocalDateTime.now(), Arrays.asList(new TagDto(1, "spa"), new TagDto(2, "relax")));
 
     @Test
     void findAll() {
@@ -61,7 +60,6 @@ class GiftCertificateServiceTest {
         assertEquals(expected, giftCertificateService.findAll(OFFSET, LIMIT));
     }
 
-
     @Test
     void findNumberOfEntities() {
         Mockito.when(giftCertificateRepository.findNumberOfEntities()).thenReturn(3L);
@@ -72,7 +70,7 @@ class GiftCertificateServiceTest {
     void findByIdPositive() {
         Mockito.when(giftCertificateRepository.findById(certificate.getId())).thenReturn(certificate);
         Mockito.when(mapper.changeCertificateToDto(certificate)).thenReturn(dto);
-        assertEquals(dto,giftCertificateService.findById(certificate.getId()));
+        assertEquals(dto, giftCertificateService.findById(certificate.getId()));
     }
 
     @Test
@@ -91,7 +89,8 @@ class GiftCertificateServiceTest {
 
     @Test
     void createNegative() {
-        Mockito.when(pageValidation.checkPageInfo(OFFSET, LIMIT)).thenThrow(GiftCertificateDtoValidationException.class);
+        Mockito.when(pageValidation.checkPageInfo(OFFSET, LIMIT))
+                .thenThrow(GiftCertificateDtoValidationException.class);
         Mockito.when(giftCertificateRepository.create(certificate)).thenReturn(certificate);
         Mockito.when(mapper.changeDtoToCertificate(dto)).thenReturn(certificate);
         Mockito.when(mapper.changeCertificateToDto(certificate)).thenReturn(dto);

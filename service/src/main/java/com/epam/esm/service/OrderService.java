@@ -63,14 +63,14 @@ public class OrderService {
             throw new NoSuchResourceException(CustomErrorCode.USER);
         }
         List<GiftCertificate> certificatesList = new ArrayList<>();
-        BigDecimal price = new BigDecimal(0);
+        BigDecimal price = BigDecimal.ZERO;
         for (Integer i : parameter.getCertificateDtos()) {
             GiftCertificate certificate = certificateRepository.findById(i);
             if (Objects.isNull(certificate)) {
                 throw new NoSuchResourceException(CustomErrorCode.ORDER);
             }
+            price = price.add(certificate.getPrice());
             certificatesList.add(certificate);
-            price.add(certificate.getPrice());
         }
         Order order = new Order();
         order.setUser(user);
@@ -99,7 +99,7 @@ public class OrderService {
 
     public List<OrderDto> readOrdersByUser(long userId) {
         List<Order>orderList = orderRepository.readOrdersByUser(userId);
-        if (orderList.isEmpty() || Objects.isNull(orderList) ) {
+        if (Objects.isNull(orderList) ||  orderList.isEmpty()) {
             throw new NoSuchResourceException(CustomErrorCode.USER);
         }
         return orderList.stream().map(order -> orderMapper.chandeOrderToDto(order))

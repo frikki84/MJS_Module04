@@ -1,27 +1,36 @@
 package com.epam.esm.controller.controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.epam.esm.controller.util.HateoasBuilder;
 import com.epam.esm.controller.util.PaginationBuilder;
 import com.epam.esm.entity.UserDto;
 import com.epam.esm.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("v2/users")
 public class UserController {
+
     public static final String DEFAULTE_PAGE_VALUE = "1";
     public static final String DEFAULTE_SIZE_VALUE = "10";
 
     @Autowired
     private UserService service;
     private HateoasBuilder hateoas;
-    private final PaginationBuilder<UserDto>pagination;
-
+    private final PaginationBuilder<UserDto> pagination;
 
     public UserController(UserService service, HateoasBuilder hateoasBuilder, PaginationBuilder<UserDto> pagination) {
         this.service = service;
@@ -41,8 +50,8 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto findById(@PathVariable long id) {
         return hateoas.addLinksToUser(service.findById(id));
-
     }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(@RequestBody UserDto dto) {

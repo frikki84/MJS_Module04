@@ -1,8 +1,7 @@
 package com.epam.esm.service.exception;
 
-import com.epam.esm.service.exception.CustomErrorCode;
-
 public class NoSuchResourceException extends RuntimeException {
+
     private String code;
 
     public NoSuchResourceException(CustomErrorCode code) {

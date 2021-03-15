@@ -1,10 +1,9 @@
 package com.epam.esm.service.mapper.impl;
 
-import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.GiftCertificateDto;
-import com.epam.esm.entity.Tag;
-import com.epam.esm.entity.TagDto;
-import com.epam.esm.service.mapper.TagDtoMapper;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Arrays;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,13 +12,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.GiftCertificateDto;
+import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.TagDto;
+import com.epam.esm.service.mapper.TagDtoMapper;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateDtoMapperImplTest {
+
     @Mock
     private TagDtoMapper tagDtoMapper;
     @InjectMocks
@@ -35,7 +36,6 @@ class CertificateDtoMapperImplTest {
         certificate.setTags(Arrays.asList(tag));
         dto.setTagList(Arrays.asList(tagDto));
     }
-
 
     @Test
     void changeDtoToCertificate() {

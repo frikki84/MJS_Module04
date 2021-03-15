@@ -1,18 +1,17 @@
 package com.epam.esm.entity;
 
+import java.util.List;
+
 import com.epam.esm.utils.OrderType;
 import com.epam.esm.utils.SortParameter;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 public class SearchGiftCertificateParameterDto {
 
     private String name;
@@ -22,7 +21,8 @@ public class SearchGiftCertificateParameterDto {
     private OrderType order;
 
     public boolean isEmpty() {
-        return (name == null || name.isEmpty()) && (description == null || description.isEmpty()) && (tags == null || tags.isEmpty()) && sortBy == null && order == null;
+        return (name == null || name.isEmpty()) && (description == null || description.isEmpty()) && (tags == null
+                || tags.isEmpty()) && sortBy == null && order == null;
     }
 }
 

@@ -13,9 +13,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableTransactionManagement
 @EnableWebMvc
 public class ControllerConfig {
+
     public static final String LOCALIZATION_PROPERTIES = "classpath:localization/message";
     public static final String DEFAULT_ENCODING = "UTF-8";
-
 
     @Bean
     public MessageSource messageSource() {

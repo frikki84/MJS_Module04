@@ -5,6 +5,7 @@ import com.epam.esm.entity.Order;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.User;
 import com.epam.esm.repository.TagRepository;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,12 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
+
 import java.util.List;
 import java.util.Objects;
 
 @Repository
 @Transactional
 public class TagRepositoryImpl implements TagRepository {
+
     private static final String ORDER_LIST_ATTRIBUTE = "orderList";
     private static final String CERTIFICATE_LIST_ATTRIBUTE = "giftCertificateList";
     private static final String TAG_ATTRIBUTE = "tags";
@@ -35,10 +38,7 @@ public class TagRepositoryImpl implements TagRepository {
         CriteriaQuery<Tag> tagCriteriaQuery = criteriaBuilder.createQuery(Tag.class);
         Root<Tag> root = tagCriteriaQuery.from(Tag.class);
         tagCriteriaQuery.select(root);
-        return entityManager.createQuery(tagCriteriaQuery)
-                .setFirstResult(offset)
-                .setMaxResults(limit)
-                .getResultList();
+        return entityManager.createQuery(tagCriteriaQuery).setFirstResult(offset).setMaxResults(limit).getResultList();
 
     }
 
@@ -54,8 +54,7 @@ public class TagRepositoryImpl implements TagRepository {
         Root<Tag> root = giftCertificateCriteriaQuery.from(Tag.class);
         Predicate predicate = criteriaBuilder.like(root.get(COLUMN_NAME), tagName);
         giftCertificateCriteriaQuery.select(root).where(predicate);
-        return entityManager.createQuery(giftCertificateCriteriaQuery)
-                .getResultList();
+        return entityManager.createQuery(giftCertificateCriteriaQuery).getResultList();
     }
 
     @Override

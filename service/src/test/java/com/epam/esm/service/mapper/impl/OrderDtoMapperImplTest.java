@@ -1,8 +1,9 @@
 package com.epam.esm.service.mapper.impl;
 
-import com.epam.esm.entity.*;
-import com.epam.esm.service.mapper.CertificateDtoMapper;
-import com.epam.esm.service.mapper.UserDtoMapper;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Arrays;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,12 +12,18 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.GiftCertificateDto;
+import com.epam.esm.entity.Order;
+import com.epam.esm.entity.OrderDto;
+import com.epam.esm.entity.User;
+import com.epam.esm.entity.UserDto;
+import com.epam.esm.service.mapper.CertificateDtoMapper;
+import com.epam.esm.service.mapper.UserDtoMapper;
 
 @ExtendWith(MockitoExtension.class)
 class OrderDtoMapperImplTest {
+
     @Mock
     private CertificateDtoMapper certificateMapper;
     @Mock

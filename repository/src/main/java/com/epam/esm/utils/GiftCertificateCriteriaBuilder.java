@@ -4,20 +4,22 @@ import com.epam.esm.entity.GiftCertificate;
 
 import com.epam.esm.entity.SearchGiftCertificateParameter;
 import com.epam.esm.entity.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 
 import javax.persistence.criteria.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-
 @Component
 public class GiftCertificateCriteriaBuilder {
+
     public static final String REGEX = "%";
     public static final String PARAMETER_NAME = "name";
     public static final String PARAMETER_DESCRIPTION = "description";
@@ -25,8 +27,8 @@ public class GiftCertificateCriteriaBuilder {
     public static final String PARAMETER_SORTBY_NAME = "name";
     public static final String PARAMETER_SORTBY_CREATE_DATE = "createDate";
     public static final String TAG_LIST_IN_GIFTCERTIFICATE = "tags";
-    public static final String QUERY_SELECT_BY_TAG_NAME = "select tag from Tag tag where tag.nameTag in (:" + PARAMETER_TAG_NAMES + ")";
-
+    public static final String QUERY_SELECT_BY_TAG_NAME =
+            "select tag from Tag tag where tag.nameTag in (:" + PARAMETER_TAG_NAMES + ")";
 
     @Autowired
     private final EntityManager entityManager;
@@ -37,7 +39,8 @@ public class GiftCertificateCriteriaBuilder {
 
     public CriteriaQuery<GiftCertificate> buildQuery(SearchGiftCertificateParameter parameter) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<GiftCertificate> giftCertificateCriteriaQuery = criteriaBuilder.createQuery(GiftCertificate.class);
+        CriteriaQuery<GiftCertificate> giftCertificateCriteriaQuery = criteriaBuilder.createQuery(
+                GiftCertificate.class);
         Root<GiftCertificate> root = giftCertificateCriteriaQuery.from(GiftCertificate.class);
 
         List<Predicate> predicateList = new ArrayList<>();
@@ -61,27 +64,30 @@ public class GiftCertificateCriteriaBuilder {
 
         if (Objects.nonNull(tagNames)) {
             List<String> distinctTagList = tagNames.stream().distinct().collect(Collectors.toList());
-            List<Tag> tags = entityManager.createQuery(QUERY_SELECT_BY_TAG_NAME, Tag.class).setParameter(PARAMETER_TAG_NAMES, distinctTagList).getResultList();
+            List<Tag> tags = entityManager.createQuery(QUERY_SELECT_BY_TAG_NAME, Tag.class)
+                    .setParameter(PARAMETER_TAG_NAMES, distinctTagList)
+                    .getResultList();
             if (tags.size() != distinctTagList.size()) {
                 return giftCertificateCriteriaQuery;
             }
-            tags.forEach(tag -> predicateList.add(criteriaBuilder.isMember(tag, root.get(TAG_LIST_IN_GIFTCERTIFICATE))));
+            tags.forEach(
+                    tag -> predicateList.add(criteriaBuilder.isMember(tag, root.get(TAG_LIST_IN_GIFTCERTIFICATE))));
 
         }
         giftCertificateCriteriaQuery.select(root).where(predicateList.toArray(new Predicate[0]));
 
         SortParameter sortParameter = parameter.getSortBy();
 
-        String sortValue=null;
+        String sortValue = null;
 
         if (Objects.nonNull(sortParameter)) {
             switch (sortParameter) {
-                case NAME:
-                    sortValue = PARAMETER_SORTBY_NAME;
-                    break;
-                case CREATE_DATE:
-                    sortValue = PARAMETER_SORTBY_CREATE_DATE;
-                    break;
+            case NAME:
+                sortValue = PARAMETER_SORTBY_NAME;
+                break;
+            case CREATE_DATE:
+                sortValue = PARAMETER_SORTBY_CREATE_DATE;
+                break;
             }
         }
 
@@ -89,12 +95,12 @@ public class GiftCertificateCriteriaBuilder {
         Order order = null;
         if (Objects.nonNull(orderType)) {
             switch (orderType) {
-                case ASC:
-                    order = criteriaBuilder.asc(root.get(sortValue));
-                    break;
-                case DESC:
-                    order = criteriaBuilder.desc(root.get(sortValue));
-                    break;
+            case ASC:
+                order = criteriaBuilder.asc(root.get(sortValue));
+                break;
+            case DESC:
+                order = criteriaBuilder.desc(root.get(sortValue));
+                break;
             }
 
             giftCertificateCriteriaQuery.orderBy(order);

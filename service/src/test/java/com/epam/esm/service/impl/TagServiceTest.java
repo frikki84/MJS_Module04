@@ -1,5 +1,19 @@
 package com.epam.esm.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.TagDto;
 import com.epam.esm.repository.TagRepository;
@@ -9,32 +23,21 @@ import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.exception.TagValidationException;
 import com.epam.esm.service.mapper.TagDtoMapper;
 import com.epam.esm.service.validation.TagValidation;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class TagServiceTest {
+
     public static final int OFFSET = 10;
     public static final int LIMIT = 10;
     public static final long ID = 1L;
     public static final String TAG_NAME = "Entity";
 
     @Mock
-    private  TagRepository tagRepository;
+    private TagRepository tagRepository;
     @Mock
-    private  TagDtoMapper mapper;
+    private TagDtoMapper mapper;
     @Mock
-    private  UserRepository userRepository;
+    private UserRepository userRepository;
     @Mock
     private TagValidation tagValidation;
 
@@ -59,9 +62,8 @@ class TagServiceTest {
         TagDto dto = new TagDto();
         Mockito.when(tagRepository.findById(ID)).thenReturn(tag);
         Mockito.when(mapper.changeTagToTagDto(tag)).thenReturn(dto);
-        assertEquals(dto,tagService.findById(ID));
+        assertEquals(dto, tagService.findById(ID));
     }
-
 
     @Test
     void findByIdNegative() {
@@ -74,13 +76,14 @@ class TagServiceTest {
         Tag tag = new Tag();
         TagDto dto = new TagDto();
         dto.setNameTag(TAG_NAME);
-        List<Tag>tags = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
         Mockito.when(tagValidation.chechTagDtoFormat(dto)).thenReturn(true);
         Mockito.when(tagRepository.findByName(TAG_NAME)).thenReturn(tags);
         Mockito.when(tagRepository.create(tag)).thenReturn(tag);
         Mockito.when(mapper.changeTagToTagDto(tag)).thenReturn(dto);
-        assertEquals(dto,tagService.create(dto));
+        assertEquals(dto, tagService.create(dto));
     }
+
     @Test
     void createNegative() {
         TagDto dto = new TagDto();
@@ -99,6 +102,7 @@ class TagServiceTest {
         Mockito.when(tagRepository.delete(ID)).thenThrow(NoSuchResourceException.class);
         assertThrows(NoSuchResourceException.class, () -> tagService.delete(ID));
     }
+
     @Test
     void findNumberOfEntities() {
         Mockito.when(tagRepository.findNumberOfEntities()).thenReturn(ID);

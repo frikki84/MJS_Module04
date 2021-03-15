@@ -1,11 +1,11 @@
 package com.epam.esm.service.exception;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ExceptionDetails {
+
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime time;
     private int errorStatus;

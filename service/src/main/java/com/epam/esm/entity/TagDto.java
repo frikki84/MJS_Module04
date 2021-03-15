@@ -1,19 +1,20 @@
 package com.epam.esm.entity;
 
-import lombok.*;
+import javax.validation.constraints.NotBlank;
+
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
-import javax.validation.constraints.NotBlank;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper=false)
-
 @Relation(itemRelation = "tag", collectionRelation = "tags")
 public class TagDto extends RepresentationModel<TagDto> {
+
     private long id;
 
     @NotBlank

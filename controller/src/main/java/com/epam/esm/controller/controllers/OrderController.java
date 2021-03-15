@@ -1,21 +1,30 @@
 package com.epam.esm.controller.controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.epam.esm.controller.util.HateoasBuilder;
 import com.epam.esm.controller.util.PaginationBuilder;
 import com.epam.esm.entity.OrderCreationParameter;
 import com.epam.esm.entity.OrderDto;
 import com.epam.esm.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
 
 @RestController
 @RequestMapping("/v2/orders")
 public class OrderController {
+
     public static final String DEFAULT_PAGE_VALUE = "1";
     public static final String DEFAULT_SIZE_VALUE = "10";
 
@@ -29,7 +38,6 @@ public class OrderController {
         this.hateoas = hateoas;
         this.pagination = pagination;
     }
-
 
     @GetMapping
     public PagedModel<OrderDto> findAll(
@@ -57,8 +65,7 @@ public class OrderController {
     }
 
     @GetMapping(params = "user")
-    public List<OrderDto> readOrdersByUser(
-            @RequestParam(value = "user", required = true) long userId) {
+    public List<OrderDto> readOrdersByUser(@RequestParam(value = "user", required = true) long userId) {
         List<OrderDto> orderDtoList = orderService.readOrdersByUser(userId);
         hateoas.addLinksToListOrder(orderDtoList);
         return orderDtoList;

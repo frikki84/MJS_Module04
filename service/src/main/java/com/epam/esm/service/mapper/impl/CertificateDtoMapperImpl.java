@@ -1,27 +1,28 @@
 package com.epam.esm.service.mapper.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.TagDto;
 import com.epam.esm.service.mapper.CertificateDtoMapper;
 import com.epam.esm.service.mapper.TagDtoMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @Component
 public class CertificateDtoMapperImpl implements CertificateDtoMapper {
+
     @Autowired
     private final TagDtoMapper tagDtoMapper;
 
     public CertificateDtoMapperImpl(TagDtoMapper tagDtoMapper) {
         this.tagDtoMapper = tagDtoMapper;
     }
-
 
     @Override
     public GiftCertificate changeDtoToCertificate(GiftCertificateDto dto) {
