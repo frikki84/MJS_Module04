@@ -31,7 +31,6 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public List<Tag> findAll(int offset, int limit) {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tag> tagCriteriaQuery = criteriaBuilder.createQuery(Tag.class);
         Root<Tag> root = tagCriteriaQuery.from(Tag.class);
