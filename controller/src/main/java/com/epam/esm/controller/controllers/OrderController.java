@@ -16,6 +16,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/v2/orders")
 public class OrderController {
+    public static final String DEFAULT_PAGE_VALUE = "1";
+    public static final String DEFAULT_SIZE_VALUE = "10";
+
     @Autowired
     private final OrderService orderService;
     private final HateoasBuilder hateoas;
@@ -30,11 +33,11 @@ public class OrderController {
 
     @GetMapping
     public PagedModel<OrderDto> findAll(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+            @RequestParam(value = "page", required = false, defaultValue = DEFAULT_PAGE_VALUE) int page,
+            @RequestParam(value = "size", required = false, defaultValue = DEFAULT_SIZE_VALUE) int size) {
         List<OrderDto> list = orderService.findAll(page, size);
         hateoas.addLinksToListOrder(list);
-        return pagination.addPagination(list,page, size, orderService.findNumberOfEntities());
+        return pagination.addPagination(list, page, size, orderService.findNumberOfEntities());
     }
 
     @GetMapping("/{id}")
@@ -58,6 +61,6 @@ public class OrderController {
             @RequestParam(value = "user", required = true) long userId) {
         List<OrderDto> orderDtoList = orderService.readOrdersByUser(userId);
         hateoas.addLinksToListOrder(orderDtoList);
-        return  orderDtoList;
+        return orderDtoList;
     }
 }

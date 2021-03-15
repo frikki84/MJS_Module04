@@ -14,6 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/v2/tags")
 public class TagController {
+    public static final String DEFAULTE_PAGE_VALUE = "1";
+    public static final String DEFAULTE_SIZE_VALUE = "10";
+
     @Autowired
     private final TagService tagService;
     private final HateoasBuilder hateoas;
@@ -27,8 +30,8 @@ public class TagController {
 
     @GetMapping
     public PagedModel<TagDto> findAll(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+            @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
+            @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size) {
         List<TagDto> list = tagService.findAll(page, size);
         hateoas.addLinksToListTag(list);
         return pagination.addPagination(list,page, size, tagService.findNumberOfEntities());

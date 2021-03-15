@@ -1,12 +1,14 @@
 package com.epam.esm.utils;
 
 import com.epam.esm.entity.GiftCertificate;
+
 import com.epam.esm.entity.SearchGiftCertificateParameter;
 import com.epam.esm.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;

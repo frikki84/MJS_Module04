@@ -14,6 +14,9 @@ import java.util.List;
 @RestController
 @RequestMapping("v2/users")
 public class UserController {
+    public static final String DEFAULTE_PAGE_VALUE = "1";
+    public static final String DEFAULTE_SIZE_VALUE = "10";
+
     @Autowired
     private UserService service;
     private HateoasBuilder hateoas;
@@ -28,8 +31,8 @@ public class UserController {
 
     @GetMapping
     public PagedModel<UserDto> findAll(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+            @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
+            @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size) {
         List<UserDto> list = service.findAll(page, size);
         hateoas.addLinksToListUser(list);
         return pagination.addPagination(list, page, size, service.findNumberOfEntities());

@@ -17,6 +17,9 @@ import java.util.List;
 @RequestMapping("/v2/certificates")
 
 public class GiftCertificateController {
+    public static final String DEFAULTE_PAGE_VALUE = "1";
+    public static final String DEFAULTE_SIZE_VALUE = "10";
+
     @Autowired
     private final GiftCertificateService giftCertificateService;
     private final HateoasBuilder hateoas;
@@ -30,8 +33,8 @@ public class GiftCertificateController {
 
     @GetMapping
     public PagedModel<GiftCertificateDto> findAll(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size) {
+            @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
+            @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size) {
         List<GiftCertificateDto> list = giftCertificateService.findAll(page, size);
         hateoas.addLinksToGiftCertificateList(list);
         return pagination.addPagination(list, page, size, giftCertificateService.findNumberOfEntities());
@@ -45,8 +48,8 @@ public class GiftCertificateController {
 
     @GetMapping("/find")
     public PagedModel<GiftCertificateDto> findAllByParameter(
-            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
+            @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size,
             @RequestBody SearchGiftCertificateParameterDto parameter) {
         List<GiftCertificateDto> list = giftCertificateService.findAll(parameter, page, size);
         hateoas.addLinksToGiftCertificateList(list);

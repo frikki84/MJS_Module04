@@ -45,7 +45,7 @@ public class Order {
             name = "users_order_has_certificate",
             joinColumns = @JoinColumn(name = "order_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "certificate_id", nullable = false))
-    @OnDelete(action = OnDeleteAction.CASCADE)
+
     private List<GiftCertificate> giftCertificateList;
 
 }

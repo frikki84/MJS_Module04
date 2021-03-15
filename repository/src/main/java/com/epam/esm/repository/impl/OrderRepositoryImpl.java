@@ -5,6 +5,7 @@ import com.epam.esm.entity.Order;
 import com.epam.esm.repository.OrderRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,6 +15,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
+@Transactional
 public class OrderRepositoryImpl implements OrderRepository {
     public static final int OFFSET_DEFAULT_VALUE = 1;
     public static final String PARAMETER_NAME_FOR_FINDING_ORDERS_BY_USER = "user";
