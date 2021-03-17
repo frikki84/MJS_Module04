@@ -6,14 +6,10 @@ import com.epam.esm.utils.OrderType;
 import com.epam.esm.utils.SortParameter;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @NoArgsConstructor
-@Getter
-@Setter
 public class SearchGiftCertificateParameter {
 
     private String name;

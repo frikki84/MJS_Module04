@@ -42,8 +42,7 @@ public class Order {
     @Column(name = "purchase_date", nullable = false)
     private LocalDateTime date;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH,
-            CascadeType.PERSIST})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "users_order_has_certificate", joinColumns = @JoinColumn(name = "order_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "certificate_id", nullable = false))
     private List<GiftCertificate> giftCertificateList;
 
