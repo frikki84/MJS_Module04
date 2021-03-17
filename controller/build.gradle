@@ -6,6 +6,6 @@ dependencies {
     implementation project(':service')
 }
 
-bootJar{
+bootJar {
     archiveFileName = 'webBootJar.jar'
 }

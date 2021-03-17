@@ -44,33 +44,18 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(TagValidationException.class)
     public ResponseEntity<ExceptionDetails> handleTagValidationException(TagValidationException exception) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        String message = getErrorResponse(exception.getMessage());
-        String exceptionCode = CustomErrorCode.TAG.getCode();
-        String errorCode = status.value() + exceptionCode;
-        ExceptionDetails data = new ExceptionDetails(LocalDateTime.now(), status.value(), message, errorCode);
-        return new ResponseEntity<>(data, status);
+        return createResponseEntity(HttpStatus.BAD_REQUEST, exception, CustomErrorCode.TAG);
     }
 
     @ExceptionHandler(GiftCertificateDtoValidationException.class)
     public ResponseEntity<ExceptionDetails> handleGiftCertificateDtoValidationException(
             GiftCertificateDtoValidationException exception) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        String message = getErrorResponse(exception.getMessage());
-        String exceptionCode = CustomErrorCode.CERTIFICATE.getCode();
-        String errorCode = status.value() + exceptionCode;
-        ExceptionDetails data = new ExceptionDetails(LocalDateTime.now(), status.value(), message, errorCode);
-        return new ResponseEntity<>(data, status);
+        return createResponseEntity(HttpStatus.BAD_REQUEST, exception, CustomErrorCode.CERTIFICATE);
     }
 
     @ExceptionHandler(PageException.class)
     public ResponseEntity<ExceptionDetails> handlePageException(PageException exception) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        String message = getErrorResponse(exception.getMessage());
-        String exceptionCode = CustomErrorCode.CERTIFICATE.getCode();
-        String errorCode = status.value() + exceptionCode;
-        ExceptionDetails data = new ExceptionDetails(LocalDateTime.now(), status.value(), message, errorCode);
-        return new ResponseEntity<>(data, status);
+        return createResponseEntity(HttpStatus.BAD_REQUEST, exception, CustomErrorCode.CERTIFICATE);
     }
 
     private String getErrorResponse(String key) {
@@ -79,6 +64,15 @@ public class ApplicationExceptionHandler {
         Locale locale = request.getLocale();
         String bundleMessage = resourceBundle.getMessage(key, new Object[] {}, locale);
         return bundleMessage;
+    }
+
+    private ResponseEntity createResponseEntity(HttpStatus status, Exception exception,
+            CustomErrorCode customErrorCode) {
+        String message = getErrorResponse(exception.getMessage());
+        String exceptionCode = customErrorCode.getCode();
+        String errorCode = status.value() + exceptionCode;
+        ExceptionDetails data = new ExceptionDetails(LocalDateTime.now(), status.value(), message, errorCode);
+        return new ResponseEntity<>(data, status);
     }
 
 }

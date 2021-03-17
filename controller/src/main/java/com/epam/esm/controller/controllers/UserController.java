@@ -29,13 +29,13 @@ public class UserController {
 
     @Autowired
     private UserService service;
-    private HateoasBuilder hateoas;
-    private final PaginationBuilder<UserDto> pagination;
+    private HateoasBuilder hateoasBuilder;
+    private final PaginationBuilder<UserDto> paginationBuilder;
 
     public UserController(UserService service, HateoasBuilder hateoasBuilder, PaginationBuilder<UserDto> pagination) {
         this.service = service;
-        this.hateoas = hateoasBuilder;
-        this.pagination = pagination;
+        this.hateoasBuilder = hateoasBuilder;
+        this.paginationBuilder = pagination;
     }
 
     @GetMapping
@@ -43,19 +43,19 @@ public class UserController {
             @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
             @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size) {
         List<UserDto> list = service.findAll(page, size);
-        hateoas.addLinksToListUser(list);
-        return pagination.addPagination(list, page, size, service.findNumberOfEntities());
+        hateoasBuilder.addLinksToListUser(list);
+        return paginationBuilder.addPagination(list, page, size, service.findNumberOfEntities());
     }
 
     @GetMapping("/{id}")
     public UserDto findById(@PathVariable long id) {
-        return hateoas.addLinksToUser(service.findById(id));
+        return hateoasBuilder.addLinksToUser(service.findById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(@RequestBody UserDto dto) {
-        return hateoas.addLinksToUser(service.create(dto));
+        return hateoasBuilder.addLinksToUser(service.create(dto));
     }
 
     @DeleteMapping("/{id}")

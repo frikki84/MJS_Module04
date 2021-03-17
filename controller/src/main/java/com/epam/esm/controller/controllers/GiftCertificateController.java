@@ -31,14 +31,14 @@ public class GiftCertificateController {
 
     @Autowired
     private final GiftCertificateService giftCertificateService;
-    private final HateoasBuilder hateoas;
-    private final PaginationBuilder<GiftCertificateDto> pagination;
+    private final HateoasBuilder hateoasBuilder;
+    private final PaginationBuilder<GiftCertificateDto> paginationBuilder;
 
     public GiftCertificateController(GiftCertificateService giftCertificateService, HateoasBuilder hateoas,
             PaginationBuilder<GiftCertificateDto> pagination) {
         this.giftCertificateService = giftCertificateService;
-        this.hateoas = hateoas;
-        this.pagination = pagination;
+        this.hateoasBuilder = hateoas;
+        this.paginationBuilder = pagination;
     }
 
     @GetMapping
@@ -46,14 +46,14 @@ public class GiftCertificateController {
             @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
             @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size) {
         List<GiftCertificateDto> list = giftCertificateService.findAll(page, size);
-        hateoas.addLinksToGiftCertificateList(list);
-        return pagination.addPagination(list, page, size, giftCertificateService.findNumberOfEntities());
+        hateoasBuilder.addLinksToGiftCertificateList(list);
+        return paginationBuilder.addPagination(list, page, size, giftCertificateService.findNumberOfEntities());
     }
 
     @GetMapping("/{id}")
     public GiftCertificateDto findById(@PathVariable Long id) {
         GiftCertificateDto dto = giftCertificateService.findById(id);
-        return hateoas.addLinksToGiftCertificate(dto);
+        return hateoasBuilder.addLinksToGiftCertificate(dto);
     }
 
     @GetMapping("/find")
@@ -62,14 +62,14 @@ public class GiftCertificateController {
             @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size,
             @RequestBody SearchGiftCertificateParameterDto parameter) {
         List<GiftCertificateDto> list = giftCertificateService.findAll(parameter, page, size);
-        hateoas.addLinksToGiftCertificateList(list);
-        return pagination.addPagination(list, page, size, giftCertificateService.findNumberOfEntities());
+        hateoasBuilder.addLinksToGiftCertificateList(list);
+        return paginationBuilder.addPagination(list, page, size, giftCertificateService.findNumberOfEntities());
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public GiftCertificateDto create(@RequestBody GiftCertificateDto dto) {
-        return hateoas.addLinksToGiftCertificate(giftCertificateService.create(dto));
+        return hateoasBuilder.addLinksToGiftCertificate(giftCertificateService.create(dto));
     }
 
     @DeleteMapping("/{id}")
@@ -79,6 +79,6 @@ public class GiftCertificateController {
 
     @PatchMapping("/{id}")
     public GiftCertificateDto update(@RequestBody GiftCertificateDto dto, @PathVariable Long id) {
-        return hateoas.addLinksToGiftCertificate(giftCertificateService.update(dto, id));
+        return hateoasBuilder.addLinksToGiftCertificate(giftCertificateService.update(dto, id));
     }
 }

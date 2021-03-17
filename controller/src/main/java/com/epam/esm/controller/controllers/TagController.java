@@ -21,13 +21,13 @@ public class TagController {
 
     @Autowired
     private final TagService tagService;
-    private final HateoasBuilder hateoas;
-    private final PaginationBuilder<TagDto> pagination;
+    private final HateoasBuilder hateoasBuilder;
+    private final PaginationBuilder<TagDto> paginationBuilder;
 
     public TagController(TagService tagService, HateoasBuilder hateoas, PaginationBuilder<TagDto> pagination) {
         this.tagService = tagService;
-        this.hateoas = hateoas;
-        this.pagination = pagination;
+        this.hateoasBuilder = hateoas;
+        this.paginationBuilder = pagination;
     }
 
     @GetMapping
@@ -35,19 +35,19 @@ public class TagController {
             @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
             @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size) {
         List<TagDto> list = tagService.findAll(page, size);
-        hateoas.addLinksToListTag(list);
-        return pagination.addPagination(list, page, size, tagService.findNumberOfEntities());
+        hateoasBuilder.addLinksToListTag(list);
+        return paginationBuilder.addPagination(list, page, size, tagService.findNumberOfEntities());
     }
 
     @GetMapping("/{id}")
     public TagDto findById(@PathVariable Long id) {
-        return hateoas.addLinksToTag(tagService.findById(id));
+        return hateoasBuilder.addLinksToTag(tagService.findById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TagDto create(@RequestBody TagDto dto) {
-        return hateoas.addLinksToTag(tagService.create(dto));
+        return hateoasBuilder.addLinksToTag(tagService.create(dto));
     }
 
     @DeleteMapping("/{id}")

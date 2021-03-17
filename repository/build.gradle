@@ -5,6 +5,7 @@ jar{
     enabled = true
 }
 dependencies{
+    runtimeOnly 'mysql:mysql-connector-java'
 
 }
 

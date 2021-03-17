@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -55,14 +56,23 @@ public class RepositoryConfiguration {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
-    private Properties hibernateProperties() {
+    public Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update");
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         hibernateProperties.setProperty("hibernate.show_sql", "true");
         hibernateProperties.setProperty("hibernate.globally_quoted_identifiers", "true");
-
         return hibernateProperties;
+    }
+
+    @Bean
+    public DataSource dataSource() {
+        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+        driverManagerDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        driverManagerDataSource.setUrl("jdbc:mysql://127.0.0.1:3306/module02?serverTimezone=UTC&useSSL=false");
+        driverManagerDataSource.setUsername("root");
+        driverManagerDataSource.setPassword("201020");
+        return driverManagerDataSource;
     }
 
 }

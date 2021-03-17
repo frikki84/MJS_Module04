@@ -30,13 +30,13 @@ public class OrderController {
 
     @Autowired
     private final OrderService orderService;
-    private final HateoasBuilder hateoas;
-    private final PaginationBuilder<OrderDto> pagination;
+    private final HateoasBuilder hateoasBuilder;
+    private final PaginationBuilder<OrderDto> paginationBuilder;
 
     public OrderController(OrderService orderService, HateoasBuilder hateoas, PaginationBuilder<OrderDto> pagination) {
         this.orderService = orderService;
-        this.hateoas = hateoas;
-        this.pagination = pagination;
+        this.hateoasBuilder = hateoas;
+        this.paginationBuilder = pagination;
     }
 
     @GetMapping
@@ -44,19 +44,19 @@ public class OrderController {
             @RequestParam(value = "page", required = false, defaultValue = DEFAULT_PAGE_VALUE) int page,
             @RequestParam(value = "size", required = false, defaultValue = DEFAULT_SIZE_VALUE) int size) {
         List<OrderDto> list = orderService.findAll(page, size);
-        hateoas.addLinksToListOrder(list);
-        return pagination.addPagination(list, page, size, orderService.findNumberOfEntities());
+        hateoasBuilder.addLinksToListOrder(list);
+        return paginationBuilder.addPagination(list, page, size, orderService.findNumberOfEntities());
     }
 
     @GetMapping("/{id}")
     public OrderDto findById(@PathVariable long id) {
-        return hateoas.addLinksToOrder(orderService.findById(id));
+        return hateoasBuilder.addLinksToOrder(orderService.findById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderDto create(@RequestBody OrderCreationParameter parameter) {
-        return hateoas.addLinksToOrder(orderService.create(parameter));
+        return hateoasBuilder.addLinksToOrder(orderService.create(parameter));
     }
 
     @DeleteMapping("/{id}")
@@ -67,7 +67,7 @@ public class OrderController {
     @GetMapping(params = "user")
     public List<OrderDto> readOrdersByUser(@RequestParam(value = "user", required = true) long userId) {
         List<OrderDto> orderDtoList = orderService.readOrdersByUser(userId);
-        hateoas.addLinksToListOrder(orderDtoList);
+        hateoasBuilder.addLinksToListOrder(orderDtoList);
         return orderDtoList;
     }
 }

@@ -28,7 +28,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "gift_certificate")
 public class GiftCertificate {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -46,7 +45,8 @@ public class GiftCertificate {
     @Column(name = "last_update_date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime lastUpdateDate;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH,
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+            //CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH,
             CascadeType.PERSIST})
     @JoinTable(name = "gift_certificate_has_tag", joinColumns = {
             @JoinColumn(name = "gift_certicicate_id_gift_certicicate")}, inverseJoinColumns = {
