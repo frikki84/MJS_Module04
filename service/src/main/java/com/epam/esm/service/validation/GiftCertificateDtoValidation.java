@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.service.exception.GiftCertificateDtoValidationException;
@@ -34,18 +35,18 @@ public class GiftCertificateDtoValidation {
 
     public static boolean chechCertificateDtoFormat(GiftCertificateDto dto) {
         boolean result = DEFAULT_RESULT;
-        if (dto.getName() == null || dto.getName().isBlank() || dto.getName().length() < MIN_NAME_LENGTH
+        if (Objects.isNull(dto.getName()) || dto.getName().isBlank() || dto.getName().length() < MIN_NAME_LENGTH
                 || dto.getName().length() > MAX_NAME_LENGTH) {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_NAME);
-        } else if (dto.getDescription() == null || dto.getDescription().isBlank()
+        } else if (Objects.isNull(dto.getDescription()) || dto.getDescription().isBlank()
                 || dto.getDescription().length() < MIN_DESCRIPTION_LENGTH
                 || dto.getDescription().length() > MAX_DESCRIPTION_LENGTH) {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_DECRIPTION);
-        } else if (dto.getPrice() == null || dto.getPrice().compareTo(new BigDecimal(MIN_PRICE)) < 0) {
+        } else if (Objects.isNull(dto.getPrice()) || dto.getPrice().compareTo(new BigDecimal(MIN_PRICE)) < 0) {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_PRICE);
-        } else if (dto.getDuration() == null || dto.getDuration().compareTo(Integer.parseInt(MIN_DURATION)) < 0) {
+        } else if (Objects.isNull(dto.getDuration()) || dto.getDuration().compareTo(Integer.parseInt(MIN_DURATION)) < 0) {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_DURATION);
-        } else if (dto.getTagList() == null || dto.getTagList().isEmpty()) {
+        } else if (Objects.isNull(dto.getTagList()) || dto.getTagList().isEmpty()) {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_TAG_LIST);
         }
 
@@ -65,14 +66,12 @@ public class GiftCertificateDtoValidation {
         if (Objects.nonNull(dto.getPrice()) && dto.getPrice().compareTo(new BigDecimal(MIN_PRICE)) < 0) {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_PRICE);
         }
-
         if (Objects.nonNull(dto.getDuration()) && dto.getDuration().compareTo(Integer.parseInt(MIN_DURATION)) < 0) {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_DURATION);
         }
         if (Objects.nonNull(dto.getTagList()) || !dto.getTagList().isEmpty()) {
             dto.getTagList().forEach(tagDto -> tagValidation.chechTagDtoFormat(tagDto));
         }
-
         return result;
     }
 

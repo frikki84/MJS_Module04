@@ -1,8 +1,10 @@
 package com.epam.esm.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,37 +114,38 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
         return findId;
     }
 
+    @Transactional
     public GiftCertificateDto update(GiftCertificateDto giftCertificate, Long id) {
         GiftCertificate certificateFromDb = giftCertificateRepository.findById(id);
+
         if (Objects.isNull(certificateFromDb)) {
             throw new NoSuchResourceException(CustomErrorCode.CERTIFICATE);
         }
         boolean checkDto = certificateValidation.chechCertificateDtoFormatForUpdate(giftCertificate);
 
         GiftCertificate certificate = mapper.changeDtoToCertificate(giftCertificate);
-        if (certificate.getName() != null) {
+        if (Objects.nonNull(certificate.getName())) {
             certificateFromDb.setName(certificate.getName());
         }
-        if (certificate.getDescription() != null) {
+        if (Objects.nonNull(certificate.getDescription())) {
             certificateFromDb.setDescription(certificate.getDescription());
         }
-        if (certificate.getPrice() != null) {
+        if (Objects.nonNull(certificate.getPrice())) {
             certificateFromDb.setPrice(certificate.getPrice());
         }
-        if (certificate.getDuration() != null) {
+        if (Objects.nonNull(certificate.getDuration())) {
             certificateFromDb.setDuration(certificate.getDuration());
         }
-        if (certificate.getCreateDate() != null) {
+        if (Objects.nonNull(certificate.getCreateDate())) {
             certificateFromDb.setCreateDate(certificate.getCreateDate());
         }
 
         if (Objects.nonNull(certificate.getTags())) {
-            certificateFromDb.setTags(certificate.getTags());
+            List<Tag> newTagList = createTagListWithAdditionalTags(certificateFromDb, certificate);
+            certificateFromDb.setTags(newTagList);
         }
-
         LocalDateTime currentDate = LocalDateTime.now();
         certificateFromDb.setLastUpdateDate(currentDate);
-
         return mapper.changeCertificateToDto(giftCertificateRepository.update(certificateFromDb));
     }
 
@@ -158,6 +161,24 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
         } catch (RuntimeException e) {
             return tagRepository.create(tag);
         }
+    }
+
+    private List<Tag> createTagListWithAdditionalTags(GiftCertificate giftCertificateFromDb,
+            GiftCertificate updatedGiftCertificate) {
+        List<Tag> newTagList = giftCertificateFromDb.getTags();
+        List<String> tagNames = new ArrayList<>();
+        for (Tag tag : newTagList) {
+            tagNames.add(tag.getNameTag());
+        }
+        for (Tag tag : updatedGiftCertificate.getTags()) {
+            if (!tagNames.contains(tag.getNameTag())) {
+                newTagList.add(tag);
+            }
+        }
+        System.out.println("newTagList " + newTagList);
+        List<Tag> tags = newTagList.stream().map(tag -> checkTagOperation(tag)).collect(Collectors.toList());
+        System.out.println(tags);
+        return tags;
     }
 
 }

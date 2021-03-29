@@ -39,7 +39,6 @@ public class TagRepositoryImpl implements TagRepository {
         Root<Tag> root = tagCriteriaQuery.from(Tag.class);
         tagCriteriaQuery.select(root);
         return entityManager.createQuery(tagCriteriaQuery).setFirstResult(offset).setMaxResults(limit).getResultList();
-
     }
 
     @Override
@@ -60,6 +59,7 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public Tag create(Tag entity) {
         entityManager.persist(entity);
+        entityManager.flush();
         return entity;
     }
 
@@ -87,7 +87,7 @@ public class TagRepositoryImpl implements TagRepository {
         ListJoin<Order, GiftCertificate> giftList = orderList.joinList(CERTIFICATE_LIST_ATTRIBUTE);
         ListJoin<GiftCertificate, Tag> tagList = giftList.joinList(TAG_ATTRIBUTE);
 
-        Expression orderId = tagList.get("id");
+        Expression orderId = tagList.get(COLUMN_ID);
         tagQuery.select(tagList)
                 .where(criteriaBuilder.equal(userRoot.get(COLUMN_ID), userId))
                 .groupBy(orderId)

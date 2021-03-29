@@ -1,6 +1,7 @@
 package com.epam.esm.repository.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.SearchGiftCertificateParameter;
+import com.epam.esm.entity.Tag;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.utils.GiftCertificateCriteriaBuilder;
 
@@ -21,7 +23,9 @@ import com.epam.esm.utils.GiftCertificateCriteriaBuilder;
 @Repository
 @Transactional
 public class GiftCertificateRepositoryImpl implements GiftCertificateRepository {
+
     public static int OFFSET_DEFAULT_VALUE = 1;
+    public static final String DELETE_CERTIFICATE_FROM_ORDER = "DELETE FROM users_order_has_certificate OHC WHERE OHC.certificate_id=?";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -32,6 +36,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     public GiftCertificateRepositoryImpl(EntityManager entityManager, GiftCertificateCriteriaBuilder criteriaBuilder) {
         this.entityManager = entityManager;
         this.criteriaBuilder = criteriaBuilder;
+
     }
 
     @Override
@@ -65,20 +70,23 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public GiftCertificate create(GiftCertificate entity) {
+        addNewTags(entity);
         entityManager.persist(entity);
         return entity;
     }
 
     @Override
     public long delete(long id) {
-        entityManager.refresh(findById(id));
+        entityManager.createNativeQuery(DELETE_CERTIFICATE_FROM_ORDER).setParameter(1, id).executeUpdate();
+        entityManager.remove(findById(id));
         return id;
     }
 
-
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
-        return entityManager.merge(giftCertificate);
+        entityManager.merge(giftCertificate);
+        //entityManager.flush();
+        return findById(giftCertificate.getId());
     }
 
     @Override
@@ -87,6 +95,14 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
         CriteriaQuery<Long> query = builder.createQuery(Long.class);
         query.select(builder.count(query.from(GiftCertificate.class)));
         return entityManager.createQuery(query).getSingleResult();
+    }
+
+    private void addNewTags(GiftCertificate certificate) {
+        List<Tag> tagList = certificate.getTags();
+        List<Tag> checkedTagListInDb = tagList.stream()
+                .map(tag -> entityManager.merge(tag))
+                .collect(Collectors.toList());
+        certificate.setTags(checkedTagListInDb);
     }
 
 
