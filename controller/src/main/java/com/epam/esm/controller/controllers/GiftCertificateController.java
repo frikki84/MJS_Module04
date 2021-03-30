@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -28,6 +29,8 @@ public class GiftCertificateController {
 
     public static final String DEFAULTE_PAGE_VALUE = "1";
     public static final String DEFAULTE_SIZE_VALUE = "10";
+    public static final String AUTHORITY_READ = "hasAuthority('certificate:read')";
+    public static final String AUTHORITY_WRITE = "hasAuthority('certificate:write')";
 
     @Autowired
     private final GiftCertificateService giftCertificateService;
@@ -42,6 +45,7 @@ public class GiftCertificateController {
     }
 
     @GetMapping
+    @PreAuthorize(AUTHORITY_READ)
     public PagedModel<GiftCertificateDto> findAll(
             @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
             @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size) {
@@ -51,12 +55,14 @@ public class GiftCertificateController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize(AUTHORITY_READ)
     public GiftCertificateDto findById(@PathVariable Long id) {
         GiftCertificateDto dto = giftCertificateService.findById(id);
         return hateoasBuilder.addLinksToGiftCertificate(dto);
     }
 
     @GetMapping("/find")
+    @PreAuthorize(AUTHORITY_READ)
     public PagedModel<GiftCertificateDto> findAllByParameter(
             @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
             @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size,
@@ -68,16 +74,19 @@ public class GiftCertificateController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize(AUTHORITY_WRITE)
     public GiftCertificateDto create(@RequestBody GiftCertificateDto dto) {
         return hateoasBuilder.addLinksToGiftCertificate(giftCertificateService.create(dto));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(AUTHORITY_WRITE)
     public long delete(@PathVariable long id) {
         return giftCertificateService.delete(id);
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize(AUTHORITY_WRITE)
     public GiftCertificateDto update(@RequestBody GiftCertificateDto dto, @PathVariable Long id) {
         return hateoasBuilder.addLinksToGiftCertificate(giftCertificateService.update(dto, id));
     }

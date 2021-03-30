@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,8 @@ public class UserController {
 
     public static final String DEFAULTE_PAGE_VALUE = "1";
     public static final String DEFAULTE_SIZE_VALUE = "10";
+    public static final String AUTHORITY_READ = "hasAuthority('user:read')";
+    public static final String AUTHORITY_WRITE = "hasAuthority('user:write')";
 
     @Autowired
     private UserService service;
@@ -39,6 +42,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize(AUTHORITY_READ)
     public PagedModel<UserDto> findAll(
             @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
             @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size) {
@@ -48,17 +52,20 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize(AUTHORITY_READ)
     public UserDto findById(@PathVariable long id) {
         return hateoasBuilder.addLinksToUser(service.findById(id));
     }
 
     @PostMapping
+    @PreAuthorize(AUTHORITY_WRITE)
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto create(@RequestBody UserDto dto) {
         return hateoasBuilder.addLinksToUser(service.create(dto));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(AUTHORITY_WRITE)
     public Long delete(@PathVariable Long id) {
         return service.delete(id);
     }

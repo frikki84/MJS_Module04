@@ -11,9 +11,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -22,6 +24,7 @@ public class UserRepositoryImpl implements UserRepository {
     public static final int OFFSET_DEFAULT_VALUE = 1;
     public static final String QUERY_FIND_USER_WITH_HIGHIEST_COST_OF_ORDERS = "select o.user from Order o group by o.user order by sum(o.price) desc";
     private static final int POSITION_WITH_MAX_VALUE = 1;
+    public static final String COLUMN_NAME = "name";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -70,6 +73,21 @@ public class UserRepositoryImpl implements UserRepository {
                 .setMaxResults(POSITION_WITH_MAX_VALUE)
                 .getSingleResult()
                 .getId();
+    }
+
+    @Override
+    public List<User> findByName(String userName) {
+        System.out.println("Repa " + userName);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User>root = criteriaQuery.from(User.class);
+        Predicate predicate = criteriaBuilder.like(root.get(COLUMN_NAME), userName);
+        criteriaQuery.select(root).where(predicate);
+        System.out.println(criteriaQuery);
+        User user = entityManager.createQuery(criteriaQuery).getSingleResult()
+        System.out.println("repa user " + user);
+        return user;
+
     }
 
 }
