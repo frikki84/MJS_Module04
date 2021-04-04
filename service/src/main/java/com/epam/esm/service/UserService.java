@@ -65,4 +65,8 @@ public class UserService implements CrdService<UserDto> {
     public long findNumberOfEntities() {
         return userRepository.findNumberOfEntities();
     }
+
+    public UserDto findUserByName(String userName) {
+        return mapper.chandeUserToDto(userRepository.findByName(userName));
+    }
 }

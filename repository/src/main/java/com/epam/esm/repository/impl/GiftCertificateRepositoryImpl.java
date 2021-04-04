@@ -85,7 +85,6 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
         entityManager.merge(giftCertificate);
-        //entityManager.flush();
         return findById(giftCertificate.getId());
     }
 
@@ -95,6 +94,12 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
         CriteriaQuery<Long> query = builder.createQuery(Long.class);
         query.select(builder.count(query.from(GiftCertificate.class)));
         return entityManager.createQuery(query).getSingleResult();
+    }
+
+    @Override
+    public long getCountOfEntities(SearchGiftCertificateParameter parameter) {
+        CriteriaQuery<GiftCertificate> criteriaQuery = criteriaBuilder.buildQuery(parameter);
+        return entityManager.createQuery(criteriaQuery).getResultList().size();
     }
 
     private void addNewTags(GiftCertificate certificate) {

@@ -44,16 +44,19 @@ public class GiftCertificateDtoValidation {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_DECRIPTION);
         } else if (Objects.isNull(dto.getPrice()) || dto.getPrice().compareTo(new BigDecimal(MIN_PRICE)) < 0) {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_PRICE);
-        } else if (Objects.isNull(dto.getDuration()) || dto.getDuration().compareTo(Integer.parseInt(MIN_DURATION)) < 0) {
+        } else if (Objects.isNull(dto.getDuration())
+                || dto.getDuration().compareTo(Integer.parseInt(MIN_DURATION)) < 0) {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_DURATION);
         } else if (Objects.isNull(dto.getTagList()) || dto.getTagList().isEmpty()) {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_TAG_LIST);
+        } else if (Objects.nonNull(dto.getTagList()) && !dto.getTagList().isEmpty()) {
+            dto.getTagList().forEach(tagDto -> tagValidation.chechTagDtoFormat(tagDto));
         }
 
         return result;
     }
 
-    public  boolean chechCertificateDtoFormatForUpdate(GiftCertificateDto dto) {
+    public boolean chechCertificateDtoFormatForUpdate(GiftCertificateDto dto) {
         boolean result = DEFAULT_RESULT;
         if (Objects.nonNull(dto.getName()) && (dto.getName().length() < MIN_NAME_LENGTH
                 || dto.getName().length() > MAX_NAME_LENGTH)) {
@@ -69,7 +72,7 @@ public class GiftCertificateDtoValidation {
         if (Objects.nonNull(dto.getDuration()) && dto.getDuration().compareTo(Integer.parseInt(MIN_DURATION)) < 0) {
             throw new GiftCertificateDtoValidationException(INVALID_DTO_DURATION);
         }
-        if (Objects.nonNull(dto.getTagList()) || !dto.getTagList().isEmpty()) {
+        if (Objects.nonNull(dto.getTagList()) && !dto.getTagList().isEmpty()) {
             dto.getTagList().forEach(tagDto -> tagValidation.chechTagDtoFormat(tagDto));
         }
         return result;

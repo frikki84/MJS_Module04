@@ -2,16 +2,18 @@ package com.epam.esm.controller.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.epam.esm.service.security.UserDetailServiceImpl;
+import com.epam.esm.service.security.JwtConfiguration;
 
 @Configuration
 @EnableWebSecurity
@@ -20,40 +22,37 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public static final int BCRYPT_ROUND = 12;
 
-    private final UserDetailServiceImpl userDetailService;
+    private final JwtConfiguration jwtConfiguration;
 
-    public SecurityConfiguration(UserDetailServiceImpl userDetailService) {
-        this.userDetailService = userDetailService;
+    public SecurityConfiguration(JwtConfiguration jwtConfiguration) {
+        this.jwtConfiguration = jwtConfiguration;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf()
                 .disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()
                 .antMatchers("/")
                 .permitAll()
+                .antMatchers("/v2/auth/login").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                .apply(jwtConfiguration);
     }
 
+
+    @Bean
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(daoAuthenticationProvider());
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Bean
-    protected PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(BCRYPT_ROUND);
-    }
-
-    @Bean
-    protected DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        daoAuthenticationProvider.setUserDetailsService(userDetailService);
-        return daoAuthenticationProvider;
     }
 }

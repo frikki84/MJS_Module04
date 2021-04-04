@@ -1,11 +1,6 @@
 package com.epam.esm.repository.impl;
 
-import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.User;
-import com.epam.esm.repository.UserRepository;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,8 +9,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.epam.esm.entity.User;
+import com.epam.esm.repository.UserRepository;
 
 @Repository
 @Transactional
@@ -24,7 +22,7 @@ public class UserRepositoryImpl implements UserRepository {
     public static final int OFFSET_DEFAULT_VALUE = 1;
     public static final String QUERY_FIND_USER_WITH_HIGHIEST_COST_OF_ORDERS = "select o.user from Order o group by o.user order by sum(o.price) desc";
     private static final int POSITION_WITH_MAX_VALUE = 1;
-    public static final String COLUMN_NAME = "name";
+    private static final String COLUMN_NAME = "name";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -76,17 +74,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> findByName(String userName) {
-        System.out.println("Repa " + userName);
+    public User findByName(String userName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-        Root<User>root = criteriaQuery.from(User.class);
+        CriteriaQuery<User> giftCertificateCriteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = giftCertificateCriteriaQuery.from(User.class);
         Predicate predicate = criteriaBuilder.like(root.get(COLUMN_NAME), userName);
-        criteriaQuery.select(root).where(predicate);
-        System.out.println(criteriaQuery);
-        User user = entityManager.createQuery(criteriaQuery).getSingleResult()
-        System.out.println("repa user " + user);
-        return user;
+        giftCertificateCriteriaQuery.select(root).where(predicate);
+        return entityManager.createQuery(giftCertificateCriteriaQuery).getSingleResult();
 
     }
 

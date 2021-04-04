@@ -26,10 +26,10 @@ public class GiftCertificateCriteriaBuilder {
     public static final String PARAMETER_TAG_NAMES = "tags";
     public static final String PARAMETER_SORTBY_NAME = "name";
     public static final String PARAMETER_SORTBY_CREATE_DATE = "createDate";
-    public static final String TAG_LIST_IN_GIFTCERTIFICATE = "tags";
+    public static final String TAGS_IN_GIFTCERTIFICATE = "tags";
     public static final String QUERY_SELECT_BY_TAG_NAME =
             "select tag from Tag tag where tag.nameTag in (:" + PARAMETER_TAG_NAMES + ")";
-
+    public static final String PATTERN_FOR_EMPTY_CRITERIA_QUERY = "";
     @Autowired
     private final EntityManager entityManager;
 
@@ -67,12 +67,12 @@ public class GiftCertificateCriteriaBuilder {
             List<Tag> tags = entityManager.createQuery(QUERY_SELECT_BY_TAG_NAME, Tag.class)
                     .setParameter(PARAMETER_TAG_NAMES, distinctTagList)
                     .getResultList();
-            if (tags.size() != distinctTagList.size()) {
-                return giftCertificateCriteriaQuery;
-            }
-            tags.forEach(
-                    tag -> predicateList.add(criteriaBuilder.isMember(tag, root.get(TAG_LIST_IN_GIFTCERTIFICATE))));
 
+            if (distinctTagList.size() != tags.size()) {
+                return giftCertificateCriteriaQuery.select(root)
+                        .where(criteriaBuilder.like(root.get(PARAMETER_NAME), PATTERN_FOR_EMPTY_CRITERIA_QUERY));
+            }
+            tags.forEach(tag -> predicateList.add(criteriaBuilder.isMember(tag, root.get(TAGS_IN_GIFTCERTIFICATE))));
         }
         giftCertificateCriteriaQuery.select(root).where(predicateList.toArray(new Predicate[0]));
 
