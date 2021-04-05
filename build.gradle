@@ -33,6 +33,7 @@ subprojects {
         compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
         annotationProcessor 'org.projectlombok:lombok'
         implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+
     }
 
     test {

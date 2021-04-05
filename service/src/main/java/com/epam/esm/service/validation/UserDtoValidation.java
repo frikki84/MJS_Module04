@@ -29,8 +29,8 @@ public class UserDtoValidation {
     public boolean checkUserDto(UserDto userDto) {
         boolean result = true;
         chechUserDtoFormat(userDto);
-        User user = userRepository.findByName(userDto.getName());
-        if (Objects.nonNull(user) ) {
+        List<User> userList = userRepository.findByName(userDto.getName());
+        if (Objects.nonNull(userList) && !userList.isEmpty()) {
             throw new UserValidationException(USER_NAME_EXISTS);
         }
         return result;

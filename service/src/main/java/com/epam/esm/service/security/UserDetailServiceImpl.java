@@ -1,7 +1,5 @@
 package com.epam.esm.service.security;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,8 +21,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByName(username);
-        System.out.println("User in UserDetails" + user);
-        return SecurityUser.createUserDetailsFromUser(user);
+        User user = userRepository.findByName(username).get(0);
+        UserDetails userDetails = SecurityUser.createUserDetailsFromUser(user);
+        return userDetails;
     }
 }

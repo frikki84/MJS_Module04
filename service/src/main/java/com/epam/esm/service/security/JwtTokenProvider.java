@@ -2,6 +2,7 @@ package com.epam.esm.service.security;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+
 import java.util.Base64;
 import java.util.Date;
 import java.util.Objects;
@@ -28,9 +29,10 @@ public class JwtTokenProvider {
 
     public static final String JWT_EXCEPTION = "jwt_exception";
 
+    private final static String PREFIX_FOR_POSTMAN_AOTH2 = "Bearer ";
+
     public final UserDetailServiceImpl userDetailService;
 
-    //заголовок запросов, который хранит токен
     @Value("${jwt.header}")
     private String authorizationHeader;
     @Value("${jwt.milliseconds}")
@@ -48,42 +50,37 @@ public class JwtTokenProvider {
         secretWord = Base64.getEncoder().encodeToString(secretWord.getBytes());
     }
 
-    public String createToken(String name, String role) {
+    public String createToken(String name) {
         Claims claims = Jwts.claims().setSubject(name);
-        claims.put("role", role);
-        //время, когда был создан токен
         LocalDateTime now = LocalDateTime.now();
-        //время, когда был завалиден
-        LocalDateTime validity = now.minusMinutes(secretMinutes);
+        LocalDateTime validity = now.plusMinutes(secretMinutes);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()))
                 .setExpiration(Date.from(validity.atZone(ZoneId.systemDefault()).toInstant()))
                 //подписываем при помощи специального алгоритма
-                .signWith(SignatureAlgorithm.ES256, secretWord)
+                .signWith(SignatureAlgorithm.HS256,  secretWord)
                 .compact();
     }
 
     public boolean validateToken(String token) {
-        boolean result = false;
-        if (Objects.isNull(token)) {
-            return result;
-        }
+        if (token == null) {
+            return false; }
         try {
-            //устанавливаю секретное слово и парсю токен
-            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretWord).parseClaimsJws(token);
-            // беру тело клеймса, вытаскиваю время его создания и определяю, был ли он создан до сейчаса, т.е. он не исктек
-            result = !claimsJws.getBody().getExpiration().before(new Date());
+           //устанавливаю секретное слово и парсю токен
+        Jws<Claims> claimsJws = Jwts.parser()
+                .setSigningKey(secretWord).parseClaimsJws(token);
+            // беру тело клеймса, вытаскиваю время его создания и определяю, был ли он создан до сейчас, т.е. он не исктек
+            return  !claimsJws.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtAuthenticationException(JWT_EXCEPTION);
         }
-        return result;
     }
 
     //получение аутентификаци из токена
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = this.userDetailService.loadUserByUsername(getUsername(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        UserDetails userDetails = userDetailService.loadUserByUsername(getUsername(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
     //получить имя пользователя из токена
@@ -93,7 +90,11 @@ public class JwtTokenProvider {
 
     //нужен для контроллера: принимает HttpServletRequest и возвращает хедер запроса
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader(authorizationHeader);
+        String tokenWithBearer = request.getHeader(authorizationHeader);
+        if (tokenWithBearer == null || tokenWithBearer.isEmpty()) {
+            return null;
+        }
+        return tokenWithBearer.substring(PREFIX_FOR_POSTMAN_AOTH2.length());
     }
 
 }

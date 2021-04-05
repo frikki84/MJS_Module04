@@ -3,6 +3,7 @@ package com.epam.esm.service.mapper.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.epam.esm.entity.Order;
@@ -14,8 +15,9 @@ import com.epam.esm.service.mapper.UserDtoMapper;
 @Component
 public class UserDtoMapperImpl implements UserDtoMapper {
 
-//    private final OrderDtoMapper orderDtoMapper;
-//
+    @Autowired
+    private  OrderDtoMapper orderDtoMapper;
+
 //    public UserDtoMapperImpl(OrderDtoMapper orderDtoMapper) {
 //        this.orderDtoMapper = orderDtoMapper;
 //    }

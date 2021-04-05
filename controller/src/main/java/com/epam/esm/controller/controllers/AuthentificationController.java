@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.epam.esm.entity.AuthentificationRequestDto;
 import com.epam.esm.entity.UserDto;
 import com.epam.esm.service.UserService;
-import com.epam.esm.service.mapper.impl.UserDtoMapperImpl;
 import com.epam.esm.service.security.JwtTokenProvider;
 
 @RestController
@@ -26,21 +25,18 @@ public class AuthentificationController {
     private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserDtoMapperImpl userDtoMapper;
 
     public AuthentificationController(AuthenticationManager authenticationManager, UserService userService,
-            JwtTokenProvider jwtTokenProvider, UserDtoMapperImpl userDtoMapper) {
+            JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.userDtoMapper = userDtoMapper;
     }
 
     @PostMapping("/login")
     public ResponseEntity authentificatt(@RequestBody AuthentificationRequestDto dto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getName(), dto.getPassword()));
-        UserDto user = userService.findUserByName(dto.getName());
-        String token = jwtTokenProvider.createToken(dto.getName(), "user");
+        String token = jwtTokenProvider.createToken(dto.getName());
         Map<Object, Object> response = new HashMap<>();
         response.put("name", dto.getName());
         response.put("token", token);
@@ -50,8 +46,9 @@ public class AuthentificationController {
 
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registaration(){
-
+    public UserDto registaration(@RequestBody UserDto userDto) {
+        return userService.create(userDto);
     }
+
 
 }

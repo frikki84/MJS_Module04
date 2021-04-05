@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -18,6 +19,8 @@ import com.epam.esm.service.exception.JwtAuthenticationException;
 
 @Component
 public class JwtTokenFilter extends GenericFilterBean {
+
+    public static final String  EXCEPTION_MESSAGE = "jwt_exception_filter";
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -29,6 +32,7 @@ public class JwtTokenFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
+
         try {
             if (token != null && jwtTokenProvider.validateToken(token)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
@@ -37,11 +41,9 @@ public class JwtTokenFilter extends GenericFilterBean {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-        } catch (JwtAuthenticationException e) {
+        } catch (AuthenticationException e) {
             SecurityContextHolder.clearContext();
-            //переписать ошибку, чтобы статус был уже внутри
-            ((HttpServletResponse) servletResponse).sendError(10000000);
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
+            throw new JwtAuthenticationException(EXCEPTION_MESSAGE);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

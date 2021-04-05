@@ -1,6 +1,12 @@
 package com.epam.esm.repository.impl;
 
-import java.util.List;
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.User;
+import com.epam.esm.repository.UserRepository;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,11 +15,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.epam.esm.entity.User;
-import com.epam.esm.repository.UserRepository;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -74,14 +76,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findByName(String userName) {
+    public List<User> findByName(String userName) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> giftCertificateCriteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = giftCertificateCriteriaQuery.from(User.class);
         Predicate predicate = criteriaBuilder.like(root.get(COLUMN_NAME), userName);
         giftCertificateCriteriaQuery.select(root).where(predicate);
-        return entityManager.createQuery(giftCertificateCriteriaQuery).getSingleResult();
-
+        return entityManager.createQuery(giftCertificateCriteriaQuery).getResultList();
     }
 
 }

@@ -116,6 +116,7 @@ public class ApplicationExceptionHandler {
     private ResponseEntity createResponseEntity(HttpStatus status, Exception exception,
             CustomErrorCode customErrorCode) {
         String message = getErrorResponse(exception.getMessage());
+        System.out.println(message);
         String exceptionCode = customErrorCode.getCode();
         String errorCode = status.value() + exceptionCode;
         ExceptionDetails data = new ExceptionDetails(LocalDateTime.now(), status.value(), message, errorCode);
