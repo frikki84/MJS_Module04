@@ -53,4 +53,11 @@ public class GiftCertificate {
             @JoinColumn(name = "gift_certicicate_id_gift_certicicate")}, inverseJoinColumns = {
             @JoinColumn(name = "tag_id_tag")})
     private List<Tag> tags;
+
+    @Override
+    public String toString() {
+        return "GiftCertificate{" + "id=" + id + ", name='" + name + '\'' + ", description='" + description + '\''
+                + ", price=" + price + ", duration=" + duration + ", createDate=" + createDate + ", lastUpdateDate="
+                + lastUpdateDate;
+    }
 }

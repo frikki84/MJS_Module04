@@ -2,10 +2,8 @@ package com.epam.esm.service.security;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-
 import java.util.Base64;
 import java.util.Date;
-import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +42,6 @@ public class JwtTokenProvider {
         this.userDetailService = userDetailService;
     }
 
-    //для безопасности - шифруем секретное слово
     @PostConstruct
     protected void init() {
         secretWord = Base64.getEncoder().encodeToString(secretWord.getBytes());
@@ -58,37 +55,31 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()))
                 .setExpiration(Date.from(validity.atZone(ZoneId.systemDefault()).toInstant()))
-                //подписываем при помощи специального алгоритма
-                .signWith(SignatureAlgorithm.HS256,  secretWord)
+                .signWith(SignatureAlgorithm.HS256, secretWord)
                 .compact();
     }
 
     public boolean validateToken(String token) {
         if (token == null) {
-            return false; }
+            return false;
+        }
         try {
-           //устанавливаю секретное слово и парсю токен
-        Jws<Claims> claimsJws = Jwts.parser()
-                .setSigningKey(secretWord).parseClaimsJws(token);
-            // беру тело клеймса, вытаскиваю время его создания и определяю, был ли он создан до сейчас, т.е. он не исктек
-            return  !claimsJws.getBody().getExpiration().before(new Date());
-        } catch (JwtException | IllegalArgumentException e) {
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretWord).parseClaimsJws(token);
+            return !claimsJws.getBody().getExpiration().before(new Date());
+        } catch (RuntimeException  e) {
             throw new JwtAuthenticationException(JWT_EXCEPTION);
         }
     }
 
-    //получение аутентификаци из токена
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
-    //получить имя пользователя из токена
     public String getUsername(String token) {
         return Jwts.parser().setSigningKey(secretWord).parseClaimsJws(token).getBody().getSubject();
     }
 
-    //нужен для контроллера: принимает HttpServletRequest и возвращает хедер запроса
     public String resolveToken(HttpServletRequest request) {
         String tokenWithBearer = request.getHeader(authorizationHeader);
         if (tokenWithBearer == null || tokenWithBearer.isEmpty()) {

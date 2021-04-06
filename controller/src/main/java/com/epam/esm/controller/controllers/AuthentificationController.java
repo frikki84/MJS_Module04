@@ -19,7 +19,7 @@ import com.epam.esm.service.UserService;
 import com.epam.esm.service.security.JwtTokenProvider;
 
 @RestController
-@RequestMapping("/v2/auth")
+@RequestMapping("/v3/auth")
 public class AuthentificationController {
 
     private final AuthenticationManager authenticationManager;
@@ -34,7 +34,7 @@ public class AuthentificationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity authentificatt(@RequestBody AuthentificationRequestDto dto) {
+    public ResponseEntity authentificate(@RequestBody AuthentificationRequestDto dto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getName(), dto.getPassword()));
         String token = jwtTokenProvider.createToken(dto.getName());
         Map<Object, Object> response = new HashMap<>();
@@ -49,6 +49,5 @@ public class AuthentificationController {
     public UserDto registaration(@RequestBody UserDto userDto) {
         return userService.create(userDto);
     }
-
 
 }

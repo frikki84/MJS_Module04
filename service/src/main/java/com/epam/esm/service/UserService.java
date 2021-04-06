@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +15,7 @@ import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.UserDtoMapper;
 import com.epam.esm.service.validation.PageInfoValidation;
+import com.epam.esm.service.validation.SecurityValidator;
 import com.epam.esm.service.validation.UserDtoValidation;
 
 @Service
@@ -26,15 +26,15 @@ public class UserService implements CrdService<UserDto> {
     private final UserDtoMapper mapper;
     private final PageInfoValidation pageValidation;
     private final UserDtoValidation userDtoValidation;
-    private final PasswordEncoder passwordEncoder;
+    private final SecurityValidator securityValidator;
 
     public UserService(UserRepository userRepository, UserDtoMapper mapper, PageInfoValidation pageValidation,
-            UserDtoValidation userDtoValidation, PasswordEncoder passwordEncoder) {
+            UserDtoValidation userDtoValidation, SecurityValidator securityValidator) {
         this.userRepository = userRepository;
         this.mapper = mapper;
         this.pageValidation = pageValidation;
         this.userDtoValidation = userDtoValidation;
-        this.passwordEncoder = passwordEncoder;
+        this.securityValidator = securityValidator;
         pageValidation.setCrdOperations(userRepository);
     }
 
@@ -60,17 +60,10 @@ public class UserService implements CrdService<UserDto> {
     public UserDto create(UserDto entity) {
         userDtoValidation.checkUserDto(entity);
         User user = mapper.chandeDtoToUser(entity);
-        user.setPassword(passwordEncoder.encode(entity.getPassword()));
-        user.setRole(Role.USER);
-        return mapper.chandeUserToDto(userRepository.create(user));
-    }
-
-
-    public UserDto create(UserDto entity, Role role) {
-        userDtoValidation.checkUserDto(entity);
-        User user = mapper.chandeDtoToUser(entity);
-        user.setPassword(passwordEncoder.encode(entity.getPassword()));
-        user.setRole(role);
+        User securityUser = securityValidator.findUserFromAuthentication();
+        if (Objects.isNull(securityUser) || !securityUser.getRole().equals(Role.ADMIN)) {
+            user.setRole(Role.USER);
+        }
         return mapper.chandeUserToDto(userRepository.create(user));
     }
 

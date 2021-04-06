@@ -23,7 +23,7 @@ import com.epam.esm.entity.OrderDto;
 import com.epam.esm.service.OrderService;
 
 @RestController
-@RequestMapping("/v2/orders")
+@RequestMapping("/v3/orders")
 public class OrderController {
 
     public static final String DEFAULT_PAGE_VALUE = "1";
@@ -43,7 +43,7 @@ public class OrderController {
     }
 
     @GetMapping
-    @PreAuthorize(AUTHORITY_READ)
+    @PreAuthorize(AUTHORITY_WRITE)
     public PagedModel<OrderDto> findAll(
             @RequestParam(value = "page", required = false, defaultValue = DEFAULT_PAGE_VALUE) int page,
             @RequestParam(value = "size", required = false, defaultValue = DEFAULT_SIZE_VALUE) int size) {
@@ -53,16 +53,16 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize(AUTHORITY_READ)
+    @PreAuthorize(AUTHORITY_WRITE)
     public OrderDto findById(@PathVariable long id) {
         return hateoasBuilder.addLinksToOrder(orderService.findById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize(AUTHORITY_WRITE)
+    @PreAuthorize(AUTHORITY_READ)
     public OrderDto create(@RequestBody OrderCreationParameter parameter) {
-        return hateoasBuilder.addLinksToOrder(orderService.create(parameter));
+        return hateoasBuilder.addLinksToOrder(orderService.addOrder(parameter));
     }
 
     @DeleteMapping("/{id}")
@@ -73,7 +73,7 @@ public class OrderController {
 
     @GetMapping(params = "user")
     @PreAuthorize(AUTHORITY_READ)
-    public List<OrderDto> readOrdersByUser(@RequestParam(value = "user", required = true) long userId) {
+    public List<OrderDto> readOrdersByUser(@RequestParam(value = "user", required = false) Long userId) {
         List<OrderDto> orderDtoList = orderService.readOrdersByUser(userId);
         hateoasBuilder.addLinksToListOrder(orderDtoList);
         return orderDtoList;

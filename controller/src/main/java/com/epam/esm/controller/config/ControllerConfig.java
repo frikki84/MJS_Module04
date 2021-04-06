@@ -28,9 +28,4 @@ public class ControllerConfig {
         return source;
     }
 
-//    @Bean
-//    public static PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder(BCRYPT_ROUND);
-//    }
-
 }

@@ -17,10 +17,12 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import com.epam.esm.service.exception.AccessException;
 import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.CustomErrorExeption;
 import com.epam.esm.service.exception.ExceptionDetails;
 import com.epam.esm.service.exception.GiftCertificateDtoValidationException;
+
 import com.epam.esm.service.exception.JwtAuthenticationException;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.exception.PageException;
@@ -34,6 +36,7 @@ public class ApplicationExceptionHandler {
     public static final String NO_METHOD = "no_method";
     public static final String BAD_REQUEST = "bad_request";
     public static final String WRONG_URL = "wrong_url";
+    public static final String JWT_EXCEPTION = "jwt_exception";
 
     private final ReloadableResourceBundleMessageSource resourceBundle;
 
@@ -69,6 +72,11 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(JwtAuthenticationException.class)
     public ResponseEntity<ExceptionDetails> handleJwtAuthenticationException(JwtAuthenticationException exception) {
+        return createResponseEntity(HttpStatus.UNAUTHORIZED, exception, CustomErrorCode.GENERAL);
+    }
+
+    @ExceptionHandler(AccessException.class)
+    public ResponseEntity<ExceptionDetails> handleAccessException(AccessException exception) {
         return createResponseEntity(HttpStatus.UNAUTHORIZED, exception, CustomErrorCode.GENERAL);
     }
 
@@ -116,7 +124,6 @@ public class ApplicationExceptionHandler {
     private ResponseEntity createResponseEntity(HttpStatus status, Exception exception,
             CustomErrorCode customErrorCode) {
         String message = getErrorResponse(exception.getMessage());
-        System.out.println(message);
         String exceptionCode = customErrorCode.getCode();
         String errorCode = status.value() + exceptionCode;
         ExceptionDetails data = new ExceptionDetails(LocalDateTime.now(), status.value(), message, errorCode);

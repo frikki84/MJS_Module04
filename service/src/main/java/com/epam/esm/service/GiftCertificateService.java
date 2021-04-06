@@ -1,7 +1,6 @@
 package com.epam.esm.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,8 +38,6 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
     private final TagDtoMapper tagDtoMapper;
     private final GiftCertificateDtoValidation certificateValidation;
 
-
-
     public GiftCertificateService(GiftCertificateRepository giftCertificateRepository, CertificateDtoMapper mapper,
             PageInfoValidation pageValidation, TagRepository tagRepository, SearchParamterDtoMapper paramterDtoMapper,
             TagDtoMapper tagDtoMapper, GiftCertificateDtoValidation certificateValidation) {
@@ -77,13 +74,11 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
                 .collect(Collectors.toList());
     }
 
-
     public long findNumberOfEntities(SearchGiftCertificateParameterDto parametrDto) {
         SearchGiftCertificateParameter parametr = paramterDtoMapper.changeDtoToSearchGiftSertificateParametr(
                 parametrDto);
         return giftCertificateRepository.getCountOfEntities(parametr);
     }
-
 
     public long findNumberOfEntities() {
         return giftCertificateRepository.findNumberOfEntities();
@@ -181,7 +176,6 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
                 correctList.add(tag);
             }
         }
-
         return correctList;
     }
 

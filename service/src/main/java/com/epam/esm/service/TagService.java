@@ -1,21 +1,21 @@
 package com.epam.esm.service;
 
-import com.epam.esm.entity.Tag;
-import com.epam.esm.entity.TagDto;
-import com.epam.esm.repository.TagRepository;
-import com.epam.esm.repository.UserRepository;
-import com.epam.esm.service.CrdService;
-import com.epam.esm.service.exception.CustomErrorCode;
-import com.epam.esm.service.exception.NoSuchResourceException;
-import com.epam.esm.service.mapper.TagDtoMapper;
-import com.epam.esm.service.validation.TagValidation;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.TagDto;
+import com.epam.esm.repository.TagRepository;
+import com.epam.esm.repository.UserRepository;
+import com.epam.esm.service.exception.CustomErrorCode;
+import com.epam.esm.service.exception.NoSuchResourceException;
+import com.epam.esm.service.mapper.TagDtoMapper;
+import com.epam.esm.service.validation.TagValidation;
 
 @Service
 @Transactional
@@ -27,7 +27,8 @@ public class TagService implements CrdService<TagDto> {
     private final UserRepository userRepository;
     private final TagValidation tagValidation;
 
-    public TagService(TagRepository tagRepository, TagDtoMapper mapper, UserRepository userRepository, TagValidation tagValidation) {
+    public TagService(TagRepository tagRepository, TagDtoMapper mapper, UserRepository userRepository,
+            TagValidation tagValidation) {
         this.tagRepository = tagRepository;
         this.mapper = mapper;
         this.userRepository = userRepository;
@@ -36,7 +37,10 @@ public class TagService implements CrdService<TagDto> {
 
     @Override
     public List<TagDto> findAll(int offset, int limit) {
-        return tagRepository.findAll(offset, limit).stream().map(tag -> mapper.changeTagToTagDto(tag)).collect(Collectors.toList());
+        return tagRepository.findAll(offset, limit)
+                .stream()
+                .map(tag -> mapper.changeTagToTagDto(tag))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -77,8 +81,6 @@ public class TagService implements CrdService<TagDto> {
     public long findNumberOfEntities() {
         return tagRepository.findNumberOfEntities();
     }
-
-
 
     public TagDto findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder() {
         Long userId = userRepository.findUserWithTheHighestCostOfAllOrder();

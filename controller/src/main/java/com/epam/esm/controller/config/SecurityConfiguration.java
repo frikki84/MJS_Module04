@@ -10,10 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.epam.esm.service.security.JwtConfiguration;
-import com.epam.esm.service.security.JwtTokenFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,11 +21,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public static final int BCRYPT_ROUND = 12;
 
     private final JwtConfiguration jwtConfiguration;
-    private final JwtTokenFilter jwtTokenFilter;
 
-    public SecurityConfiguration(JwtConfiguration jwtConfiguration, JwtTokenFilter jwtTokenFilter) {
+    public SecurityConfiguration(JwtConfiguration jwtConfiguration) {
         this.jwtConfiguration = jwtConfiguration;
-        this.jwtTokenFilter = jwtTokenFilter;
     }
 
     @Bean
@@ -38,18 +34,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //        http.csrf()
-        //                .disable()
-        //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        //                .and()
-        //                .authorizeRequests()
-        //                .antMatchers("/")
-        //                .permitAll()
-        //                .antMatchers("/v2/auth/login").permitAll()
-        //                .anyRequest()
-        //                .authenticated()
-        //                .and()
-        //                .apply(jwtConfiguration);
         http.httpBasic()
                 .disable()
                 .csrf()
@@ -58,7 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/v2/auth/registration")
+                .antMatchers("/v3/auth/registration")
                 .permitAll()
                 .and()
                 .apply(jwtConfiguration);

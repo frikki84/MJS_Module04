@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.epam.esm.entity.Order;
@@ -16,23 +17,21 @@ import com.epam.esm.service.mapper.UserDtoMapper;
 public class UserDtoMapperImpl implements UserDtoMapper {
 
     @Autowired
-    private  OrderDtoMapper orderDtoMapper;
+    private final PasswordEncoder passwordEncoder;
 
-//    public UserDtoMapperImpl(OrderDtoMapper orderDtoMapper) {
-//        this.orderDtoMapper = orderDtoMapper;
-//    }
+    public UserDtoMapperImpl(PasswordEncoder passwordEncoder) {
+
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public User chandeDtoToUser(UserDto dto) {
         User user = new User();
         user.setId(dto.getId());
         user.setName(dto.getName());
-        user.setPassword(dto.getPassword());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setEmail(dto.getEmail());
         user.setRole(dto.getRole());
-//        List<Order> orderList = new ArrayList<>();
-//        dto.getOrderList().forEach(orderDto -> orderList.add(orderDtoMapper.chandeDtoToOrder(orderDto)));
-//        user.setOrderList(orderList);
         return user;
     }
 
@@ -47,7 +46,4 @@ public class UserDtoMapperImpl implements UserDtoMapper {
         return dto;
     }
 
-    public String changeRoleToString(UserDto user) {
-        return user.getRole().name();
-    }
 }

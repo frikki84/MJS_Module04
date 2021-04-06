@@ -24,7 +24,7 @@ import com.epam.esm.entity.SearchGiftCertificateParameterDto;
 import com.epam.esm.service.GiftCertificateService;
 
 @RestController
-@RequestMapping("/v2/certificates")
+@RequestMapping("/v3/certificates")
 public class GiftCertificateController {
 
     public static final String DEFAULTE_PAGE_VALUE = "1";
@@ -69,7 +69,7 @@ public class GiftCertificateController {
             @RequestBody SearchGiftCertificateParameterDto parameter) {
         List<GiftCertificateDto> list = giftCertificateService.findAll(parameter, page, size);
         hateoasBuilder.addLinksToGiftCertificateList(list);
-        return paginationBuilder.addPagination(list, page, size, giftCertificateService.findNumberOfEntities());
+        return paginationBuilder.addPagination(list, page, size, giftCertificateService.findNumberOfEntities(parameter));
     }
 
     @PostMapping

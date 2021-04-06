@@ -1,26 +1,29 @@
 package com.epam.esm.utils;
 
-import com.epam.esm.entity.GiftCertificate;
-
-import com.epam.esm.entity.SearchGiftCertificateParameter;
-import com.epam.esm.entity.Tag;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.persistence.EntityManager;
-
-import javax.persistence.criteria.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.SearchGiftCertificateParameter;
+import com.epam.esm.entity.Tag;
+
 @Component
 public class GiftCertificateCriteriaBuilder {
 
     public static final String REGEX = "%";
+    public static final String PATTERN_FOR_EMPTY_CRITERIA_QUERY = "";
     public static final String PARAMETER_NAME = "name";
     public static final String PARAMETER_DESCRIPTION = "description";
     public static final String PARAMETER_TAG_NAMES = "tags";
@@ -29,7 +32,7 @@ public class GiftCertificateCriteriaBuilder {
     public static final String TAGS_IN_GIFTCERTIFICATE = "tags";
     public static final String QUERY_SELECT_BY_TAG_NAME =
             "select tag from Tag tag where tag.nameTag in (:" + PARAMETER_TAG_NAMES + ")";
-    public static final String PATTERN_FOR_EMPTY_CRITERIA_QUERY = "";
+
     @Autowired
     private final EntityManager entityManager;
 
@@ -75,11 +78,8 @@ public class GiftCertificateCriteriaBuilder {
             tags.forEach(tag -> predicateList.add(criteriaBuilder.isMember(tag, root.get(TAGS_IN_GIFTCERTIFICATE))));
         }
         giftCertificateCriteriaQuery.select(root).where(predicateList.toArray(new Predicate[0]));
-
         SortParameter sortParameter = parameter.getSortBy();
-
         String sortValue = null;
-
         if (Objects.nonNull(sortParameter)) {
             switch (sortParameter) {
             case NAME:
@@ -90,7 +90,6 @@ public class GiftCertificateCriteriaBuilder {
                 break;
             }
         }
-
         OrderType orderType = parameter.getOrder();
         Order order = null;
         if (Objects.nonNull(orderType)) {
@@ -105,7 +104,6 @@ public class GiftCertificateCriteriaBuilder {
 
             giftCertificateCriteriaQuery.orderBy(order);
         }
-
         return giftCertificateCriteriaQuery;
 
     }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v2/tags")
+@RequestMapping("/v3/tags")
 public class TagController {
 
     public static final String DEFAULTE_PAGE_VALUE = "1";

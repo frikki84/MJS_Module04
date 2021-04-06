@@ -15,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -44,10 +43,11 @@ public class Order {
     private LocalDateTime date;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "users_order_has_certificate",
-            joinColumns = @JoinColumn(name = "order_id", nullable = false),
-            inverseJoinColumns = @JoinColumn(name = "certificate_id", nullable = false))
+    @JoinTable(name = "users_order_has_certificate", joinColumns = @JoinColumn(name = "order_id", nullable = false), inverseJoinColumns = @JoinColumn(name = "certificate_id", nullable = false))
     private List<GiftCertificate> giftCertificateList;
 
+    @Override
+    public String toString() {
+        return "Order{" + "id=" + id + ", price=" + price + ", date=" + date+"}";
+    }
 }

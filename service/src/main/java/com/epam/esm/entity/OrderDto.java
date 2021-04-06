@@ -26,7 +26,7 @@ public class OrderDto extends RepresentationModel<OrderDto> {
     private LocalDateTime date;
     @JsonIgnoreProperties(value = {"orderList"})
     private UserDto user;
-    @JsonIgnoreProperties(value = {"description", "duration", "createDate", "lastUpdateDate", "tags"})
+    @JsonIgnoreProperties(value = {"description", "duration", "createDate", "lastUpdateDate", "tagList"})
     private List<GiftCertificateDto> giftCertificateList;
 
 }

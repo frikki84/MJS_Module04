@@ -15,6 +15,7 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.OrderCreationParameter;
 import com.epam.esm.entity.OrderDto;
+import com.epam.esm.entity.Role;
 import com.epam.esm.entity.User;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.OrderRepository;
@@ -23,10 +24,13 @@ import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.OrderDtoMapper;
 import com.epam.esm.service.validation.PageInfoValidation;
+import com.epam.esm.service.validation.SecurityValidator;
 
 @Service
 @Transactional
 public class OrderService {
+
+    public static final int DEFAULT_USER_ID_VALUE = 0;
 
     @Autowired
     private final OrderRepository orderRepository;
@@ -34,14 +38,17 @@ public class OrderService {
     private final UserRepository userRepository;
     private final GiftCertificateRepository certificateRepository;
     private final PageInfoValidation pageInfoValidation;
+    private final SecurityValidator securityValidator;
 
     public OrderService(OrderRepository orderRepository, OrderDtoMapper orderMapper, UserRepository userRepository,
-            GiftCertificateRepository certificateRepository, PageInfoValidation pageInfoValidation) {
+            GiftCertificateRepository certificateRepository, PageInfoValidation pageInfoValidation,
+            SecurityValidator securityValidator) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.userRepository = userRepository;
         this.certificateRepository = certificateRepository;
         this.pageInfoValidation = pageInfoValidation;
+        this.securityValidator = securityValidator;
         pageInfoValidation.setCrdOperations(orderRepository);
     }
 
@@ -61,6 +68,16 @@ public class OrderService {
         return orderMapper.chandeOrderToDto(order);
     }
 
+    public OrderDto addOrder(OrderCreationParameter parameter) {
+        User user = securityValidator.findUserFromAuthentication();
+        if (parameter.getUserId() == DEFAULT_USER_ID_VALUE) {
+            parameter.setUserId(user.getId());
+        } else if (user.getRole().equals(Role.USER)) {
+            parameter.setUserId(user.getId());
+        }
+        return create(parameter);
+    }
+
     @Transactional
     public OrderDto create(OrderCreationParameter parameter) {
         User user = userRepository.findById(parameter.getUserId());
@@ -69,7 +86,7 @@ public class OrderService {
         }
         List<GiftCertificate> certificatesList = new ArrayList<>();
         BigDecimal price = BigDecimal.ZERO;
-        for (Integer i : parameter.getCertificateDtos()) {
+        for (Integer i : parameter.getCertificates()) {
             GiftCertificate certificate = certificateRepository.findById(i);
             if (Objects.isNull(certificate)) {
                 throw new NoSuchResourceException(CustomErrorCode.ORDER);
@@ -99,11 +116,19 @@ public class OrderService {
         return orderRepository.findNumberOfEntities();
     }
 
-    public List<OrderDto> readOrdersByUser(long userId) {
+    public List<OrderDto> readOrdersByUser(Long userId) {
+        User user = securityValidator.findUserFromAuthentication();
+        if (Objects.isNull(userId)) {
+            userId = user.getId();
+        }
+        if (user.getRole().equals(Role.USER)) {
+            userId = user.getId();
+        }
         List<Order> orderList = orderRepository.readOrdersByUser(userId);
-        if (Objects.isNull(orderList) || orderList.isEmpty()) {
+        if ((Objects.isNull(orderList) || orderList.isEmpty()) && userId != user.getId()) {
             throw new NoSuchResourceException(CustomErrorCode.USER);
         }
         return orderList.stream().map(order -> orderMapper.chandeOrderToDto(order)).collect(Collectors.toList());
     }
+
 }

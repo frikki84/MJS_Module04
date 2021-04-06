@@ -22,7 +22,7 @@ import com.epam.esm.entity.UserDto;
 import com.epam.esm.service.UserService;
 
 @RestController
-@RequestMapping("v2/users")
+@RequestMapping("/v3/users")
 public class UserController {
 
     public static final String DEFAULTE_PAGE_VALUE = "1";

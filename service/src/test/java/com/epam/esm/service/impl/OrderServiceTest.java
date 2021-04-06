@@ -51,7 +51,6 @@ class OrderServiceTest {
 
     @Test
     void findAll() {
-//        Mockito.when(pageInfoValidation.checkPageInfo(OFFSET, LIMIT)).thenReturn(true);
 
     }
 
@@ -75,7 +74,7 @@ class OrderServiceTest {
         GiftCertificateDto giftCertificateDto = new GiftCertificateDto();
         OrderCreationParameter parameter = new OrderCreationParameter();
         parameter.setUserId(ID);
-        parameter.setCertificateDtos(Arrays.asList(1));
+        parameter.setCertificates(Arrays.asList(1));
         Order order = new Order();
         OrderDto orderDto = new OrderDto();
         User user = new User();
@@ -93,7 +92,7 @@ class OrderServiceTest {
         GiftCertificateDto giftCertificateDto = new GiftCertificateDto();
         OrderCreationParameter parameter = new OrderCreationParameter();
         parameter.setUserId(ID);
-        parameter.setCertificateDtos(Arrays.asList(1));
+        parameter.setCertificates(Arrays.asList(1));
         Order order = new Order();
         OrderDto orderDto = new OrderDto();
         User user = new User();
@@ -108,7 +107,7 @@ class OrderServiceTest {
         GiftCertificateDto giftCertificateDto = new GiftCertificateDto();
         OrderCreationParameter parameter = new OrderCreationParameter();
         parameter.setUserId(ID);
-        parameter.setCertificateDtos(Arrays.asList(1));
+        parameter.setCertificates(Arrays.asList(1));
         Order order = new Order();
         OrderDto orderDto = new OrderDto();
         User user = new User();

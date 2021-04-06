@@ -9,19 +9,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.epam.esm.entity.User;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
+@AllArgsConstructor
 public class SecurityUser implements UserDetails {
 
     public static final boolean DEFAULT_STATUS = true;
 
-    private final String name;
-    private final String password;
-    private final List<SimpleGrantedAuthority> authorities;
-
-    public SecurityUser(String name, String password, List<SimpleGrantedAuthority> authorities) {
-        this.name = name;
-        this.password = password;
-        this.authorities = authorities;
-    }
+    private Long id;
+    private String name;
+    private String password;
+    private List<SimpleGrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -61,6 +61,6 @@ public class SecurityUser implements UserDetails {
     public static UserDetails createUserDetailsFromUser(User user) {
         return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(),
                 DEFAULT_STATUS, DEFAULT_STATUS, DEFAULT_STATUS, DEFAULT_STATUS, user.getRole().getAuthorities());
-
     }
+
 }

@@ -7,7 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -20,7 +19,7 @@ import com.epam.esm.service.exception.JwtAuthenticationException;
 @Component
 public class JwtTokenFilter extends GenericFilterBean {
 
-    public static final String  EXCEPTION_MESSAGE = "jwt_exception_filter";
+    public static final String EXCEPTION_MESSAGE = "jwt_exception_filter";
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -37,7 +36,6 @@ public class JwtTokenFilter extends GenericFilterBean {
             if (token != null && jwtTokenProvider.validateToken(token)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 if (authentication != null) {
-                    //SecurityContextHolder возьми этот контекст и положи в него данную аутентификацию
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
