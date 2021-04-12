@@ -13,11 +13,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.epam.esm.service.security.JwtConfiguration;
 
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    public static final int BCRYPT_ROUND = 12;
+    private int BCRYPT_ROUND = 12;
 
     private final JwtConfiguration jwtConfiguration;
 
@@ -48,7 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public static PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(BCRYPT_ROUND);
     }
 }
