@@ -1,20 +1,17 @@
 package com.epam.esm.repository.impl;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.configuration.IntParameterValues;
 import com.epam.esm.entity.Order;
 import com.epam.esm.repository.OrderRepository;
 
@@ -22,8 +19,7 @@ import com.epam.esm.repository.OrderRepository;
 @Transactional
 public class OrderRepositoryImpl implements OrderRepository {
 
-    public static final int OFFSET_DEFAULT_VALUE = 1;
-    public static final String PARAMETER_NAME_FOR_FINDING_ORDERS_BY_USER = "user";
+    private String parameterNameForFindingOrdersByUser = "user";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -34,7 +30,7 @@ public class OrderRepositoryImpl implements OrderRepository {
         CriteriaQuery<Order> orderCriteriaQuery = criteriaBuilder.createQuery(Order.class);
         Root<Order> root = orderCriteriaQuery.from(Order.class);
         orderCriteriaQuery.select(root);
-        int itemsOffset = (offset - OFFSET_DEFAULT_VALUE) * limit;
+        int itemsOffset = (offset - IntParameterValues.OFFSET_DEFAULT_VALUE.getValue()) * limit;
         return entityManager.createQuery(orderCriteriaQuery)
                 .setFirstResult(itemsOffset)
                 .setMaxResults(limit)
@@ -72,7 +68,7 @@ public class OrderRepositoryImpl implements OrderRepository {
         CriteriaQuery<Order> orderQuery = criteriaBuilder.createQuery(Order.class);
         Root<Order> root = orderQuery.from(Order.class);
         orderQuery.select(root)
-                .where(criteriaBuilder.equal(root.get(PARAMETER_NAME_FOR_FINDING_ORDERS_BY_USER), userID));
+                .where(criteriaBuilder.equal(root.get(parameterNameForFindingOrdersByUser), userID));
         return entityManager.createQuery(orderQuery).getResultList();
     }
 

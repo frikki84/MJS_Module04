@@ -14,6 +14,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.epam.esm.configuration.IntParameterValues;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.Tag;
@@ -24,12 +25,11 @@ import com.epam.esm.repository.TagRepository;
 @Transactional
 public class TagRepositoryImpl implements TagRepository {
 
-    private static final String ORDER_LIST_ATTRIBUTE = "orderList";
-    private static final String CERTIFICATE_LIST_ATTRIBUTE = "giftCertificateList";
-    private static final String TAG_ATTRIBUTE = "tags";
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_NAME = "nameTag";
-    private static final int POSITION_WITH_MAX_VALUE = 1;
+    private  String orderListAttribute = "orderList";
+    private  String certificateListAttribute = "giftCertificateList";
+    private  String tagAttribute = "tags";
+    private  String columnId = "id";
+    private  String columnName = "nameTag";
 
     @PersistenceContext
     EntityManager entityManager;
@@ -53,7 +53,7 @@ public class TagRepositoryImpl implements TagRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tag> giftCertificateCriteriaQuery = criteriaBuilder.createQuery(Tag.class);
         Root<Tag> root = giftCertificateCriteriaQuery.from(Tag.class);
-        Predicate predicate = criteriaBuilder.like(root.get(COLUMN_NAME), tagName);
+        Predicate predicate = criteriaBuilder.like(root.get(columnName), tagName);
         giftCertificateCriteriaQuery.select(root).where(predicate);
         return entityManager.createQuery(giftCertificateCriteriaQuery).getResultList();
     }
@@ -85,16 +85,18 @@ public class TagRepositoryImpl implements TagRepository {
         CriteriaQuery<Tag> tagQuery = criteriaBuilder.createQuery(Tag.class);
         Root<User> userRoot = tagQuery.from(User.class);
 
-        ListJoin<User, Order> orderList = userRoot.joinList(ORDER_LIST_ATTRIBUTE);
-        ListJoin<Order, GiftCertificate> giftList = orderList.joinList(CERTIFICATE_LIST_ATTRIBUTE);
-        ListJoin<GiftCertificate, Tag> tagList = giftList.joinList(TAG_ATTRIBUTE);
+        ListJoin<User, Order> orderList = userRoot.joinList(orderListAttribute);
+        ListJoin<Order, GiftCertificate> giftList = orderList.joinList(certificateListAttribute);
+        ListJoin<GiftCertificate, Tag> tagList = giftList.joinList(tagAttribute);
 
-        Expression orderId = tagList.get(COLUMN_ID);
+        Expression orderId = tagList.get(columnId);
         tagQuery.select(tagList)
-                .where(criteriaBuilder.equal(userRoot.get(COLUMN_ID), userId))
+                .where(criteriaBuilder.equal(userRoot.get(columnId), userId))
                 .groupBy(orderId)
                 .orderBy(criteriaBuilder.desc(criteriaBuilder.count(orderId)));
 
-        return entityManager.createQuery(tagQuery).setMaxResults(POSITION_WITH_MAX_VALUE).getSingleResult();
+        return entityManager.createQuery(tagQuery)
+                .setMaxResults(IntParameterValues.POSITION_WITH_MAX_VALUE.getValue())
+                .getSingleResult();
     }
 }

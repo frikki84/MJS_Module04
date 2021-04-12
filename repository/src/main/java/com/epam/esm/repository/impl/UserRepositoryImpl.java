@@ -1,12 +1,6 @@
 package com.epam.esm.repository.impl;
 
-import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
-import com.epam.esm.entity.User;
-import com.epam.esm.repository.UserRepository;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,16 +9,19 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import java.util.List;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.epam.esm.configuration.IntParameterValues;
+import com.epam.esm.entity.User;
+import com.epam.esm.repository.UserRepository;
 
 @Repository
 @Transactional
 public class UserRepositoryImpl implements UserRepository {
 
-    public static final int OFFSET_DEFAULT_VALUE = 1;
-    public static final String QUERY_FIND_USER_WITH_HIGHIEST_COST_OF_ORDERS = "select o.user from Order o group by o.user order by sum(o.price) desc";
-    private static final int POSITION_WITH_MAX_VALUE = 1;
-    private static final String COLUMN_NAME = "name";
+    private String queryFindUserWithHighiestCostOfOrders = "select o.user from Order o group by o.user order by sum(o.price) desc";
+    private String columnName = "name";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -35,7 +32,7 @@ public class UserRepositoryImpl implements UserRepository {
         CriteriaQuery<User> userCriteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = userCriteriaQuery.from(User.class);
         userCriteriaQuery.select(root);
-        int itemsOffset = (offset - OFFSET_DEFAULT_VALUE) * limit;
+        int itemsOffset = (offset - IntParameterValues.OFFSET_DEFAULT_VALUE.getValue()) * limit;
         return entityManager.createQuery(userCriteriaQuery)
                 .setFirstResult(itemsOffset)
                 .setMaxResults(limit)
@@ -69,8 +66,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Long findUserWithTheHighestCostOfAllOrder() {
-        return entityManager.createQuery(QUERY_FIND_USER_WITH_HIGHIEST_COST_OF_ORDERS, User.class)
-                .setMaxResults(POSITION_WITH_MAX_VALUE)
+        return entityManager.createQuery(queryFindUserWithHighiestCostOfOrders, User.class)
+                .setMaxResults(IntParameterValues.POSITION_WITH_MAX_VALUE.getValue())
                 .getSingleResult()
                 .getId();
     }
@@ -80,7 +77,7 @@ public class UserRepositoryImpl implements UserRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> giftCertificateCriteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = giftCertificateCriteriaQuery.from(User.class);
-        Predicate predicate = criteriaBuilder.like(root.get(COLUMN_NAME), userName);
+        Predicate predicate = criteriaBuilder.like(root.get(columnName), userName);
         giftCertificateCriteriaQuery.select(root).where(predicate);
         return entityManager.createQuery(giftCertificateCriteriaQuery).getResultList();
     }

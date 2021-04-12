@@ -125,7 +125,7 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
         if (Objects.isNull(certificateFromDb)) {
             throw new NoSuchResourceException(CustomErrorCode.CERTIFICATE);
         }
-        boolean checkDto = certificateValidation.chechCertificateDtoFormatForUpdate(giftCertificate);
+        certificateValidation.chechCertificateDtoFormatForUpdate(giftCertificate);
 
         GiftCertificate certificate = mapper.changeDtoToCertificate(giftCertificate);
         if (Objects.nonNull(certificate.getName())) {

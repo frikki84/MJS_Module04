@@ -1,6 +1,7 @@
 package com.epam.esm.entity;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.epam.esm.utils.OrderType;
 import com.epam.esm.utils.SortParameter;
@@ -19,7 +20,7 @@ public class SearchGiftCertificateParameter {
     private OrderType order;
 
     public boolean isEmpty() {
-        return (name == null || name.isEmpty()) && (description == null || description.isEmpty()) && (tags == null
-                || tags.isEmpty()) && sortBy == null && order == null;
+        return (Objects.isNull(name) || name.isEmpty()) && (Objects.isNull(description) || description.isEmpty()) && (
+                Objects.isNull(tags) || tags.isEmpty()) && Objects.isNull(sortBy) && Objects.isNull(order);
     }
 }

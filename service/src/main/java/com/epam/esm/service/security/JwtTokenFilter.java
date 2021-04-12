@@ -1,6 +1,7 @@
 package com.epam.esm.service.security;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -15,11 +16,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import com.epam.esm.service.exception.JwtAuthenticationException;
+import com.epam.esm.service.exception.LocalizationExceptionMessageValues;
 
 @Component
 public class JwtTokenFilter extends GenericFilterBean {
-
-    public static final String EXCEPTION_MESSAGE = "jwt_exception_filter";
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -33,15 +33,16 @@ public class JwtTokenFilter extends GenericFilterBean {
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) servletRequest);
 
         try {
-            if (token != null && jwtTokenProvider.validateToken(token)) {
+            if (Objects.nonNull(token) && jwtTokenProvider.validateToken(token)) {
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
-                if (authentication != null) {
+                if (Objects.nonNull(authentication)) {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
         } catch (AuthenticationException e) {
             SecurityContextHolder.clearContext();
-            throw new JwtAuthenticationException(EXCEPTION_MESSAGE);
+            throw new JwtAuthenticationException(
+                    LocalizationExceptionMessageValues.EXCEPTION_JWT_FILTER_MESSAGE.getMessage());
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

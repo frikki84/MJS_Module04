@@ -22,16 +22,15 @@ import com.epam.esm.entity.Tag;
 @Component
 public class GiftCertificateCriteriaBuilder {
 
-    public static final String REGEX = "%";
-    public static final String PATTERN_FOR_EMPTY_CRITERIA_QUERY = "";
-    public static final String PARAMETER_NAME = "name";
-    public static final String PARAMETER_DESCRIPTION = "description";
-    public static final String PARAMETER_TAG_NAMES = "tags";
-    public static final String PARAMETER_SORTBY_NAME = "name";
-    public static final String PARAMETER_SORTBY_CREATE_DATE = "createDate";
-    public static final String TAGS_IN_GIFTCERTIFICATE = "tags";
-    public static final String QUERY_SELECT_BY_TAG_NAME =
-            "select tag from Tag tag where tag.nameTag in (:" + PARAMETER_TAG_NAMES + ")";
+    private String regexForCreationPredicates = "%";
+    private String patternForEmptyCriteriaQuery = "";
+    private String parameterName = "name";
+    private String parameterDescription = "description";
+    private String parameterTagNames = "tags";
+    private String parameterSortbyName = "name";
+    private String parameterSortbyCreateDate = "createDate";
+    private String tagsInGiftcertificate = "tags";
+    private String querySelectByTagName = "select tag from Tag tag where tag.nameTag in (:" + parameterTagNames + ")";
 
     @Autowired
     private final EntityManager entityManager;
@@ -51,15 +50,15 @@ public class GiftCertificateCriteriaBuilder {
         String parameterName = parameter.getName();
 
         if (Objects.nonNull(parameterName)) {
-            String pattern = REGEX + parameterName + REGEX;
-            Predicate predicate = criteriaBuilder.like(root.get(PARAMETER_NAME), pattern);
+            String pattern = regexForCreationPredicates + parameterName + regexForCreationPredicates;
+            Predicate predicate = criteriaBuilder.like(root.get(this.parameterName), pattern);
             predicateList.add(predicate);
         }
 
         String parameterDescription = parameter.getDescription();
         if (Objects.nonNull(parameterDescription)) {
-            String pattern = REGEX + parameterDescription + REGEX;
-            Predicate predicate = criteriaBuilder.like(root.get(PARAMETER_DESCRIPTION), pattern);
+            String pattern = regexForCreationPredicates + parameterDescription + regexForCreationPredicates;
+            Predicate predicate = criteriaBuilder.like(root.get(this.parameterDescription), pattern);
             predicateList.add(predicate);
         }
 
@@ -67,15 +66,15 @@ public class GiftCertificateCriteriaBuilder {
 
         if (Objects.nonNull(tagNames)) {
             List<String> distinctTagList = tagNames.stream().distinct().collect(Collectors.toList());
-            List<Tag> tags = entityManager.createQuery(QUERY_SELECT_BY_TAG_NAME, Tag.class)
-                    .setParameter(PARAMETER_TAG_NAMES, distinctTagList)
+            List<Tag> tags = entityManager.createQuery(querySelectByTagName, Tag.class)
+                    .setParameter(parameterTagNames, distinctTagList)
                     .getResultList();
 
             if (distinctTagList.size() != tags.size()) {
                 return giftCertificateCriteriaQuery.select(root)
-                        .where(criteriaBuilder.like(root.get(PARAMETER_NAME), PATTERN_FOR_EMPTY_CRITERIA_QUERY));
+                        .where(criteriaBuilder.like(root.get(this.parameterName), patternForEmptyCriteriaQuery));
             }
-            tags.forEach(tag -> predicateList.add(criteriaBuilder.isMember(tag, root.get(TAGS_IN_GIFTCERTIFICATE))));
+            tags.forEach(tag -> predicateList.add(criteriaBuilder.isMember(tag, root.get(tagsInGiftcertificate))));
         }
         giftCertificateCriteriaQuery.select(root).where(predicateList.toArray(new Predicate[0]));
         SortParameter sortParameter = parameter.getSortBy();
@@ -83,10 +82,10 @@ public class GiftCertificateCriteriaBuilder {
         if (Objects.nonNull(sortParameter)) {
             switch (sortParameter) {
             case NAME:
-                sortValue = PARAMETER_SORTBY_NAME;
+                sortValue = parameterSortbyName;
                 break;
             case CREATE_DATE:
-                sortValue = PARAMETER_SORTBY_CREATE_DATE;
+                sortValue = parameterSortbyCreateDate;
                 break;
             }
         }

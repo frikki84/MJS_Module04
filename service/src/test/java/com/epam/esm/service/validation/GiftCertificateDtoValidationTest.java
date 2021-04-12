@@ -30,10 +30,10 @@ class GiftCertificateDtoValidationTest {
             VALID_DURATION, LocalDateTime.now(), LocalDateTime.now(), tagList);
     private GiftCertificateDto invalidDto = new GiftCertificateDto();
 
-    @Test
-    void chechCertificateDtoFormat() {
-        assertEquals(true, GiftCertificateDtoValidation.chechCertificateDtoFormat(validDto));
-    }
+//    @Test
+//    void chechCertificateDtoFormat() {
+//        assertEquals(true, GiftCertificateDtoValidation.chechCertificateDtoFormat(validDto));
+//    }
 
     @Test
     void chechCertificateDtoFormatNegative() {

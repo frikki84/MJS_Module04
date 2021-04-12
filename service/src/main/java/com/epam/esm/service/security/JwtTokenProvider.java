@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -15,19 +16,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.epam.esm.service.exception.JwtAuthenticationException;
+import com.epam.esm.service.exception.LocalizationExceptionMessageValues;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtTokenProvider {
 
-    public static final String JWT_EXCEPTION = "jwt_exception";
-
-    private final static String PREFIX_FOR_POSTMAN_AOTH2 = "Bearer ";
+    private String prefixForPostmanAoth2 = "Bearer ";
 
     public final UserDetailServiceImpl userDetailService;
 
@@ -60,14 +59,14 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
-        if (token == null) {
+        if (Objects.isNull(token)) {
             return false;
         }
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretWord).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
-        } catch (RuntimeException  e) {
-            throw new JwtAuthenticationException(JWT_EXCEPTION);
+        } catch (RuntimeException e) {
+            throw new JwtAuthenticationException(LocalizationExceptionMessageValues.JWT_EXCEPTION.getMessage());
         }
     }
 
@@ -82,10 +81,10 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest request) {
         String tokenWithBearer = request.getHeader(authorizationHeader);
-        if (tokenWithBearer == null || tokenWithBearer.isEmpty()) {
+        if (Objects.isNull(tokenWithBearer) || tokenWithBearer.isEmpty()) {
             return null;
         }
-        return tokenWithBearer.substring(PREFIX_FOR_POSTMAN_AOTH2.length());
+        return tokenWithBearer.substring(prefixForPostmanAoth2.length());
     }
 
 }

@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -16,15 +14,14 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 public class ControllerConfig {
 
-    public static final String LOCALIZATION_PROPERTIES = "classpath:localization/message";
-    public static final String DEFAULT_ENCODING = "UTF-8";
-    public static final int BCRYPT_ROUND = 12;
+    private String localizationProperties = "classpath:localization/message";
+    private String defaultEncoding = "UTF-8";
 
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource source = new ReloadableResourceBundleMessageSource();
-        source.setBasename(LOCALIZATION_PROPERTIES);
-        source.setDefaultEncoding(DEFAULT_ENCODING);
+        source.setBasename(localizationProperties);
+        source.setDefaultEncoding(defaultEncoding);
         return source;
     }
 

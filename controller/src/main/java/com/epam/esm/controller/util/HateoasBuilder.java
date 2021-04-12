@@ -20,17 +20,17 @@ import com.epam.esm.entity.UserDto;
 @Component
 public class HateoasBuilder {
 
-    public static final String CERTIFICATE_UPDATE = "update certificate";
-    public static final String CERTIFICATE_CREATE = "create certificate";
-    public static final String TAG_CREATE = "create tag";
-    public static final String USER_CREATE = "create user";
-    public static final String ORDER_LINK_TO_USER = "user";
-    public static final String ORDER_USER_ORDERS = "user orders";
+    private String certificateUpdate = "update certificate";
+    private String certificateCreate = "create certificate";
+    private String tagCreate = "create tag";
+    private String userCreate = "create user";
+    private String orderLinkToUser = "user";
+    private String orderUserOrders = "user orders";
 
     public GiftCertificateDto addLinksToGiftCertificate(GiftCertificateDto dto) {
-        dto.add(linkTo(methodOn(GiftCertificateController.class).update(dto, dto.getId())).withRel(CERTIFICATE_UPDATE)
+        dto.add(linkTo(methodOn(GiftCertificateController.class).update(dto, dto.getId())).withRel(certificateUpdate)
                 .withType(HttpMethod.PATCH.name()));
-        dto.add(linkTo(methodOn(GiftCertificateController.class).create(dto)).withRel(CERTIFICATE_CREATE)
+        dto.add(linkTo(methodOn(GiftCertificateController.class).create(dto)).withRel(certificateCreate)
                 .withType(HttpMethod.POST.name()));
         addLinksToListTag(dto.getTagList());
         return dto;
@@ -46,7 +46,7 @@ public class HateoasBuilder {
     }
 
     public TagDto addLinksToTag(TagDto tagDto) {
-        tagDto.add(linkTo(methodOn(TagController.class).create(tagDto)).withRel(TAG_CREATE)
+        tagDto.add(linkTo(methodOn(TagController.class).create(tagDto)).withRel(tagCreate)
                 .withType(HttpMethod.POST.name()));
 
         return tagDto;
@@ -58,7 +58,7 @@ public class HateoasBuilder {
     }
 
     public UserDto addLinksToUser(UserDto userDto) {
-        userDto.add(linkTo(methodOn(UserController.class).create(userDto)).withRel(USER_CREATE)
+        userDto.add(linkTo(methodOn(UserController.class).create(userDto)).withRel(userCreate)
                 .withType(HttpMethod.POST.name()));
 
         return userDto;
@@ -73,7 +73,7 @@ public class HateoasBuilder {
     public OrderDto addLinksToOrder(OrderDto orderDto) {
         addLinksToGiftCertificateList(orderDto.getGiftCertificateList());
         UserDto user = orderDto.getUser();
-        user.add(linkTo(methodOn(UserController.class).findById(user.getId())).withRel(ORDER_LINK_TO_USER)
+        user.add(linkTo(methodOn(UserController.class).findById(user.getId())).withRel(orderLinkToUser)
                 .withType(HttpMethod.GET.name()));
         return orderDto;
     }
@@ -81,10 +81,10 @@ public class HateoasBuilder {
     public void addLinksToListOrder(List<OrderDto> orderDtoList) {
         for (OrderDto orderDto : orderDtoList) {
             orderDto.add(linkTo(methodOn(OrderController.class).readOrdersByUser(orderDto.getUser().getId())).withRel(
-                    ORDER_USER_ORDERS).withType(HttpMethod.GET.name()));
+                    orderUserOrders).withType(HttpMethod.GET.name()));
             addLinksToGiftCertificateList(orderDto.getGiftCertificateList());
             UserDto user = orderDto.getUser();
-            user.add(linkTo(methodOn(UserController.class).findById(user.getId())).withRel(ORDER_LINK_TO_USER)
+            user.add(linkTo(methodOn(UserController.class).findById(user.getId())).withRel(orderLinkToUser)
                     .withType(HttpMethod.GET.name()));
         }
     }

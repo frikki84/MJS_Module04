@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.epam.esm.configuration.IntParameterValues;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.OrderCreationParameter;
@@ -29,8 +30,6 @@ import com.epam.esm.service.validation.SecurityValidator;
 @Service
 @Transactional
 public class OrderService {
-
-    public static final int DEFAULT_USER_ID_VALUE = 0;
 
     @Autowired
     private final OrderRepository orderRepository;
@@ -70,9 +69,10 @@ public class OrderService {
 
     public OrderDto addOrder(OrderCreationParameter parameter) {
         User user = securityValidator.findUserFromAuthentication();
-        if (parameter.getUserId() == DEFAULT_USER_ID_VALUE) {
+        if (parameter.getUserId() == IntParameterValues.DEFAULT_USER_ID_VALUE.getValue()) {
             parameter.setUserId(user.getId());
-        } else if (user.getRole().equals(Role.USER)) {
+        }
+        if (user.getRole().equals(Role.USER)) {
             parameter.setUserId(user.getId());
         }
         return create(parameter);

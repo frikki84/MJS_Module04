@@ -13,19 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.epam.esm.configuration.IntParameterValues;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.SearchGiftCertificateParameter;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.utils.GiftCertificateCriteriaBuilder;
 
-
 @Repository
 @Transactional
 public class GiftCertificateRepositoryImpl implements GiftCertificateRepository {
 
-    public static int OFFSET_DEFAULT_VALUE = 1;
-    public static final String DELETE_CERTIFICATE_FROM_ORDER = "DELETE FROM users_order_has_certificate OHC WHERE OHC.certificate_id=?";
+    private String deleteCertificateFromOrder = "DELETE FROM users_order_has_certificate OHC WHERE OHC.certificate_id=?";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -46,7 +45,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
                 GiftCertificate.class);
         Root<GiftCertificate> root = giftCertificateCriteriaQuery.from(GiftCertificate.class);
         giftCertificateCriteriaQuery.select(root);
-        int itemsOffset = (offset - OFFSET_DEFAULT_VALUE) * limit;
+        int itemsOffset = (offset - IntParameterValues.OFFSET_DEFAULT_VALUE.getValue()) * limit;
         return entityManager.createQuery(giftCertificateCriteriaQuery)
                 .setFirstResult(itemsOffset)
                 .setMaxResults(limit)
@@ -56,7 +55,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
     @Override
     public List<GiftCertificate> findAll(SearchGiftCertificateParameter parametr, int offset, int limit) {
         CriteriaQuery<GiftCertificate> criteriaQuery = criteriaBuilder.buildQuery(parametr);
-        int itemsOffset = (offset - OFFSET_DEFAULT_VALUE) * limit;
+        int itemsOffset = (offset - IntParameterValues.OFFSET_DEFAULT_VALUE.getValue()) * limit;
         return entityManager.createQuery(criteriaQuery)
                 .setFirstResult(itemsOffset)
                 .setMaxResults(limit)
@@ -77,7 +76,7 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
 
     @Override
     public long delete(long id) {
-        entityManager.createNativeQuery(DELETE_CERTIFICATE_FROM_ORDER).setParameter(1, id).executeUpdate();
+        entityManager.createNativeQuery(deleteCertificateFromOrder).setParameter(1, id).executeUpdate();
         entityManager.remove(findById(id));
         return id;
     }
@@ -109,7 +108,6 @@ public class GiftCertificateRepositoryImpl implements GiftCertificateRepository 
                 .collect(Collectors.toList());
         certificate.setTags(checkedTagListInDb);
     }
-
 
 }
 

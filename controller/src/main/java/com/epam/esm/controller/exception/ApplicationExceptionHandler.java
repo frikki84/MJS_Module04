@@ -22,8 +22,8 @@ import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.CustomErrorExeption;
 import com.epam.esm.service.exception.ExceptionDetails;
 import com.epam.esm.service.exception.GiftCertificateDtoValidationException;
-
 import com.epam.esm.service.exception.JwtAuthenticationException;
+import com.epam.esm.service.exception.LocalizationExceptionMessageValues;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.exception.PageException;
 import com.epam.esm.service.exception.TagValidationException;
@@ -31,12 +31,6 @@ import com.epam.esm.service.exception.UserValidationException;
 
 @ControllerAdvice
 public class ApplicationExceptionHandler {
-
-    public static final String NO_SUCH_RESOURCE_MESSAGE = "no_resource";
-    public static final String NO_METHOD = "no_method";
-    public static final String BAD_REQUEST = "bad_request";
-    public static final String WRONG_URL = "wrong_url";
-    public static final String JWT_EXCEPTION = "jwt_exception";
 
     private final ReloadableResourceBundleMessageSource resourceBundle;
 
@@ -46,7 +40,8 @@ public class ApplicationExceptionHandler {
 
     @ExceptionHandler(NoSuchResourceException.class)
     public ResponseEntity<ExceptionDetails> handleNoSuchResourceException(NoSuchResourceException exception) {
-        return createResponseEntity(HttpStatus.NOT_FOUND, exception, NO_SUCH_RESOURCE_MESSAGE);
+        return createResponseEntity(HttpStatus.NOT_FOUND, exception,
+                LocalizationExceptionMessageValues.NO_SUCH_RESOURCE_MESSAGE.getMessage());
     }
 
     @ExceptionHandler(TagValidationException.class)
@@ -83,19 +78,22 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ExceptionDetails> handleHttpRequestMethodNotSupportedException(
             HttpRequestMethodNotSupportedException exception) {
-        return createResponseEntity(HttpStatus.METHOD_NOT_ALLOWED, NO_METHOD, CustomErrorCode.GENERAL);
+        return createResponseEntity(HttpStatus.METHOD_NOT_ALLOWED, LocalizationExceptionMessageValues.NO_METHOD.getMessage(),
+                CustomErrorCode.GENERAL);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ExceptionDetails> handleHttpMessageNotReadableException(
             HttpMessageNotReadableException exception) {
-        return createResponseEntity(HttpStatus.BAD_REQUEST, BAD_REQUEST, CustomErrorCode.GENERAL);
+        return createResponseEntity(HttpStatus.BAD_REQUEST, LocalizationExceptionMessageValues.BAD_REQUEST.getMessage(),
+                CustomErrorCode.GENERAL);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ExceptionDetails> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException exception) {
-        return createResponseEntity(HttpStatus.BAD_REQUEST, WRONG_URL, CustomErrorCode.GENERAL);
+        return createResponseEntity(HttpStatus.BAD_REQUEST, LocalizationExceptionMessageValues.WRONG_URL.getMessage(),
+                CustomErrorCode.GENERAL);
     }
 
     private String getErrorResponse(String key) {
