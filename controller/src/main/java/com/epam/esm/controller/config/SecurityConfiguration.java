@@ -1,7 +1,6 @@
 package com.epam.esm.controller.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,7 +16,7 @@ import com.epam.esm.service.security.JwtConfiguration;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private int BCRYPT_ROUND = 12;
+    private static int BCRYPT_ROUND = 12;
 
     private final JwtConfiguration jwtConfiguration;
 

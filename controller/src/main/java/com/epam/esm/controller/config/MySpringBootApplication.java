@@ -7,10 +7,11 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan("com.epam.esm")
 public class MySpringBootApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(MySpringBootApplication.class, args);
-    }
 
+    }
 
 }
 

@@ -1,35 +1,32 @@
 package com.epam.esm.repository.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.ListJoin;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.epam.esm.configuration.IntParameterValues;
-import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Order;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.entity.User;
 import com.epam.esm.repository.TagRepository;
 
 @Repository
 @Transactional
 public class TagRepositoryImpl implements TagRepository {
 
-    private  String orderListAttribute = "orderList";
-    private  String certificateListAttribute = "giftCertificateList";
-    private  String tagAttribute = "tags";
-    private  String columnId = "id";
-    private  String columnName = "nameTag";
+    private String orderListAttribute = "orderList";
+    private String certificateListAttribute = "giftCertificateList";
+    private String tagAttribute = "tags";
+    private String columnId = "id";
+    private String columnName = "nameTag";
+    private String sqlQueryFindAllMostUsedTags = "select t.nameTag from tag t join gift_certificate_has_tag gsht on gsht.tag_id_tag=t.id join gift_certificate gs on gsht.gift_certicicate_id_gift_certicicate=gs.id join users_order_has_certificate uohs on uohs.certificate_id=gs.id join users_order uo on uohs.order_id=uo.id where uo.user_id=?  group by t.nameTag having count(t.nametag) = (select count(t.nametag) from tag t  join gift_certificate_has_tag gsht on gsht.tag_id_tag=t.id join gift_certificate gs on gsht.gift_certicicate_id_gift_certicicate=gs.id join users_order_has_certificate uohs on uohs.certificate_id=gs.id join users_order uo on uohs.order_id=uo.id where uo.user_id=? group by t.nameTag order by count(t.nametag) desc limit 1) order by count(t.nametag) desc;";
 
     @PersistenceContext
     EntityManager entityManager;
@@ -80,23 +77,14 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public Tag getMostWidelyUsedUsersTag(long userId) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Tag> tagQuery = criteriaBuilder.createQuery(Tag.class);
-        Root<User> userRoot = tagQuery.from(User.class);
+    public List<Tag> getMostWidelyUsedUsersTag(long userId) {
+        Query query = entityManager.createNativeQuery(sqlQueryFindAllMostUsedTags);
+        query.setParameter(1, userId);
+        query.setParameter(2, userId);
+        List<String> tagList = query.getResultList();
+        List<Tag> result = new ArrayList<>();
+        tagList.forEach(s -> result.add(findByName(s).get(0)));
+        return result;
 
-        ListJoin<User, Order> orderList = userRoot.joinList(orderListAttribute);
-        ListJoin<Order, GiftCertificate> giftList = orderList.joinList(certificateListAttribute);
-        ListJoin<GiftCertificate, Tag> tagList = giftList.joinList(tagAttribute);
-
-        Expression orderId = tagList.get(columnId);
-        tagQuery.select(tagList)
-                .where(criteriaBuilder.equal(userRoot.get(columnId), userId))
-                .groupBy(orderId)
-                .orderBy(criteriaBuilder.desc(criteriaBuilder.count(orderId)));
-
-        return entityManager.createQuery(tagQuery)
-                .setMaxResults(IntParameterValues.POSITION_WITH_MAX_VALUE.getValue())
-                .getSingleResult();
     }
 }

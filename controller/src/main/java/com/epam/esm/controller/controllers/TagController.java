@@ -64,7 +64,7 @@ public class TagController {
 
     @GetMapping("/most_used_tag")
     @PreAuthorize(AUTHORITY_WRITE)
-    public TagDto findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder() {
+    public List<TagDto> findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder() {
         return tagService.findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder();
     }
 

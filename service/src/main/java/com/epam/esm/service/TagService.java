@@ -1,5 +1,6 @@
 package com.epam.esm.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -82,9 +83,11 @@ public class TagService implements CrdService<TagDto> {
         return tagRepository.findNumberOfEntities();
     }
 
-    public TagDto findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder() {
+    public List<TagDto> findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder() {
         Long userId = userRepository.findUserWithTheHighestCostOfAllOrder();
-        Tag tag = tagRepository.getMostWidelyUsedUsersTag(userId);
-        return mapper.changeTagToTagDto(tag);
+        List<Tag> tags = tagRepository.getMostWidelyUsedUsersTag(userId);
+        List<TagDto> dtos = new ArrayList<>();
+        tags.forEach(tag -> dtos.add(mapper.changeTagToTagDto(tag)));
+        return dtos;
     }
 }
