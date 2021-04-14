@@ -13,6 +13,7 @@ public class JwtConfiguration extends SecurityConfigurerAdapter<DefaultSecurityF
 
     public JwtConfiguration(JwtTokenFilter jwtTokenFilter) {
         this.jwtTokenFilter = jwtTokenFilter;
+
     }
 
     @Override
@@ -20,4 +21,5 @@ public class JwtConfiguration extends SecurityConfigurerAdapter<DefaultSecurityF
         builder.addFilterBefore(jwtTokenFilter, BasicAuthenticationFilter.class);
 
     }
+
 }

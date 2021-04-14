@@ -9,8 +9,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -39,10 +39,10 @@ public class JwtTokenFilter extends GenericFilterBean {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
-        } catch (AuthenticationException e) {
+        } catch (RuntimeException e) {
             SecurityContextHolder.clearContext();
-            throw new JwtAuthenticationException(
-                    LocalizationExceptionMessageValues.EXCEPTION_JWT_FILTER_MESSAGE.getMessage());
+            throw new JwtAuthenticationException(LocalizationExceptionMessageValues.JWT_EXCEPTION.getMessage(),
+                    HttpStatus.UNAUTHORIZED);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

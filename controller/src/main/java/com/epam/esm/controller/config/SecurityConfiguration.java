@@ -11,17 +11,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.epam.esm.service.security.JwtConfiguration;
+import com.epam.esm.service.security.SpringSecurityExceptionHandler;
 
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static int BCRYPT_ROUND = 12;
 
     private final JwtConfiguration jwtConfiguration;
+    private final SpringSecurityExceptionHandler exceptionHandler;
 
-    public SecurityConfiguration(JwtConfiguration jwtConfiguration) {
+    public SecurityConfiguration(JwtConfiguration jwtConfiguration, SpringSecurityExceptionHandler exceptionHandler) {
         this.jwtConfiguration = jwtConfiguration;
+        this.exceptionHandler = exceptionHandler;
     }
 
     @Bean
@@ -42,6 +45,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/v3/auth/registration")
                 .permitAll()
+                .antMatchers("/v3/auth/login")
+                .permitAll()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(exceptionHandler)
                 .and()
                 .apply(jwtConfiguration);
     }

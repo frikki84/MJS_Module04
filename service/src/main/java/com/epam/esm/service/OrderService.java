@@ -22,6 +22,7 @@ import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.OrderRepository;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.exception.CustomErrorCode;
+import com.epam.esm.service.exception.LocalizationExceptionMessageValues;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.OrderDtoMapper;
 import com.epam.esm.service.validation.PageInfoValidation;
@@ -121,8 +122,8 @@ public class OrderService {
         if (Objects.isNull(userId)) {
             userId = user.getId();
         }
-        if (user.getRole().equals(Role.USER)) {
-            userId = user.getId();
+        if (user.getRole().equals(Role.USER) && userId != user.getId()) {
+            throw new NoSuchResourceException(LocalizationExceptionMessageValues.INFORMATION_FOBBIDEN.getMessage(), CustomErrorCode.ORDER);
         }
         List<Order> orderList = orderRepository.readOrdersByUser(userId);
         if ((Objects.isNull(orderList) || orderList.isEmpty()) && userId != user.getId()) {
