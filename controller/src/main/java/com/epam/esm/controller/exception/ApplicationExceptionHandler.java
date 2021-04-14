@@ -65,11 +65,6 @@ public class ApplicationExceptionHandler {
         return createResponseEntity(HttpStatus.BAD_REQUEST, exception);
     }
 
-//    @ExceptionHandler(JwtAuthenticationException.class)
-//    public ResponseEntity<ExceptionDetails> handleJwtAuthenticationException(JwtAuthenticationException exception) {
-//        return createResponseEntity(HttpStatus.UNAUTHORIZED, exception, CustomErrorCode.GENERAL);
-//    }
-
     @ExceptionHandler(AccessException.class)
     public ResponseEntity<ExceptionDetails> handleAccessException(AccessException exception) {
         return createResponseEntity(HttpStatus.UNAUTHORIZED, exception, CustomErrorCode.GENERAL);
