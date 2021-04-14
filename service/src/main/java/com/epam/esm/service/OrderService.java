@@ -21,6 +21,7 @@ import com.epam.esm.entity.User;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.repository.OrderRepository;
 import com.epam.esm.repository.UserRepository;
+import com.epam.esm.service.exception.AccessException;
 import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.LocalizationExceptionMessageValues;
 import com.epam.esm.service.exception.NoSuchResourceException;
@@ -122,8 +123,9 @@ public class OrderService {
         if (Objects.isNull(userId)) {
             userId = user.getId();
         }
+        System.out.println("userId = " + userId + ", user.getId() = " + user.getId());
         if (user.getRole().equals(Role.USER) && userId != user.getId()) {
-            throw new NoSuchResourceException(LocalizationExceptionMessageValues.INFORMATION_FOBBIDEN.getMessage(), CustomErrorCode.ORDER);
+            throw new AccessException(LocalizationExceptionMessageValues.INFORMATION_FOBBIDEN.getMessage());
         }
         List<Order> orderList = orderRepository.readOrdersByUser(userId);
         if ((Objects.isNull(orderList) || orderList.isEmpty()) && userId != user.getId()) {

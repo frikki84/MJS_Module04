@@ -8,8 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -22,9 +22,11 @@ import com.epam.esm.service.exception.LocalizationExceptionMessageValues;
 public class JwtTokenFilter extends GenericFilterBean {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final SpringSecurityExceptionHandler exceptionHandler;
 
-    public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
+    public JwtTokenFilter(JwtTokenProvider jwtTokenProvider, SpringSecurityExceptionHandler exceptionHandler) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.exceptionHandler = exceptionHandler;
     }
 
     @Override
@@ -41,9 +43,11 @@ public class JwtTokenFilter extends GenericFilterBean {
             }
         } catch (RuntimeException e) {
             SecurityContextHolder.clearContext();
-            throw new JwtAuthenticationException(LocalizationExceptionMessageValues.JWT_EXCEPTION.getMessage(),
-                    HttpStatus.UNAUTHORIZED);
+            exceptionHandler.commence((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse,
+                    new JwtAuthenticationException(LocalizationExceptionMessageValues.JWT_EXCEPTION.getMessage()));
+
         }
+
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }

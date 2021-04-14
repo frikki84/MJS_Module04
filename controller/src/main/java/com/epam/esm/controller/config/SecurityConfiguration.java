@@ -45,10 +45,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/v3/auth/registration")
                 .permitAll()
-                .antMatchers("/v3/auth/login")
-                .permitAll()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(exceptionHandler)
                 .and()
                 .apply(jwtConfiguration);
     }

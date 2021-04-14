@@ -8,8 +8,8 @@ public enum LocalizationExceptionMessageValues {
             "tagdto_invalid_name"), INVALID_USER_NAME("userdto_invalid_name"), INVALID_EMAIL(
             "userdto_invalid_email"), INVALID_PASSWORD("userdto_invalid_password"), USER_NAME_EXISTS(
             "username_exists"), NO_SUCH_RESOURCE_MESSAGE("no_resource"), NO_METHOD("no_method"), BAD_REQUEST(
-            "bad_request"), WRONG_URL("wrong_url"), EXCEPTION_JWT_FILTER_MESSAGE("jwt_exception_filter"), JWT_EXCEPTION(
-            "jwt_exception"), INFORMATION_FOBBIDEN("information_fobbiden");
+            "bad_request"), WRONG_URL("wrong_url"), JWT_EXCEPTION(
+            "JWT token is expired or invalid"), INFORMATION_FOBBIDEN("information_fobbiden");
 
     private String message;
 

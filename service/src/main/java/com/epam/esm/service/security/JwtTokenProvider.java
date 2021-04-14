@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +20,6 @@ import com.epam.esm.service.exception.LocalizationExceptionMessageValues;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -67,9 +65,8 @@ public class JwtTokenProvider {
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretWord).parseClaimsJws(token);
             return !claimsJws.getBody().getExpiration().before(new Date());
-        } catch (JwtException e) {
-            throw new JwtAuthenticationException(LocalizationExceptionMessageValues.JWT_EXCEPTION.getMessage(),
-                    HttpStatus.UNAUTHORIZED);
+        } catch (RuntimeException e) {
+            throw new JwtAuthenticationException(LocalizationExceptionMessageValues.JWT_EXCEPTION.getMessage());
         }
     }
 
