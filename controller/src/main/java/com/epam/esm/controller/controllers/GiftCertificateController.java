@@ -67,9 +67,11 @@ public class GiftCertificateController {
             @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
             @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size,
             @RequestBody SearchGiftCertificateParameterDto parameter) {
+
         List<GiftCertificateDto> list = giftCertificateService.findAll(parameter, page, size);
         hateoasBuilder.addLinksToGiftCertificateList(list);
-        return paginationBuilder.addPagination(list, page, size, giftCertificateService.findNumberOfEntities(parameter));
+        return paginationBuilder.addPagination(list, page, size,
+                giftCertificateService.findNumberOfEntities(parameter));
     }
 
     @PostMapping

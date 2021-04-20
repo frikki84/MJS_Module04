@@ -22,7 +22,6 @@ import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.CustomErrorExeption;
 import com.epam.esm.service.exception.ExceptionDetails;
 import com.epam.esm.service.exception.GiftCertificateDtoValidationException;
-import com.epam.esm.service.exception.JwtAuthenticationException;
 import com.epam.esm.service.exception.LocalizationExceptionMessageValues;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.exception.PageException;
@@ -73,8 +72,8 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ExceptionDetails> handleHttpRequestMethodNotSupportedException(
             HttpRequestMethodNotSupportedException exception) {
-        return createResponseEntity(HttpStatus.METHOD_NOT_ALLOWED, LocalizationExceptionMessageValues.NO_METHOD.getMessage(),
-                CustomErrorCode.GENERAL);
+        return createResponseEntity(HttpStatus.METHOD_NOT_ALLOWED,
+                LocalizationExceptionMessageValues.NO_METHOD.getMessage(), CustomErrorCode.GENERAL);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

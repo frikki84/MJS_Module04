@@ -27,6 +27,7 @@ public class JwtTokenFilter extends GenericFilterBean {
     public JwtTokenFilter(JwtTokenProvider jwtTokenProvider, SpringSecurityExceptionHandler exceptionHandler) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.exceptionHandler = exceptionHandler;
+
     }
 
     @Override
