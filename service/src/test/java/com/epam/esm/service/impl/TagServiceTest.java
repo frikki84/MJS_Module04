@@ -114,7 +114,7 @@ class TagServiceTest {
         Tag tag = new Tag();
         TagDto dto = new TagDto();
         Mockito.when(userRepository.findUserWithTheHighestCostOfAllOrder()).thenReturn(ID);
-        Mockito.when(tagRepository.getMostWidelyUsedUsersTag(ID)).thenReturn(tag);
+        //Mockito.when(tagRepository.getMostWidelyUsedUsersTag(ID)).thenReturn(tag);
         Mockito.when(mapper.changeTagToTagDto(tag)).thenReturn(dto);
         assertEquals(ID, tagService.findMostWidelyUsedTagOfUserWithTheHighestCostOfAllOrder());
 

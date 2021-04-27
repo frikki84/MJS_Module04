@@ -1,4 +1,4 @@
-package com.epam.esm.controller.controllers;
+package com.epam.esm.controllers;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.epam.esm.controller.util.HateoasBuilder;
-import com.epam.esm.controller.util.PaginationBuilder;
+import com.epam.esm.util.HateoasBuilder;
+import com.epam.esm.util.PaginationBuilder;
 import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.SearchGiftCertificateParameterDto;
 import com.epam.esm.service.GiftCertificateService;

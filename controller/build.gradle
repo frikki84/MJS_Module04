@@ -5,7 +5,3 @@ plugins {
 dependencies {
     implementation project(':service')
 }
-
-bootJar {
-    archiveFileName = 'webBootJar.jar'
-}

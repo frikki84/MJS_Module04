@@ -1,4 +1,4 @@
-package com.epam.esm.controller.controllers;
+package com.epam.esm.controllers;
 
 import java.util.HashMap;
 import java.util.Map;

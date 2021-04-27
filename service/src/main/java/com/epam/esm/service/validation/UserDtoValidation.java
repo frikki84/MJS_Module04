@@ -46,7 +46,7 @@ public class UserDtoValidation {
     }
 
     private void chechUserEmail(UserDto dto) {
-        if (Objects.isNull(dto.getEmail()) || dto.getPassword().isBlank()) {
+        if (Objects.isNull(dto.getEmail()) || dto.getEmail().isBlank()) {
             throw new UserValidationException(LocalizationExceptionMessageValues.INVALID_EMAIL.getMessage());
         }
         Pattern pattern = Pattern.compile(regexForEmail);

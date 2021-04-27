@@ -1,4 +1,4 @@
-package com.epam.esm.controller.exception;
+package com.epam.esm.exception;
 
 import java.time.LocalDateTime;
 import java.util.Locale;

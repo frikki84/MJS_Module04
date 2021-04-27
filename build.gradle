@@ -2,7 +2,35 @@ plugins {
     id 'java'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.4.3'
+}
 
+bootJar {
+    enabled = true
+    mainClassName='com.epam.esm.config.MySpringBootApplication'
+}
+
+jar {
+    enabled = false
+}
+
+
+group = 'com.epam.esm'
+version = 'snapshot-1.0.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.4.3', ext: 'pom'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 subprojects {
@@ -12,15 +40,13 @@ subprojects {
 
     group = 'com.epam.esm'
     version = '1.0.0'
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
 
     repositories {
         mavenCentral()
     }
 
+
     dependencies {
-       
         implementation 'org.springframework.boot:spring-boot-starter'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-hateoas'
@@ -33,11 +59,7 @@ subprojects {
         compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.18'
         annotationProcessor 'org.projectlombok:lombok'
         implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-
-    }
-
-    test {
-        useJUnitPlatform()
+        implementation group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.4.3', ext: 'pom'
     }
 
 }

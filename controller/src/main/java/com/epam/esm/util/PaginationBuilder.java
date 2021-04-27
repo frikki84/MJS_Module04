@@ -1,4 +1,4 @@
-package com.epam.esm.controller.util;
+package com.epam.esm.util;
 
 import java.util.List;
 
