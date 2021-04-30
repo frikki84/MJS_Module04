@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +46,7 @@ class OrderDtoMapperImplTest {
         order.setUser(user);
         order.setGiftCertificateList(Arrays.asList(certificate));
         orderDto.setId(ID);
-        orderDto.setUser(userDto);
+//        orderDto.setUser(userDto);
         orderDto.setGiftCertificateList(Arrays.asList(certificateDto));
     }
 
@@ -53,14 +54,14 @@ class OrderDtoMapperImplTest {
     void chandeDtoToOrder() {
         Mockito.when(certificateMapper.changeDtoToCertificate(certificateDto)).thenReturn(certificate);
         Mockito.when(userDtoMapper.chandeDtoToUser(userDto)).thenReturn(user);
-        assertEquals(order, mapper.chandeDtoToOrder(orderDto));
+        Assertions.assertEquals(order, mapper.chandeDtoToOrder(orderDto));
 
     }
 
     @Test
     void chandeOrderToDto() {
         Mockito.when(certificateMapper.changeCertificateToDto(certificate)).thenReturn(certificateDto);
-        Mockito.when(userDtoMapper.chandeUserToDto(user)).thenReturn(userDto);
-        assertEquals(orderDto, mapper.chandeOrderToDto(order));
+        //Mockito.when(userDtoMapper.chandeUserToDto(user)).thenReturn(userDto);
+        Assertions.assertEquals(orderDto, mapper.chandeOrderToDto(order));
     }
 }

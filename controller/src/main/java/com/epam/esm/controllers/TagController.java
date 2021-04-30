@@ -1,9 +1,9 @@
 package com.epam.esm.controllers;
 
-import com.epam.esm.util.HateoasBuilder;
-import com.epam.esm.util.PaginationBuilder;
 import com.epam.esm.entity.TagDto;
 import com.epam.esm.service.TagService;
+import com.epam.esm.util.HateoasBuilder;
+import com.epam.esm.util.PaginationBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
@@ -34,7 +34,6 @@ public class TagController {
     }
 
     @GetMapping
-    @PreAuthorize(AUTHORITY_READ)
     public PagedModel<TagDto> findAll(
             @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
             @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size) {

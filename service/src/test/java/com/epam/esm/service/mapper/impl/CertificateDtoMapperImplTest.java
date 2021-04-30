@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,12 +41,12 @@ class CertificateDtoMapperImplTest {
     @Test
     void changeDtoToCertificate() {
         Mockito.when(tagDtoMapper.changeTagDtoToTag(tagDto)).thenReturn(tag);
-        assertEquals(certificate, mapper.changeDtoToCertificate(dto));
+        Assertions.assertEquals(certificate, mapper.changeDtoToCertificate(dto));
     }
 
     @Test
     void changeCertificateToDto() {
         Mockito.when(tagDtoMapper.changeTagToTagDto(tag)).thenReturn(tagDto);
-        assertEquals(dto, mapper.changeCertificateToDto(certificate));
+        Assertions.assertEquals(dto, mapper.changeCertificateToDto(certificate));
     }
 }

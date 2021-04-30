@@ -8,14 +8,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-//@Relation(itemRelation = "user", collectionRelation = "users")
-public class UserDto {
-        //extends RepresentationModel<UserDto> {
-
+@Relation(itemRelation = "user", collectionRelation = "users")
+public class ShownUserDto extends RepresentationModel<ShownUserDto> {
     private long id;
     private String name;
     private String email;
-    private String password;
     private Role role;
 
 }

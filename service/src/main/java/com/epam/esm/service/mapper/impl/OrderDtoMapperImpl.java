@@ -39,7 +39,7 @@ public class OrderDtoMapperImpl implements OrderDtoMapper {
         Order order = new Order();
         order.setId(dto.getId());
         order.setPrice(dto.getPrice());
-        order.setUser(userDtoMapper.chandeDtoToUser(dto.getUser()));
+        order.setUser(userDtoMapper.changeShownDtoToUser(dto.getUser()));
         order.setDate(dto.getDate());
         List<GiftCertificate> dtoList = new ArrayList<>();
         if (Objects.nonNull(dto.getGiftCertificateList())) {

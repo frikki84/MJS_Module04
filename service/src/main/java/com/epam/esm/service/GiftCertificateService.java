@@ -15,13 +15,13 @@ import com.epam.esm.entity.SearchGiftCertificateParameter;
 import com.epam.esm.entity.SearchGiftCertificateParameterDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.TagDto;
-import com.epam.esm.repository.GiftCertificateRepository;
-import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.CertificateDtoMapper;
 import com.epam.esm.service.mapper.SearchParamterDtoMapper;
 import com.epam.esm.service.mapper.TagDtoMapper;
+import com.epam.esm.repository.GiftCertificateRepository;
+import com.epam.esm.repository.TagRepository;
 import com.epam.esm.service.validation.GiftCertificateDtoValidation;
 import com.epam.esm.service.validation.PageInfoValidation;
 

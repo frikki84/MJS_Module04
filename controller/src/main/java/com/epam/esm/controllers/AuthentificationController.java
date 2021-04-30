@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.epam.esm.entity.AuthentificationRequestDto;
+import com.epam.esm.entity.ShownUserDto;
 import com.epam.esm.entity.UserDto;
+import com.epam.esm.entity.AuthentificationRequestDto;
 import com.epam.esm.service.UserService;
 import com.epam.esm.service.security.JwtTokenProvider;
 
@@ -46,7 +47,7 @@ public class AuthentificationController {
 
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto registaration(@RequestBody UserDto userDto) {
+    public ShownUserDto registaration(@RequestBody UserDto userDto) {
         return userService.create(userDto);
     }
 

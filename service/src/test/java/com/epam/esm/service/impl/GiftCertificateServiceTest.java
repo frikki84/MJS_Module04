@@ -18,12 +18,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.TagDto;
 import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.entity.TagDto;
 import com.epam.esm.repository.GiftCertificateRepository;
 import com.epam.esm.service.GiftCertificateService;
-import com.epam.esm.service.exception.GiftCertificateDtoValidationException;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.CertificateDtoMapper;
 import com.epam.esm.service.validation.PageInfoValidation;

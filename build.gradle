@@ -4,23 +4,11 @@ plugins {
     id 'org.springframework.boot' version '2.4.3'
 }
 
-bootJar {
-    enabled = true
-    mainClassName='com.epam.esm.config.MySpringBootApplication'
-}
-
-jar {
-    enabled = false
-}
-
-
 group = 'com.epam.esm'
 version = 'snapshot-1.0.0'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -29,6 +17,13 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.4.3', ext: 'pom'
 }
 
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
 test {
     useJUnitPlatform()
 }
@@ -44,8 +39,9 @@ subprojects {
     repositories {
         mavenCentral()
     }
-
-
+    bootJar {
+        enabled = false
+    }
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

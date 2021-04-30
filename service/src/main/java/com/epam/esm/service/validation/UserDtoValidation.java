@@ -7,9 +7,9 @@ import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
 
+import com.epam.esm.entity.UserDto;
 import com.epam.esm.configuration.IntParameterValues;
 import com.epam.esm.entity.User;
-import com.epam.esm.entity.UserDto;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.exception.LocalizationExceptionMessageValues;
 import com.epam.esm.service.exception.UserValidationException;

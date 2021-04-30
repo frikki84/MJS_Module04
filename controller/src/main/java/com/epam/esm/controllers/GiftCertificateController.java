@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.epam.esm.entity.GiftCertificateDto;
+import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.util.HateoasBuilder;
 import com.epam.esm.util.PaginationBuilder;
-import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.SearchGiftCertificateParameterDto;
-import com.epam.esm.service.GiftCertificateService;
 
 @RestController
 @RequestMapping("/v3/certificates")
@@ -45,7 +45,6 @@ public class GiftCertificateController {
     }
 
     @GetMapping
-    @PreAuthorize(AUTHORITY_READ)
     public PagedModel<GiftCertificateDto> findAll(
             @RequestParam(value = "page", required = false, defaultValue = DEFAULTE_PAGE_VALUE) int page,
             @RequestParam(value = "size", required = false, defaultValue = DEFAULTE_SIZE_VALUE) int size) {

@@ -1,4 +1,6 @@
-rootProject.name = 'module04'
+rootProject.name = 'module'
 include('repository', 'service', 'controller')
+
+
 
 

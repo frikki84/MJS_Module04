@@ -9,6 +9,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
+import com.epam.esm.entity.ShownUserDto;
 import com.epam.esm.controllers.GiftCertificateController;
 import com.epam.esm.controllers.OrderController;
 import com.epam.esm.controllers.TagController;
@@ -17,6 +18,7 @@ import com.epam.esm.entity.GiftCertificateDto;
 import com.epam.esm.entity.OrderDto;
 import com.epam.esm.entity.TagDto;
 import com.epam.esm.entity.UserDto;
+import com.epam.esm.service.mapper.UserDtoMapper;
 
 @Component
 public class HateoasBuilder {
@@ -27,6 +29,12 @@ public class HateoasBuilder {
     private String userCreate = "create user";
     private String orderLinkToUser = "user";
     private String orderUserOrders = "user orders";
+
+    private final UserDtoMapper userDtoMapper;
+
+    public HateoasBuilder(UserDtoMapper userDtoMapper) {
+        this.userDtoMapper = userDtoMapper;
+    }
 
     public GiftCertificateDto addLinksToGiftCertificate(GiftCertificateDto dto) {
         dto.add(WebMvcLinkBuilder.linkTo(methodOn(GiftCertificateController.class).update(dto, dto.getId())).withRel(certificateUpdate)
@@ -58,14 +66,14 @@ public class HateoasBuilder {
                 .withType(HttpMethod.GET.name())));
     }
 
-    public UserDto addLinksToUser(UserDto userDto) {
-        userDto.add(WebMvcLinkBuilder.linkTo(methodOn(UserController.class).create(userDto)).withRel(userCreate)
+    public ShownUserDto addLinksToUser(ShownUserDto userDto) {
+        UserDto dto = userDtoMapper.changeShownToSimpleDto(userDto);
+        userDto.add(WebMvcLinkBuilder.linkTo(methodOn(UserController.class).create(dto)).withRel(userCreate)
                 .withType(HttpMethod.POST.name()));
-
         return userDto;
     }
 
-    public void addLinksToListUser(List<UserDto> userDtoList) {
+    public void addLinksToListUser(List<ShownUserDto> userDtoList) {
         userDtoList.forEach(userDto -> userDto.add(
                 linkTo(methodOn(UserController.class).findById(userDto.getId())).withSelfRel()
                         .withType(HttpMethod.GET.name())));
@@ -73,7 +81,7 @@ public class HateoasBuilder {
 
     public OrderDto addLinksToOrder(OrderDto orderDto) {
         addLinksToGiftCertificateList(orderDto.getGiftCertificateList());
-        UserDto user = orderDto.getUser();
+        ShownUserDto user = orderDto.getUser();
         user.add(linkTo(methodOn(UserController.class).findById(user.getId())).withRel(orderLinkToUser)
                 .withType(HttpMethod.GET.name()));
         return orderDto;
@@ -84,7 +92,7 @@ public class HateoasBuilder {
             orderDto.add(WebMvcLinkBuilder.linkTo(methodOn(OrderController.class).readOrdersByUser(orderDto.getUser().getId())).withRel(
                     orderUserOrders).withType(HttpMethod.GET.name()));
             addLinksToGiftCertificateList(orderDto.getGiftCertificateList());
-            UserDto user = orderDto.getUser();
+            ShownUserDto user = orderDto.getUser();
             user.add(linkTo(methodOn(UserController.class).findById(user.getId())).withRel(orderLinkToUser)
                     .withType(HttpMethod.GET.name()));
         }

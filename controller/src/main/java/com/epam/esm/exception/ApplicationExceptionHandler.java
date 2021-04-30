@@ -25,8 +25,8 @@ import com.epam.esm.service.exception.GiftCertificateDtoValidationException;
 import com.epam.esm.service.exception.LocalizationExceptionMessageValues;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.exception.PageException;
-import com.epam.esm.service.exception.TagValidationException;
 import com.epam.esm.service.exception.UserValidationException;
+import com.epam.esm.service.exception.TagValidationException;
 
 @ControllerAdvice
 public class ApplicationExceptionHandler {

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,15 +50,15 @@ class UserServiceTest {
     @Test
     void findAll() {
         Mockito.when(userRepository.findAll(OFFSET, LIMIT)).thenReturn(users);
-        Mockito.when(mapper.chandeUserToDto(user)).thenReturn(dto);
+        //Mockito.when(mapper.chandeUserToDto(user)).thenReturn(dto);
         assertEquals(dtos, userService.findAll(OFFSET, LIMIT));
     }
 
     @Test
     void findByIdPositive() {
         Mockito.when(userRepository.findById(ID)).thenReturn(user);
-        Mockito.when(mapper.chandeUserToDto(user)).thenReturn(dto);
-        assertEquals(dto, userService.findById(ID));
+        //Mockito.when(mapper.chandeUserToDto(user)).thenReturn(dto);
+        Assertions.assertEquals(dto, userService.findById(ID));
     }
 
     @Test
@@ -69,8 +70,8 @@ class UserServiceTest {
     @Test
     void createPositive() {
         Mockito.when(userRepository.create(user)).thenReturn(user);
-        Mockito.when(mapper.chandeUserToDto(user)).thenReturn(dto);
-        assertEquals(dto, userService.create(dto));
+        //Mockito.when(mapper.chandeUserToDto(user)).thenReturn(dto);
+        Assertions.assertEquals(dto, userService.create(dto));
     }
 
     @Test

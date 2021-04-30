@@ -3,10 +3,10 @@ package com.epam.esm.service.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +20,6 @@ import com.epam.esm.repository.TagRepository;
 import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.TagService;
 import com.epam.esm.service.exception.NoSuchResourceException;
-import com.epam.esm.service.exception.TagValidationException;
 import com.epam.esm.service.mapper.TagDtoMapper;
 import com.epam.esm.service.validation.TagValidation;
 
@@ -62,7 +61,7 @@ class TagServiceTest {
         TagDto dto = new TagDto();
         Mockito.when(tagRepository.findById(ID)).thenReturn(tag);
         Mockito.when(mapper.changeTagToTagDto(tag)).thenReturn(dto);
-        assertEquals(dto, tagService.findById(ID));
+        Assertions.assertEquals(dto, tagService.findById(ID));
     }
 
     @Test
