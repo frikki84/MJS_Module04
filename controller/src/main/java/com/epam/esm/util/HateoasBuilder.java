@@ -41,7 +41,7 @@ public class HateoasBuilder {
                 .withType(HttpMethod.PATCH.name()));
         dto.add(linkTo(methodOn(GiftCertificateController.class).create(dto)).withRel(certificateCreate)
                 .withType(HttpMethod.POST.name()));
-        addLinksToListTag(dto.getTagList());
+        addLinksToListTag(dto.getTags());
         return dto;
     }
 
@@ -50,7 +50,7 @@ public class HateoasBuilder {
             certificate.add(
                     linkTo(methodOn(GiftCertificateController.class).findById(certificate.getId())).withSelfRel()
                             .withType(HttpMethod.GET.name()));
-            addLinksToListTag(certificate.getTagList());
+            addLinksToListTag(certificate.getTags());
         });
     }
 
@@ -80,7 +80,7 @@ public class HateoasBuilder {
     }
 
     public OrderDto addLinksToOrder(OrderDto orderDto) {
-        addLinksToGiftCertificateList(orderDto.getGiftCertificateList());
+        addLinksToGiftCertificateList(orderDto.getCertificates());
         ShownUserDto user = orderDto.getUser();
         user.add(linkTo(methodOn(UserController.class).findById(user.getId())).withRel(orderLinkToUser)
                 .withType(HttpMethod.GET.name()));
@@ -91,7 +91,7 @@ public class HateoasBuilder {
         for (OrderDto orderDto : orderDtoList) {
             orderDto.add(WebMvcLinkBuilder.linkTo(methodOn(OrderController.class).readOrdersByUser(orderDto.getUser().getId())).withRel(
                     orderUserOrders).withType(HttpMethod.GET.name()));
-            addLinksToGiftCertificateList(orderDto.getGiftCertificateList());
+            addLinksToGiftCertificateList(orderDto.getCertificates());
             ShownUserDto user = orderDto.getUser();
             user.add(linkTo(methodOn(UserController.class).findById(user.getId())).withRel(orderLinkToUser)
                     .withType(HttpMethod.GET.name()));

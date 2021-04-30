@@ -17,7 +17,7 @@ public class TagDtoMapperImpl implements TagDtoMapper {
     public Tag changeTagDtoToTag(TagDto tagDto) {
         Tag tag = new Tag();
         tag.setId(tagDto.getId());
-        tag.setNameTag(tagDto.getNameTag());
+        tag.setNameTag(tagDto.getName());
         return tag;
     }
 
@@ -25,14 +25,14 @@ public class TagDtoMapperImpl implements TagDtoMapper {
     public TagDto changeTagToTagDto(Tag tag) {
         TagDto dto = new TagDto();
         dto.setId(tag.getId());
-        dto.setNameTag(tag.getNameTag());
+        dto.setName(tag.getNameTag());
         return dto;
     }
 
     @Override
     public List<Tag> changeCertificateDtoToTagList(GiftCertificateDto dto) {
         List<Tag> tagList = new ArrayList<>();
-        dto.getTagList().forEach(tagDto -> tagList.add(changeTagDtoToTag(tagDto)));
+        dto.getTags().forEach(tagDto -> tagList.add(changeTagDtoToTag(tagDto)));
         return tagList;
     }
 }

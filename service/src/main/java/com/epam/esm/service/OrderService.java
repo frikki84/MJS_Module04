@@ -12,20 +12,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.epam.esm.configuration.IntParameterValues;
-import com.epam.esm.entity.OrderDto;
+import com.epam.esm.entity.CertificateForOrder;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.OrderCreationParameter;
+import com.epam.esm.entity.OrderDto;
 import com.epam.esm.entity.Role;
 import com.epam.esm.entity.User;
+import com.epam.esm.repository.GiftCertificateRepository;
+import com.epam.esm.repository.OrderRepository;
+import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.exception.AccessException;
 import com.epam.esm.service.exception.CustomErrorCode;
 import com.epam.esm.service.exception.LocalizationExceptionMessageValues;
 import com.epam.esm.service.exception.NoSuchResourceException;
 import com.epam.esm.service.mapper.OrderDtoMapper;
-import com.epam.esm.repository.GiftCertificateRepository;
-import com.epam.esm.repository.OrderRepository;
-import com.epam.esm.repository.UserRepository;
 import com.epam.esm.service.validation.PageInfoValidation;
 import com.epam.esm.service.validation.SecurityValidator;
 
@@ -88,13 +89,16 @@ public class OrderService {
         }
         List<GiftCertificate> certificatesList = new ArrayList<>();
         BigDecimal price = BigDecimal.ZERO;
-        for (Integer i : parameter.getCertificates()) {
-            GiftCertificate certificate = certificateRepository.findById(i);
+        for (CertificateForOrder certificate : parameter.getCertificates()) {
+            GiftCertificate dbCertificate = certificateRepository.findById(certificate.getCertificate());
             if (Objects.isNull(certificate)) {
                 throw new NoSuchResourceException(CustomErrorCode.ORDER);
             }
-            price = price.add(certificate.getPrice());
-            certificatesList.add(certificate);
+
+            price = price.add(dbCertificate.getPrice().multiply(new BigDecimal(certificate.getAmount())));
+            for (int i = 0; i < certificate.getAmount(); i++) {
+                certificatesList.add(dbCertificate);
+            }
         }
         Order order = new Order();
         order.setUser(user);

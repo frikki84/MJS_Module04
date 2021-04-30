@@ -100,7 +100,7 @@ public class GiftCertificateService implements CrdService<GiftCertificateDto> {
         LocalDateTime currentDate = LocalDateTime.now();
         certificate.setCreateDate(currentDate);
         certificate.setLastUpdateDate(currentDate);
-        List<Tag> tags = correctTagList(entity.getTagList());
+        List<Tag> tags = correctTagList(entity.getTags());
         certificate.setTags(tags);
         GiftCertificate createdCertificate = giftCertificateRepository.create(certificate);
         return mapper.changeCertificateToDto(createdCertificate);

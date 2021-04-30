@@ -42,12 +42,12 @@ public class GiftCertificateDtoValidation {
             throw new GiftCertificateDtoValidationException(
                     LocalizationExceptionMessageValues.INVALID_DTO_DURATION.getMessage());
         }
-        if (Objects.isNull(dto.getTagList()) || dto.getTagList().isEmpty()) {
+        if (Objects.isNull(dto.getTags()) || dto.getTags().isEmpty()) {
             throw new GiftCertificateDtoValidationException(
                     LocalizationExceptionMessageValues.INVALID_DTO_TAG_LIST.getMessage());
         }
-        if (Objects.nonNull(dto.getTagList()) && !dto.getTagList().isEmpty()) {
-            dto.getTagList().forEach(tagDto -> tagValidation.chechTagDtoFormat(tagDto));
+        if (Objects.nonNull(dto.getTags()) && !dto.getTags().isEmpty()) {
+            dto.getTags().forEach(tagDto -> tagValidation.chechTagDtoFormat(tagDto));
         }
 
     }
@@ -75,8 +75,8 @@ public class GiftCertificateDtoValidation {
             throw new GiftCertificateDtoValidationException(
                     LocalizationExceptionMessageValues.INVALID_DTO_DURATION.getMessage());
         }
-        if (Objects.nonNull(dto.getTagList()) && !dto.getTagList().isEmpty()) {
-            dto.getTagList().forEach(tagDto -> tagValidation.chechTagDtoFormat(tagDto));
+        if (Objects.nonNull(dto.getTags()) && !dto.getTags().isEmpty()) {
+            dto.getTags().forEach(tagDto -> tagValidation.chechTagDtoFormat(tagDto));
         }
     }
 

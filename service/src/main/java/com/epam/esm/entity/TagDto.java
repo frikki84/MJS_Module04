@@ -16,8 +16,7 @@ import lombok.NoArgsConstructor;
 public class TagDto extends RepresentationModel<TagDto> {
 
     private long id;
-
     @NotBlank
-    private String nameTag;
+    private String name;
 
 }

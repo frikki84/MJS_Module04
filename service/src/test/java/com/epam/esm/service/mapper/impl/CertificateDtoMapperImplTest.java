@@ -35,7 +35,7 @@ class CertificateDtoMapperImplTest {
     @BeforeEach
     void setUp() {
         certificate.setTags(Arrays.asList(tag));
-        dto.setTagList(Arrays.asList(tagDto));
+        dto.setTags(Arrays.asList(tagDto));
     }
 
     @Test

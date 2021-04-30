@@ -24,9 +24,9 @@ public class OrderDto extends RepresentationModel<OrderDto> {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime date;
-    @JsonIgnoreProperties(value = {"orderList"})
+    @JsonIgnoreProperties(value = {"orders"})
     private ShownUserDto user;
-    @JsonIgnoreProperties(value = {"description", "duration", "createDate", "lastUpdateDate", "tagList"})
-    private List<GiftCertificateDto> giftCertificateList;
+    @JsonIgnoreProperties(value = {"description", "duration", "createDate", "lastUpdateDate", "tags"})
+    private List<GiftCertificateDto> certificates;
 
 }

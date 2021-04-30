@@ -44,6 +44,6 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
     private LocalDateTime lastUpdateDate;
 
     @NotEmpty
-    List<TagDto> tagList;
+    List<TagDto> tags;
 
 }

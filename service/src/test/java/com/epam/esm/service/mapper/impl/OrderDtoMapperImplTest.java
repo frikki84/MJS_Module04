@@ -47,7 +47,7 @@ class OrderDtoMapperImplTest {
         order.setGiftCertificateList(Arrays.asList(certificate));
         orderDto.setId(ID);
 //        orderDto.setUser(userDto);
-        orderDto.setGiftCertificateList(Arrays.asList(certificateDto));
+        orderDto.setCertificates(Arrays.asList(certificateDto));
     }
 
     @Test

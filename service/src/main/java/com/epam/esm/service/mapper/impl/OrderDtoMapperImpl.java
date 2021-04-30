@@ -42,8 +42,8 @@ public class OrderDtoMapperImpl implements OrderDtoMapper {
         order.setUser(userDtoMapper.changeShownDtoToUser(dto.getUser()));
         order.setDate(dto.getDate());
         List<GiftCertificate> dtoList = new ArrayList<>();
-        if (Objects.nonNull(dto.getGiftCertificateList())) {
-            dto.getGiftCertificateList()
+        if (Objects.nonNull(dto.getCertificates())) {
+            dto.getCertificates()
                     .forEach(certificateDto -> dtoList.add(mapper.changeDtoToCertificate(certificateDto)));
         }
         order.setGiftCertificateList(dtoList);
@@ -60,7 +60,7 @@ public class OrderDtoMapperImpl implements OrderDtoMapper {
         List<GiftCertificateDto> certificateDtos = new ArrayList<>();
         order.getGiftCertificateList()
                 .forEach(giftCertificate -> certificateDtos.add(mapper.changeCertificateToDto(giftCertificate)));
-        dto.setGiftCertificateList(certificateDtos);
+        dto.setCertificates(certificateDtos);
         return dto;
     }
 }

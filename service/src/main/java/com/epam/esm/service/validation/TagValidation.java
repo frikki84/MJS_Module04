@@ -13,9 +13,9 @@ import com.epam.esm.service.exception.TagValidationException;
 public class TagValidation {
 
     public void chechTagDtoFormat(TagDto dto) {
-        if (Objects.isNull(dto.getNameTag()) || dto.getNameTag().isBlank()
-                || dto.getNameTag().length() < IntParameterValues.MIN_TAG_LENGTH.getValue()
-                || dto.getNameTag().length() > IntParameterValues.MAX_TAG_LENGTH.getValue()) {
+        if (Objects.isNull(dto.getName()) || dto.getName().isBlank()
+                || dto.getName().length() < IntParameterValues.MIN_TAG_LENGTH.getValue()
+                || dto.getName().length() > IntParameterValues.MAX_TAG_LENGTH.getValue()) {
             throw new TagValidationException(LocalizationExceptionMessageValues.INVALID_TAG_NAME.getMessage());
         }
 

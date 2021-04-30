@@ -57,7 +57,7 @@ public class TagService implements CrdService<TagDto> {
     public TagDto create(TagDto entity) {
         tagValidation.chechTagDtoFormat(entity);
         Tag tag = mapper.changeTagDtoToTag(entity);
-        List<Tag> checkingTagList = tagRepository.findByName(entity.getNameTag());
+        List<Tag> checkingTagList = tagRepository.findByName(entity.getName());
         Tag resultTag;
         if (checkingTagList.isEmpty()) {
             resultTag = tagRepository.create(tag);

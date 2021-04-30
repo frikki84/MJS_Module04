@@ -35,8 +35,8 @@ public class CertificateDtoMapperImpl implements CertificateDtoMapper {
         certificate.setCreateDate(dto.getCreateDate());
         certificate.setLastUpdateDate(dto.getLastUpdateDate());
         List<Tag> tagList = new ArrayList<>();
-        if (Objects.nonNull(dto.getTagList())) {
-            dto.getTagList().forEach(tagDto -> tagList.add(tagDtoMapper.changeTagDtoToTag(tagDto)));
+        if (Objects.nonNull(dto.getTags())) {
+            dto.getTags().forEach(tagDto -> tagList.add(tagDtoMapper.changeTagDtoToTag(tagDto)));
         }
         certificate.setTags(tagList);
         return certificate;
@@ -54,7 +54,7 @@ public class CertificateDtoMapperImpl implements CertificateDtoMapper {
         dto.setLastUpdateDate(certificate.getLastUpdateDate());
         List<TagDto> dtoList = new ArrayList<>();
         certificate.getTags().forEach(tag -> dtoList.add(tagDtoMapper.changeTagToTagDto(tag)));
-        dto.setTagList(dtoList);
+        dto.setTags(dtoList);
         return dto;
     }
 

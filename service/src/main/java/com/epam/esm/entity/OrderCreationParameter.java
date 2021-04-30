@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class OrderCreationParameter {
 
     private long userId = 0;
-    private List<Integer> certificates;
+    private List<CertificateForOrder> certificates;
 }
